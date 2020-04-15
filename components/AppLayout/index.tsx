@@ -1,44 +1,16 @@
 import { FunctionComponent } from "react";
 import { Layout, Row, Col } from "antd";
-import styled from "styled-components";
-
-const Header = styled(Col)`
-    width: 100%;
-    height: 50px;
-    position: fixed;
-    background-color: #202020;
-    z-index: 9999;
-    border-bottom: 1px solid #202020;
-`;
-
-const Navigation = styled(Col)`
-    position: relative;
-    margin: 0 auto;
-`;
-
-const Ul = styled.ul`
-    float: left;
-
-    & > li {
-        vertical-align: middle;
-        display: inline-block;
-        margin-right: 25px;
-        position: relative;
-        color: #ffffff;
-    }
-`;
-
-const SubUl = styled.ul`
-    float: right;
-
-    & > li {
-        vertical-align: middle;
-        display: inline-block;
-        margin-left: 25px;
-        position: relative;
-        color: #ffffff;
-    }
-`;
+import {
+    Header,
+    Ul,
+    SubUl,
+    Navigation,
+    MainHeaderSectionCol,
+    MainHeaderSection,
+    MainHeaderContainer,
+    MainContentRow,
+    MainContentCol,
+} from "./style";
 
 const AppLayout: FunctionComponent = ({ children }) => {
     return (
@@ -59,37 +31,31 @@ const AppLayout: FunctionComponent = ({ children }) => {
                     </Row>
                 </Header>
             </Row>
-            <Row style={{ paddingTop: "50px" }}>
+            <MainHeaderContainer>
                 <Col span={24}>
-                    <Row style={{ padding: "70px 0" }}>
+                    <MainHeaderSection>
                         <Col span={24}>
                             <Row>
-                                <Col
-                                    span={12}
-                                    style={{
-                                        margin: "0 auto",
-                                        textAlign: "center",
-                                    }}
-                                >
+                                <MainHeaderSectionCol span={12}>
                                     <h1>코후비 블로그</h1>
-                                </Col>
+                                </MainHeaderSectionCol>
                             </Row>
                         </Col>
-                    </Row>
+                    </MainHeaderSection>
                 </Col>
-            </Row>
-            <Row>
+            </MainHeaderContainer>
+            <MainContentRow style={{ height: "100vh" }}>
                 <Col span={24}>
                     <Row>
-                        <Col span={12} style={{ margin: "0 auto" }}>
+                        <MainContentCol span={12}>
                             <Row>
                                 <Col span={17}>{children}</Col>
                                 <Col span={7}>사이드바</Col>
                             </Row>
-                        </Col>
+                        </MainContentCol>
                     </Row>
                 </Col>
-            </Row>
+            </MainContentRow>
         </Layout>
     );
 };

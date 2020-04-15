@@ -18,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
          font-size: 14px;
          font-weight: 400;
          line-height: 24px;
+         background-color: #f3f3f3;
      }
 `;
 
