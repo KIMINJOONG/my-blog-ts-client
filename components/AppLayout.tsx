@@ -28,6 +28,18 @@ const Ul = styled.ul`
     }
 `;
 
+const SubUl = styled.ul`
+    float: right;
+
+    & > li {
+        vertical-align: middle;
+        display: inline-block;
+        margin-left: 25px;
+        position: relative;
+        color: #ffffff;
+    }
+`;
+
 const AppLayout: FunctionComponent = ({ children }) => {
     return (
         <Layout>
@@ -40,6 +52,9 @@ const AppLayout: FunctionComponent = ({ children }) => {
                                 <li>Home2</li>
                                 <li>Home3</li>
                             </Ul>
+                            <SubUl>
+                                <li>로그인</li>
+                            </SubUl>
                         </Navigation>
                     </Row>
                 </Header>
@@ -68,7 +83,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                     <Row>
                         <Col span={12} style={{ margin: "0 auto" }}>
                             <Row>
-                                <Col span={17}>컨텐츠</Col>
+                                <Col span={17}>{children}</Col>
                                 <Col span={7}>사이드바</Col>
                             </Row>
                         </Col>
