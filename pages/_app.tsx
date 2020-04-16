@@ -1,4 +1,4 @@
-import { AppProps, Container } from "next/app";
+import { AppProps } from "next/app";
 import { Helmet } from "react-helmet";
 import { createGlobalStyle } from "styled-components";
 import { reset } from "styled-reset";
@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
 
 const MyBlog = ({ Component, pageProps }: AppProps) => {
     return (
-        <Container>
+        <div>
             <Helmet>
                 <title>Kohubi's 블로그</title>
             </Helmet>
@@ -32,7 +32,7 @@ const MyBlog = ({ Component, pageProps }: AppProps) => {
                 <Component {...pageProps} />
             </AppLayout>
             <GlobalStyle />
-        </Container>
+        </div>
     );
 };
 

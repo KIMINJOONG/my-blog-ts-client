@@ -1,16 +1,18 @@
 import { FunctionComponent } from "react";
-import { Layout, Row, Col } from "antd";
+import { Layout, Row, Col, Divider } from "antd";
 import {
     Header,
     Ul,
-    SubUl,
     Navigation,
     MainHeaderSectionCol,
     MainHeaderSection,
     MainHeaderContainer,
     MainContentRow,
     MainContentCol,
+    LeftUl,
+    Logo,
 } from "./style";
+import Link from "next/link";
 
 const AppLayout: FunctionComponent = ({ children }) => {
     return (
@@ -18,15 +20,52 @@ const AppLayout: FunctionComponent = ({ children }) => {
             <Row>
                 <Header>
                     <Row style={{ height: "100%" }}>
-                        <Navigation span={12}>
+                        <Navigation span={16}>
                             <Ul>
-                                <li>Home</li>
-                                <li>Home2</li>
-                                <li>Home3</li>
+                                <li>
+                                    <Link href="/">
+                                        <a>Home</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/boards">
+                                        <a>Board</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/videos">
+                                        <a>Video</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/about">
+                                        <a>About</a>
+                                    </Link>
+                                </li>
                             </Ul>
-                            <SubUl>
-                                <li>로그인</li>
-                            </SubUl>
+                            <Logo
+                                style={{
+                                    display: "flex",
+                                    flex: 1,
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <Link href="/">
+                                    <a>
+                                        <h1>Kohubi's Blog</h1>
+                                    </a>
+                                </Link>
+                            </Logo>
+                            <LeftUl>
+                                <li>
+                                    <a>
+                                        <Link href="/login">
+                                            <a>로그인</a>
+                                        </Link>
+                                    </a>
+                                </li>
+                            </LeftUl>
                         </Navigation>
                     </Row>
                 </Header>
@@ -36,8 +75,14 @@ const AppLayout: FunctionComponent = ({ children }) => {
                     <MainHeaderSection>
                         <Col span={24}>
                             <Row>
-                                <MainHeaderSectionCol span={12}>
-                                    <h1>코후비 블로그</h1>
+                                <MainHeaderSectionCol span={16}>
+                                    <Divider
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                    >
+                                        Latest
+                                    </Divider>
                                 </MainHeaderSectionCol>
                             </Row>
                         </Col>
@@ -47,10 +92,9 @@ const AppLayout: FunctionComponent = ({ children }) => {
             <MainContentRow style={{ height: "100vh" }}>
                 <Col span={24}>
                     <Row>
-                        <MainContentCol span={12}>
+                        <MainContentCol span={16}>
                             <Row>
-                                <Col span={17}>{children}</Col>
-                                <Col span={7}>사이드바</Col>
+                                <Col span={24}>{children}</Col>
                             </Row>
                         </MainContentCol>
                     </Row>

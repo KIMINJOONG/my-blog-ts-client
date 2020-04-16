@@ -11,15 +11,16 @@ export const Header = styled(Col)`
 `;
 
 export const Navigation = styled(Col)`
-    position: relative;
+    display: flex;
     margin: 0 auto;
 `;
 
 export const Ul = styled.ul`
-    float: left;
+    display: flex;
+    flex: 1;
+    align-items: center;
 
     & > li {
-        vertical-align: middle;
         display: inline-block;
         margin-right: 25px;
         position: relative;
@@ -27,13 +28,27 @@ export const Ul = styled.ul`
     }
 `;
 
-export const SubUl = styled.ul`
-    float: right;
+export const Logo = styled.div`
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+    & > a > h1 {
+        color: white;
+        cursor: pointer;
+    }
+`;
+
+export const LeftUl = styled.ul`
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: row-reverse;
 
     & > li {
-        vertical-align: middle;
         display: inline-block;
-        margin-left: 25px;
+        margin-right: 25px;
         position: relative;
         color: #ffffff;
     }
