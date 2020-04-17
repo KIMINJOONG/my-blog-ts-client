@@ -1,12 +1,9 @@
 import { FunctionComponent } from "react";
-import { Layout, Row, Col, Divider } from "antd";
+import { Layout, Row, Col } from "antd";
 import {
     Header,
     Ul,
     Navigation,
-    MainHeaderSectionCol,
-    MainHeaderSection,
-    MainHeaderContainer,
     MainContentRow,
     MainContentCol,
     LeftUl,
@@ -59,42 +56,23 @@ const AppLayout: FunctionComponent = ({ children }) => {
                             </Logo>
                             <LeftUl>
                                 <li>
-                                    <a>
-                                        <Link href="/login">
-                                            <a>로그인</a>
-                                        </Link>
-                                    </a>
+                                    <Link href="/login">
+                                        <a>로그인</a>
+                                    </Link>
                                 </li>
                             </LeftUl>
                         </Navigation>
                     </Row>
                 </Header>
             </Row>
-            <MainHeaderContainer>
+            <MainContentRow>
                 <Col span={24}>
-                    <MainHeaderSection>
-                        <Col span={24}>
-                            <Row>
-                                <MainHeaderSectionCol span={16}>
-                                    <Divider
-                                        style={{
-                                            borderBottom: "1px solid black",
-                                        }}
-                                    >
-                                        Latest
-                                    </Divider>
-                                </MainHeaderSectionCol>
-                            </Row>
-                        </Col>
-                    </MainHeaderSection>
-                </Col>
-            </MainHeaderContainer>
-            <MainContentRow style={{ height: "100vh" }}>
-                <Col span={24}>
-                    <Row>
+                    <Row style={{ height: "100%" }}>
                         <MainContentCol span={16}>
-                            <Row>
-                                <Col span={24}>{children}</Col>
+                            <Row style={{ height: "100%" }}>
+                                <Col span={24} style={{ height: "100%" }}>
+                                    {children}
+                                </Col>
                             </Row>
                         </MainContentCol>
                     </Row>

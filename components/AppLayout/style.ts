@@ -54,23 +54,12 @@ export const LeftUl = styled.ul`
     }
 `;
 
-export const MainHeaderContainer = styled(Row)`
-    padding-top: 50px;
-`;
-
-export const MainHeaderSection = styled(Row)`
-    padding: 70px 0;
-`;
-
-export const MainHeaderSectionCol = styled(Col)`
-    margin: 0 auto;
-    text-align: center;
-`;
-
 export const MainContentRow = styled(Row)`
+    padding-top: 50px;
     height: 100vh;
 `;
 
 export const MainContentCol = styled(Col)`
+    height: 100%;
     margin: 0 auto;
 `;

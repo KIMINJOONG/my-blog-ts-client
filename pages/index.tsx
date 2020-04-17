@@ -1,8 +1,17 @@
-import { Row, Col, Card } from "antd";
+import { Row, Col, Card, Divider } from "antd";
 
 const Home = () => (
     <div>
         <Row>
+            <Col span={24}>
+                <Divider
+                    style={{
+                        borderBottom: "1px solid black",
+                    }}
+                >
+                    Latest
+                </Divider>
+            </Col>
             <Col span={8}>
                 <Card
                     style={{ marginRight: "10px" }}
