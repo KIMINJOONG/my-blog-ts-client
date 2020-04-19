@@ -8,8 +8,10 @@
         "start": "next start"
     },
     "dependencies": {
+        "@types/axios": "^0.14.0",
         "@zeit/next-css": "^1.0.1",
         "antd": "^4.1.2",
+        "axios": "^0.19.2",
         "babel-plugin-import": "^1.13.0",
         "babel-plugin-inline-import": "^3.0.0",
         "babel-plugin-styled-components": "^1.10.7",

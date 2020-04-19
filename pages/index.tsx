@@ -1,6 +1,7 @@
 import { Row, Col, Card, Divider } from "antd";
+import { NextPage } from "next";
 
-const Home = () => (
+const Home: NextPage = () => (
     <div>
         <Row>
             <Col span={24}>
