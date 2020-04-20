@@ -27,15 +27,22 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 interface Props extends AppProps {
-    result: any;
+    serverData: {
+        role: number;
+        _id: string;
+        email: string;
+        password: string;
+        name: string;
+        __v: number;
+    };
 }
 
 const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
     Component,
     pageProps,
-    result,
+    serverData,
 }) => {
-    console.log("result : ", result);
+    console.log("result : ", serverData);
     return (
         <div>
             <UserStore.Provider value={{ me: null }}>
@@ -54,13 +61,22 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
 
 MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
     let pageProps = {};
-    let result = "sadfadsfa";
+    const cookie = ctx.req?.headers.cookie ? ctx.req?.headers.cookie : "";
+    axios.defaults.headers.Authorization = cookie;
+    const result = await axios.get("http://localhost:4000/users/me", {
+        withCredentials: true,
+    });
+
+    const {
+        data: { data: serverData },
+        status: httpStatus,
+    } = result;
 
     if (Component.getInitialProps) {
         pageProps = await Component.getInitialProps(ctx);
     }
 
-    return { pageProps, result };
+    return { pageProps, serverData };
 };
 
 // class MyBlog extends App<Props> {

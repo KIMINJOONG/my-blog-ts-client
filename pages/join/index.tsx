@@ -1,6 +1,7 @@
 import { Row, Col, Form, Input, Button, message } from "antd";
 import { useCallback, useState, ChangeEvent } from "react";
 import axios from "axios";
+import Router from "next/router";
 
 interface IJoinForm {
     email: string;
@@ -45,6 +46,7 @@ const join = () => {
                     message.success(
                         "회원가입에 성공하였습니다. 로그인을 하여주세요"
                     );
+                    Router.push("/login");
                 } else {
                     message.error(serverData.error);
                 }

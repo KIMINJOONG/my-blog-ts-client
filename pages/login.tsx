@@ -1,10 +1,52 @@
-import { Row, Col, Form, Input, Button } from "antd";
+import { Row, Col, Form, Input, Button, message } from "antd";
 import Link from "next/link";
-import { useCallback } from "react";
+import Router from "next/router";
+import { useCallback, useState, ChangeEvent } from "react";
+import api from "../api";
+import jsCookie from "js-cookie";
 
+interface ILoginForm {
+    email: string;
+    password: string;
+}
+
+const useForm = (initValue: ILoginForm) => {
+    const [value, setValue] = useState(initValue);
+
+    const onChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            setValue({ ...value, [e.target.name]: e.target.value });
+        },
+        [value]
+    );
+
+    return { value, onChange };
+};
 const Login = () => {
-    const onSubmit = useCallback((e) => {
-        e.preventDefault();
+    message.config({
+        top: 65,
+        duration: 2,
+        maxCount: 3,
+        rtl: true,
+    });
+    const loginForm = useForm({
+        email: "",
+        password: "",
+    });
+    const onSubmit = useCallback(async (values) => {
+        const result = await api.login("/users/login", values);
+        const { data, status: httpStatus } = result;
+        if (httpStatus === 200) {
+            if (data.success) {
+                message.success("로그인되었습니다.");
+                jsCookie.set("token", data.data);
+                Router.push("/");
+            } else {
+                message.error(data.data.message);
+            }
+        } else {
+            message.error(data.message);
+        }
     }, []);
     return (
         <div
@@ -17,7 +59,7 @@ const Login = () => {
         >
             <Row>
                 <Col>
-                    <Form>
+                    <Form onFinish={onSubmit}>
                         <Form.Item
                             name="email"
                             label="E-mail"
@@ -32,7 +74,11 @@ const Login = () => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input
+                                name="email"
+                                value={loginForm.value.email}
+                                onChange={loginForm.onChange}
+                            />
                         </Form.Item>
                         <Form.Item
                             name="password"
@@ -45,15 +91,14 @@ const Login = () => {
                             ]}
                             hasFeedback
                         >
-                            <Input.Password />
+                            <Input.Password
+                                name="password"
+                                value={loginForm.value.password}
+                                onChange={loginForm.onChange}
+                            />
                         </Form.Item>
                         <Form.Item>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                block
-                                onClick={onSubmit}
-                            >
+                            <Button type="primary" htmlType="submit" block>
                                 Login
                             </Button>
                             <Button type="primary" block>
