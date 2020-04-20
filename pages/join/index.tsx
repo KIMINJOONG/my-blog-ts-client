@@ -1,5 +1,6 @@
-import { Row, Col, Form, Input, Button } from "antd";
+import { Row, Col, Form, Input, Button, message } from "antd";
 import { useCallback, useState, ChangeEvent } from "react";
+import axios from "axios";
 
 interface IJoinForm {
     email: string;
@@ -28,9 +29,28 @@ const join = () => {
     });
 
     const onSubmit = useCallback(
-        (e) => {
-            e.preventDefault();
-            console.log(joinForm);
+        async (values) => {
+            const result = await axios.post(
+                "http://localhost:4000/users",
+                values,
+                {
+                    withCredentials: true,
+                }
+            );
+            const { data, status: httpStatus } = result;
+
+            if (httpStatus === 200) {
+                const { data: serverData } = data;
+                if (serverData.success) {
+                    message.success(
+                        "회원가입에 성공하였습니다. 로그인을 하여주세요"
+                    );
+                } else {
+                    message.error(serverData.error);
+                }
+            } else {
+                message.error("api 통신실패");
+            }
         },
         [joinForm]
     );
@@ -46,7 +66,7 @@ const join = () => {
         >
             <Row>
                 <Col>
-                    <Form>
+                    <Form onFinish={onSubmit}>
                         <Form.Item
                             name="email"
                             label="E-mail"
@@ -133,12 +153,7 @@ const join = () => {
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                block
-                                onClick={onSubmit}
-                            >
+                            <Button type="primary" htmlType="submit" block>
                                 회원가입
                             </Button>
                         </Form.Item>
