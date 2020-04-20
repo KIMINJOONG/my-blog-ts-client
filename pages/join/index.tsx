@@ -1,11 +1,39 @@
 import { Row, Col, Form, Input, Button } from "antd";
-import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useState, ChangeEvent } from "react";
 
+interface IJoinForm {
+    email: string;
+    password: string;
+    passwordConfirm: string;
+    name: string;
+}
+const useForm = (initValue: IJoinForm) => {
+    const [value, setValue] = useState(initValue);
+
+    const onClick = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            setValue({ ...value, [e.target.name]: e.target.value });
+        },
+        [value]
+    );
+
+    return { value, onClick };
+};
 const join = () => {
-    const onSubmit = useCallback((e) => {
-        e.preventDefault();
-    }, []);
+    const joinForm = useForm({
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        name: "",
+    });
+
+    const onSubmit = useCallback(
+        (e) => {
+            e.preventDefault();
+            console.log(joinForm);
+        },
+        [joinForm]
+    );
     return (
         <div
             style={{
@@ -33,7 +61,11 @@ const join = () => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input
+                                name="email"
+                                value={joinForm.value.email}
+                                onChange={joinForm.onClick}
+                            />
                         </Form.Item>
                         <Form.Item
                             name="password"
@@ -46,7 +78,11 @@ const join = () => {
                             ]}
                             hasFeedback
                         >
-                            <Input.Password />
+                            <Input.Password
+                                name="password"
+                                value={joinForm.value.password}
+                                onChange={joinForm.onClick}
+                            />
                         </Form.Item>
                         <Form.Item
                             name="confirm"
@@ -73,10 +109,14 @@ const join = () => {
                                 }),
                             ]}
                         >
-                            <Input.Password />
+                            <Input.Password
+                                name="passwordConfirm"
+                                value={joinForm.value.passwordConfirm}
+                                onChange={joinForm.onClick}
+                            />
                         </Form.Item>
                         <Form.Item
-                            name="nickname"
+                            name="name"
                             label={<span>Nickname&nbsp;</span>}
                             rules={[
                                 {
@@ -86,13 +126,20 @@ const join = () => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input
+                                name="name"
+                                value={joinForm.value.name}
+                                onChange={joinForm.onClick}
+                            />
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" block>
-                                <Link href="/join">
-                                    <a>회원가입</a>
-                                </Link>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                block
+                                onClick={onSubmit}
+                            >
+                                회원가입
                             </Button>
                         </Form.Item>
                     </Form>
