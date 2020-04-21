@@ -1,5 +1,5 @@
-import { FunctionComponent } from "react";
-import { Layout, Row, Col } from "antd";
+import { FunctionComponent, useContext, useCallback } from "react";
+import { Layout, Row, Col, Button } from "antd";
 import {
     Header,
     Ul,
@@ -10,8 +10,17 @@ import {
     Logo,
 } from "./style";
 import Link from "next/link";
+import userStore from "../../stores/userStore";
+import jsCookie from "js-cookie";
 
 const AppLayout: FunctionComponent = ({ children }) => {
+    const userState = useContext(userStore);
+
+    const onClickLogout = useCallback(() => {
+        jsCookie.remove("token");
+        userState.me.getMe();
+    }, [userState]);
+    console.log(userState);
     return (
         <Layout>
             <Row>
@@ -56,9 +65,18 @@ const AppLayout: FunctionComponent = ({ children }) => {
                             </Logo>
                             <LeftUl>
                                 <li>
-                                    <Link href="/login">
-                                        <a>로그인</a>
-                                    </Link>
+                                    {userState &&
+                                    userState.me &&
+                                    userState.me.value &&
+                                    userState.me.value._id ? (
+                                        <Button onClick={onClickLogout}>
+                                            <a>로그아웃</a>
+                                        </Button>
+                                    ) : (
+                                        <Link href="/login">
+                                            <a>로그인</a>
+                                        </Link>
+                                    )}
                                 </li>
                             </LeftUl>
                         </Navigation>

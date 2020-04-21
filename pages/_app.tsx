@@ -3,10 +3,11 @@ import { Helmet } from "react-helmet";
 import { createGlobalStyle } from "styled-components";
 import { reset } from "styled-reset";
 import AppLayout from "../components/AppLayout";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import UserStore from "../stores/userStore";
 import axios from "axios";
 import { NextComponentType } from "next";
+import api from "../api";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};
@@ -37,16 +38,33 @@ interface Props extends AppProps {
     };
 }
 
+const useForm = (initValue: any) => {
+    const [value, setValue] = useState(initValue);
+
+    const serverDataInit = useCallback(
+        (serverData) => {
+            setValue({ ...serverData });
+        },
+        [value]
+    );
+
+    const getMe = useCallback(async () => {
+        const result = await api.getMe();
+    }, [value]);
+
+    return { value, getMe, serverDataInit };
+};
+
 const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
     Component,
     pageProps,
     serverData,
 }) => {
-    console.log("result : ", serverData);
+    const userForm = useForm(serverData);
+
     return (
         <div>
-            <UserStore.Provider value={{ me: null }}>
-                {" "}
+            <UserStore.Provider value={{ me: userForm }}>
                 <Helmet>
                     <title>Kohubi's 블로그</title>
                 </Helmet>
@@ -67,10 +85,11 @@ MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
         withCredentials: true,
     });
 
-    const {
-        data: { data: serverData },
-        status: httpStatus,
-    } = result;
+    let serverData = null;
+    const { data, status: httpStatus } = result;
+    if (httpStatus === 200) {
+        serverData = data.data;
+    }
 
     if (Component.getInitialProps) {
         pageProps = await Component.getInitialProps(ctx);

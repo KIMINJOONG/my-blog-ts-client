@@ -1,9 +1,10 @@
 import { Row, Col, Form, Input, Button, message } from "antd";
 import Link from "next/link";
 import Router from "next/router";
-import { useCallback, useState, ChangeEvent } from "react";
+import { useCallback, useState, ChangeEvent, useContext } from "react";
 import api from "../api";
 import jsCookie from "js-cookie";
+import userStore from "../stores/userStore";
 
 interface ILoginForm {
     email: string;
@@ -23,6 +24,7 @@ const useForm = (initValue: ILoginForm) => {
     return { value, onChange };
 };
 const Login = () => {
+    const userState = useContext(userStore);
     message.config({
         top: 65,
         duration: 2,
@@ -33,21 +35,25 @@ const Login = () => {
         email: "",
         password: "",
     });
-    const onSubmit = useCallback(async (values) => {
-        const result = await api.login("/users/login", values);
-        const { data, status: httpStatus } = result;
-        if (httpStatus === 200) {
-            if (data.success) {
-                message.success("로그인되었습니다.");
-                jsCookie.set("token", data.data);
-                Router.push("/");
+    const onSubmit = useCallback(
+        async (values) => {
+            const result = await api.login("/users/login", values);
+            const { data, status: httpStatus } = result;
+            if (httpStatus === 200) {
+                if (data.success) {
+                    message.success("로그인되었습니다.");
+                    await jsCookie.set("token", data.data);
+                    userState.me.getMe();
+                    Router.push("/");
+                } else {
+                    message.error(data.data.message);
+                }
             } else {
-                message.error(data.data.message);
+                message.error(data.message);
             }
-        } else {
-            message.error(data.message);
-        }
-    }, []);
+        },
+        [userState]
+    );
     return (
         <div
             style={{

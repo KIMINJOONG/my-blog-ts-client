@@ -18,4 +18,12 @@ export default {
             return error.response;
         }
     },
+    getMe: async () => {
+        try {
+            const result = await api.get("/users/me");
+            return result;
+        } catch (error) {
+            return error.response;
+        }
+    },
 };
