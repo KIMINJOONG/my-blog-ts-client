@@ -7,7 +7,7 @@ import { useState, useCallback } from "react";
 import UserStore from "../stores/userStore";
 import axios from "axios";
 import { NextComponentType } from "next";
-import api from "../api";
+import jsCookie from "js-cookie";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};
@@ -49,7 +49,18 @@ const useForm = (initValue: any) => {
     );
 
     const getMe = useCallback(async () => {
-        const result = await api.getMe();
+        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
+        const result = await axios.get("http://localhost:4000/users/me", {
+            headers: {
+                Authorization: `token=${token}`,
+            },
+        });
+        const { data, status: httpStatus } = result;
+        if (data && httpStatus === 200) {
+            setValue({ ...data.data });
+        } else {
+            setValue(null);
+        }
     }, [value]);
 
     return { value, getMe, serverDataInit };
@@ -64,7 +75,7 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
 
     return (
         <div>
-            <UserStore.Provider value={{ me: userForm }}>
+            <UserStore.Provider value={userForm}>
                 <Helmet>
                     <title>Kohubi's 블로그</title>
                 </Helmet>

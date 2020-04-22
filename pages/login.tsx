@@ -5,6 +5,7 @@ import { useCallback, useState, ChangeEvent, useContext } from "react";
 import api from "../api";
 import jsCookie from "js-cookie";
 import userStore from "../stores/userStore";
+import axios from "axios";
 
 interface ILoginForm {
     email: string;
@@ -42,8 +43,8 @@ const Login = () => {
             if (httpStatus === 200) {
                 if (data.success) {
                     message.success("로그인되었습니다.");
-                    await jsCookie.set("token", data.data);
-                    userState.me.getMe();
+                    jsCookie.set("token", data.data);
+                    userState.getMe();
                     Router.push("/");
                 } else {
                     message.error(data.data.message);

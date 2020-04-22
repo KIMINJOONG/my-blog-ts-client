@@ -3,9 +3,6 @@ import jsCookie from "js-cookie";
 
 const api = axios.create({
     baseURL: "http://localhost:4000",
-    headers: {
-        Authorization: jsCookie.get("token") ? jsCookie.get("token") : "",
-    },
     withCredentials: true,
 });
 
@@ -20,7 +17,13 @@ export default {
     },
     getMe: async () => {
         try {
-            const result = await api.get("/users/me");
+            const Authorization = await jsCookie.get("token");
+            const result = await api.get("/users/me", {
+                params: {},
+                headers: {
+                    Authorization,
+                },
+            });
             return result;
         } catch (error) {
             return error.response;

@@ -1,5 +1,5 @@
 import { FunctionComponent, useContext, useCallback } from "react";
-import { Layout, Row, Col, Button } from "antd";
+import { Layout, Row, Col, Button, message } from "antd";
 import {
     Header,
     Ul,
@@ -18,9 +18,9 @@ const AppLayout: FunctionComponent = ({ children }) => {
 
     const onClickLogout = useCallback(() => {
         jsCookie.remove("token");
-        userState.me.getMe();
+        userState.getMe();
+        message.success("로그아웃 되었습니다");
     }, [userState]);
-    console.log(userState);
     return (
         <Layout>
             <Row>
@@ -66,9 +66,8 @@ const AppLayout: FunctionComponent = ({ children }) => {
                             <LeftUl>
                                 <li>
                                     {userState &&
-                                    userState.me &&
-                                    userState.me.value &&
-                                    userState.me.value._id ? (
+                                    userState.value &&
+                                    userState.value._id ? (
                                         <Button onClick={onClickLogout}>
                                             <a>로그아웃</a>
                                         </Button>
