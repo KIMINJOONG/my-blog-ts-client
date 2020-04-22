@@ -68,7 +68,11 @@ const AppLayout: FunctionComponent = ({ children }) => {
                                     {userState &&
                                     userState.value &&
                                     userState.value._id ? (
-                                        <Button onClick={onClickLogout}>
+                                        <Button
+                                            onClick={onClickLogout}
+                                            type="link"
+                                            ghost
+                                        >
                                             <a>로그아웃</a>
                                         </Button>
                                     ) : (
