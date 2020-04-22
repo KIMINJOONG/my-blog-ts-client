@@ -8,6 +8,7 @@ import UserStore from "../stores/userStore";
 import axios from "axios";
 import { NextComponentType } from "next";
 import jsCookie from "js-cookie";
+import "../node_modules/antd/dist/antd.css";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};
