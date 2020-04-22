@@ -16,3 +16,7 @@
 -   [ ] borad delete page
 -   [ ] pagination
 -   [ ] search the board
+
+### 에러
+
+-   axios로 서버호출시 header값이 들어가지않는 부분 변경 필요 (일시해결)
