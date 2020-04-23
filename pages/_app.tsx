@@ -9,6 +9,7 @@ import axios from "axios";
 import { NextComponentType } from "next";
 import jsCookie from "js-cookie";
 import "../node_modules/antd/dist/antd.css";
+import "jodit/build/jodit.min.css";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};

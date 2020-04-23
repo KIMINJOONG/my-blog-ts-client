@@ -1,4 +1,5 @@
-import { Table, Tag } from "antd";
+import { Table, Tag, Button, Col } from "antd";
+import Link from "next/link";
 
 const columns = [
     {
@@ -76,6 +77,12 @@ const data = [
 const boards = () => {
     return (
         <div style={{ marginTop: "58px" }}>
+            <Col style={{ textAlign: "right" }}>
+                <Link href="/boards/edit">
+                    <a>글쓰기</a>
+                </Link>
+            </Col>
+
             <Table columns={columns} dataSource={data} />
         </div>
     );
