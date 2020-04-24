@@ -1,52 +1,24 @@
-import { Table, Tag, Button, Col } from "antd";
+import { Table, Tag, Col } from "antd";
 import Link from "next/link";
+import { useEffect, useState, useCallback } from "react";
+import axios from "axios";
 
 const columns = [
     {
         title: "게시글 번호",
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "_id",
+        key: "_id",
         render: (text: String) => <a>{text}</a>,
     },
     {
         title: "제목",
-        dataIndex: "age",
-        key: "age",
+        dataIndex: "title",
+        key: "title",
     },
     {
         title: "요약내용",
-        dataIndex: "address",
-        key: "address",
-    },
-    {
-        title: "Tags",
-        key: "tags",
-        dataIndex: "tags",
-        render: (tags: any) => (
-            <span>
-                {tags.map((tag: string) => {
-                    let color = tag.length > 5 ? "geekblue" : "green";
-                    if (tag === "loser") {
-                        color = "volcano";
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </span>
-        ),
-    },
-    {
-        title: "Action",
-        key: "action",
-        render: (text: String, record: any) => (
-            <span>
-                <a style={{ marginRight: 16 }}>Invite {record.name}</a>
-                <a>Delete</a>
-            </span>
-        ),
+        dataIndex: "content",
+        key: "content",
     },
 ];
 
@@ -75,6 +47,20 @@ const data = [
 ];
 
 const boards = () => {
+    const [boards, setBoards] = useState([]);
+
+    const init = useCallback(async () => {
+        const result = await axios.get("http://localhost:4000/boards");
+        const { data, status: httpStatus } = result;
+
+        if (httpStatus === 200) {
+            setBoards(data.data);
+        }
+    }, []);
+
+    useEffect(() => {
+        init();
+    }, []);
     return (
         <div style={{ marginTop: "58px" }}>
             <Col style={{ textAlign: "right" }}>
@@ -82,8 +68,7 @@ const boards = () => {
                     <a>글쓰기</a>
                 </Link>
             </Col>
-
-            <Table columns={columns} dataSource={data} />
+            {boards && <Table columns={columns} dataSource={boards} />}
         </div>
     );
 };
