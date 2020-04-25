@@ -8,41 +8,31 @@ const columns = [
         title: "게시글 번호",
         dataIndex: "_id",
         key: "_id",
-        render: (text: String) => <a>{text}</a>,
+        render: (text: string) => (
+            <Link href={`/boards/${text}`}>
+                <a>{text}</a>
+            </Link>
+        ),
     },
     {
         title: "제목",
         dataIndex: "title",
         key: "title",
+        render: (text: string, record: any) => (
+            <Link href={`/boards/${record._id}`}>
+                <a>{text}</a>
+            </Link>
+        ),
     },
     {
         title: "요약내용",
         dataIndex: "content",
         key: "content",
-    },
-];
-
-const data = [
-    {
-        key: "1",
-        name: "John Brown",
-        age: 32,
-        address: "New York No. 1 Lake Park",
-        tags: ["nice", "developer"],
-    },
-    {
-        key: "2",
-        name: "Jim Green",
-        age: 42,
-        address: "London No. 1 Lake Park",
-        tags: ["loser"],
-    },
-    {
-        key: "3",
-        name: "Joe Black",
-        age: 32,
-        address: "Sidney No. 1 Lake Park",
-        tags: ["cool", "teacher"],
+        render: (text: string, record: any) => (
+            <Link href={`/boards/${record._id}`}>
+                <a>{text}</a>
+            </Link>
+        ),
     },
 ];
 
