@@ -102,8 +102,8 @@ const Edit = ({ param, data }: IProps) => {
         const token = jsCookie.get("token") ? jsCookie.get("token") : "";
         let result;
         if (param) {
-            result = await axios.post(
-                "http://localhost:4000/boards",
+            result = await axios.put(
+                `http://localhost:4000/boards/${param}`,
                 dataForm,
                 {
                     headers: {
@@ -112,11 +112,15 @@ const Edit = ({ param, data }: IProps) => {
                 }
             );
         } else {
-            result = await axios.put("http://localhost:4000/boards", dataForm, {
-                headers: {
-                    Authorization: `token=${token}`,
-                },
-            });
+            result = await axios.post(
+                "http://localhost:4000/boards/${}",
+                dataForm,
+                {
+                    headers: {
+                        Authorization: `token=${token}`,
+                    },
+                }
+            );
         }
 
         const { data, status: httpStatus } = result;
@@ -145,8 +149,9 @@ const Edit = ({ param, data }: IProps) => {
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">
-                    Submit
+                    {param ? "수정" : "등록"}
                 </Button>
+                {param && <Button type="danger">삭제</Button>}
             </Form.Item>
         </Form>
     );
