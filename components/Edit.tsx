@@ -93,6 +93,21 @@ const Edit = ({ param, data }: IProps) => {
         dataInit();
     }, [data]);
 
+    const onClickRemove = useCallback(async () => {
+        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
+
+        const result = await axios.delete(
+            `http://localhost:4000/boards/${param}`
+        );
+
+        const { data, status: httpStatus } = result;
+
+        if (httpStatus === 200) {
+            message.success("삭제되었습니다.");
+            Router.push("/boards");
+        }
+    }, []);
+
     const onSubmit = useCallback(async () => {
         const dataForm = {
             content,
@@ -113,7 +128,7 @@ const Edit = ({ param, data }: IProps) => {
             );
         } else {
             result = await axios.post(
-                "http://localhost:4000/boards/${}",
+                "http://localhost:4000/boards",
                 dataForm,
                 {
                     headers: {
@@ -130,7 +145,7 @@ const Edit = ({ param, data }: IProps) => {
             } else {
                 message.success("등록되었습니다.");
             }
-            Router.push("/boards");
+            Router.push(`/boards/${data.data._id}`);
         }
     }, [content, title]);
 
@@ -151,7 +166,11 @@ const Edit = ({ param, data }: IProps) => {
                 <Button type="primary" htmlType="submit">
                     {param ? "수정" : "등록"}
                 </Button>
-                {param && <Button type="danger">삭제</Button>}
+                {param && (
+                    <Button type="danger" onClick={onClickRemove}>
+                        삭제
+                    </Button>
+                )}
             </Form.Item>
         </Form>
     );
