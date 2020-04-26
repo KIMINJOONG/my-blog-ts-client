@@ -18,52 +18,10 @@ const JoditEditor = dynamic(importJodit, {
     ssr: false,
 });
 
-const config = {
-    uploader: { insertImageAsBase64URI: true },
-    readonly: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false,
-    showWordsCounter: false,
-    toolbarAdaptive: false,
-    language: "ko",
-    i18n: {
-        ko: {
-            "Insert Image": "이미지 삽입",
-            "Font size": "글자 크기",
-            "Font family": "폰트",
-            undo: "이전",
-            redo: "이후",
-            Upload: "업로드",
-            "Drop image": "이미지를 올리거나",
-            "or click": "클릭해주세요.",
-            Delete: "삭제",
-            Edit: "수정",
-            "Horizontal align": "정렬",
-            Align: "글자 정렬",
-            "Align Center": "중앙 정렬",
-            "Align Left": "왼쪽 정렬",
-            "Align Right": "오른쪽 정렬",
-            "Align Justify": "저스티파이",
-            Left: "왼쪽",
-            Right: "오른쪽",
-            Center: "중앙",
-            Normal: "기본",
-            "Image properties": "이미지 속성",
-            Ok: "확인",
-            Background: "배경색",
-            Text: "글자색",
-            "Fill color or set the text color": "색상변경",
-        },
-    },
-    minWidth: "300px",
-    minHeight: "300px",
-    placeholder: "",
-    toolbarButtonSize: "large",
-};
-
 interface IProps {
     param?: string | string[];
     data?: any;
+    preset?: string;
 }
 
 const useInput = (initValue: any) => {
@@ -79,15 +37,61 @@ const useInput = (initValue: any) => {
     return { value, initdata, onChange };
 };
 
-const Edit = ({ param, data }: IProps) => {
+const Edit = ({ param, data, preset = "none" }: IProps) => {
     const title = useInput("");
     const [content, setContent] = useState("");
+    const [config, setConfig] = useState({
+        preset: "none",
+        uploader: { insertImageAsBase64URI: true },
+        readonly: false,
+        showXPathInStatusbar: false,
+        showCharsCounter: false,
+        showWordsCounter: false,
+        toolbarAdaptive: false,
+        language: "ko",
+        i18n: {
+            ko: {
+                "Insert Image": "이미지 삽입",
+                "Font size": "글자 크기",
+                "Font family": "폰트",
+                undo: "이전",
+                redo: "이후",
+                Upload: "업로드",
+                "Drop image": "이미지를 올리거나",
+                "or click": "클릭해주세요.",
+                Delete: "삭제",
+                Edit: "수정",
+                "Horizontal align": "정렬",
+                Align: "글자 정렬",
+                "Align Center": "중앙 정렬",
+                "Align Left": "왼쪽 정렬",
+                "Align Right": "오른쪽 정렬",
+                "Align Justify": "저스티파이",
+                Left: "왼쪽",
+                Right: "오른쪽",
+                Center: "중앙",
+                Normal: "기본",
+                "Image properties": "이미지 속성",
+                Ok: "확인",
+                Background: "배경색",
+                Text: "글자색",
+                "Fill color or set the text color": "색상변경",
+            },
+        },
+        minWidth: "300px",
+        minHeight: "300px",
+        placeholder: "",
+        toolbarButtonSize: "large",
+    });
     const dataInit = useCallback(() => {
         if (data) {
             title.initdata(data.title);
             setContent(data.content);
         }
-    }, [title]);
+        if (param) {
+            setConfig({ ...config, preset: "inline" });
+        }
+    }, [title, config]);
 
     useEffect(() => {
         dataInit();
@@ -152,7 +156,11 @@ const Edit = ({ param, data }: IProps) => {
     return (
         <Form name="boardForm" onFinish={onSubmit}>
             <Form.Item label="제목" rules={[{ required: true }]}>
-                <Input value={title.value} onChange={title.onChange} />
+                {param ? (
+                    <p>{title.value}</p>
+                ) : (
+                    <Input value={title.value} onChange={title.onChange} />
+                )}
             </Form.Item>
             <Form.Item>
                 <JoditEditor
@@ -162,16 +170,26 @@ const Edit = ({ param, data }: IProps) => {
                     onChange={(newContent) => {}}
                 />
             </Form.Item>
-            <Form.Item>
-                <Button type="primary" htmlType="submit">
-                    {param ? "수정" : "등록"}
-                </Button>
-                {param && (
+
+            {param ? (
+                <Form.Item>
+                    <Button
+                        type="primary"
+                        onClick={() => Router.push(`/boards/edit/${param}`)}
+                    >
+                        수정
+                    </Button>
                     <Button type="danger" onClick={onClickRemove}>
                         삭제
                     </Button>
-                )}
-            </Form.Item>
+                </Form.Item>
+            ) : (
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                        등록
+                    </Button>
+                </Form.Item>
+            )}
         </Form>
     );
 };

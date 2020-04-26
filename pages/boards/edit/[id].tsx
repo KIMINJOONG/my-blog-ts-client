@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import Edit from "../../components/Edit";
+import Edit from "../../../components/Edit";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
@@ -11,7 +11,9 @@ const edit = () => {
     const init = useCallback(async () => {
         const result = await axios.get(`http://localhost:4000/boards/${id}`);
         const { data, status: httpStatus } = result;
-        setData(data.data);
+        if (httpStatus === 200) {
+            setData(data.data);
+        }
     }, []);
     useEffect(() => {
         init();
@@ -19,7 +21,7 @@ const edit = () => {
 
     return (
         <div style={{ marginTop: "58px" }}>
-            <Edit param={id} data={data} preset={"inline"} />
+            <Edit param={id} data={data} />
         </div>
     );
 };
