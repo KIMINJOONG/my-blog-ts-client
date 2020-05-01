@@ -31,27 +31,27 @@ const join = () => {
 
     const onSubmit = useCallback(
         async (values) => {
-            const result = await axios.post(
-                "http://localhost:4000/users",
-                values,
-                {
-                    withCredentials: true,
-                }
-            );
-            const { data, status: httpStatus } = result;
-
-            if (httpStatus === 200) {
-                const { data: serverData } = data;
-                if (serverData.success) {
+            try {
+                const result = await axios.post(
+                    "http://localhost:4000/users",
+                    values,
+                    {
+                        withCredentials: true,
+                    }
+                );
+                const { data } = result;
+                if (data.success) {
                     message.success(
                         "회원가입에 성공하였습니다. 로그인을 하여주세요"
                     );
                     Router.push("/login");
-                } else {
-                    message.error(serverData.error);
                 }
-            } else {
-                message.error("api 통신실패");
+            } catch (error) {
+                const {
+                    data: { message: errorMessage },
+                } = error.response;
+
+                message.error(errorMessage);
             }
         },
         [joinForm]

@@ -26,12 +26,7 @@ const useForm = (initValue: ILoginForm) => {
 };
 const Login = () => {
     const userState = useContext(userStore);
-    message.config({
-        top: 65,
-        duration: 2,
-        maxCount: 3,
-        rtl: true,
-    });
+
     const loginForm = useForm({
         email: "",
         password: "",

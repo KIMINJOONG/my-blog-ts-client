@@ -10,6 +10,7 @@ import { NextComponentType } from "next";
 import jsCookie from "js-cookie";
 import "../node_modules/antd/dist/antd.css";
 import "jodit/build/jodit.min.css";
+import { message } from "antd";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};
@@ -73,6 +74,13 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
     pageProps,
     serverData,
 }) => {
+    message.config({
+        top: 65,
+        duration: 2,
+        maxCount: 3,
+        rtl: true,
+    });
+
     const userForm = useForm(serverData);
 
     return (
