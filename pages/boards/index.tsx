@@ -8,6 +8,7 @@ const columns = [
         title: "게시글 번호",
         dataIndex: "id",
         key: "id",
+        width: "10%",
         render: (text: string) => (
             <Link href={`/boards/${text}`}>
                 <a>{text}</a>
@@ -25,12 +26,13 @@ const columns = [
         ),
     },
     {
-        title: "요약내용",
-        dataIndex: "content",
-        key: "content",
+        title: "날짜",
+        dataIndex: "createdAt",
+        key: "createdAt",
+        width: "15%",
         render: (text: string, record: any) => (
             <Link href={`/boards/${record.id}`}>
-                <a>{text}</a>
+                <a>{text.substring(0, 10)}</a>
             </Link>
         ),
     },
@@ -58,7 +60,13 @@ const boards = () => {
                     <a>글쓰기</a>
                 </Link>
             </Col>
-            {boards && <Table columns={columns} dataSource={boards} />}
+            {boards && (
+                <Table
+                    columns={columns}
+                    dataSource={boards}
+                    pagination={{ position: ["bottomCenter"] }}
+                />
+            )}
         </div>
     );
 };

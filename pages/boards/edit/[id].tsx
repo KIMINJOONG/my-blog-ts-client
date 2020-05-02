@@ -21,7 +21,7 @@ const edit = () => {
 
     return (
         <div style={{ marginTop: "58px" }}>
-            <Edit param={id} data={data} />
+            <Edit param={id} data={data} preset={"none"} />
         </div>
     );
 };

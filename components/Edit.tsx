@@ -22,6 +22,7 @@ interface IProps {
     param?: string | string[];
     data?: any;
     preset?: string;
+    disabled?: boolean;
 }
 
 const useInput = (initValue: any) => {
@@ -37,11 +38,12 @@ const useInput = (initValue: any) => {
     return { value, initdata, onChange };
 };
 
-const Edit = ({ param, data, preset = "none" }: IProps) => {
+const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
     const title = useInput("");
     const [content, setContent] = useState("");
     const [config, setConfig] = useState({
-        preset: "none",
+        preset,
+        disabled: preset === "none" ? false : true,
         uploader: { insertImageAsBase64URI: true },
         readonly: false,
         showXPathInStatusbar: false,
@@ -87,9 +89,6 @@ const Edit = ({ param, data, preset = "none" }: IProps) => {
         if (data) {
             title.initdata(data.title);
             setContent(data.content);
-        }
-        if (param) {
-            setConfig({ ...config, preset: "inline" });
         }
     }, [title, config]);
 
@@ -149,14 +148,14 @@ const Edit = ({ param, data, preset = "none" }: IProps) => {
             } else {
                 message.success("등록되었습니다.");
             }
-            Router.push(`/boards/${data.data._id}`);
+            Router.push(`/boards/${data.data.id}`);
         }
     }, [content, title]);
 
     return (
         <Form name="boardForm" onFinish={onSubmit}>
             <Form.Item label="제목" rules={[{ required: true }]}>
-                {param ? (
+                {preset === "inline" ? (
                     <p>{title.value}</p>
                 ) : (
                     <Input value={title.value} onChange={title.onChange} />
@@ -173,12 +172,19 @@ const Edit = ({ param, data, preset = "none" }: IProps) => {
 
             {param ? (
                 <Form.Item>
-                    <Button
-                        type="primary"
-                        onClick={() => Router.push(`/boards/edit/${param}`)}
-                    >
-                        수정
-                    </Button>
+                    {preset === "inline" ? (
+                        <Button
+                            type="primary"
+                            onClick={() => Router.push(`/boards/edit/${param}`)}
+                        >
+                            수정
+                        </Button>
+                    ) : (
+                        <Button type="primary" onClick={onSubmit}>
+                            수정
+                        </Button>
+                    )}
+
                     <Button type="danger" onClick={onClickRemove}>
                         삭제
                     </Button>

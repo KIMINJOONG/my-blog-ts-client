@@ -19,7 +19,7 @@ const edit = () => {
 
     return (
         <div style={{ marginTop: "58px" }}>
-            <Edit param={id} data={data} preset={"inline"} />
+            <Edit param={id} data={data} preset={"inline"} disabled={true} />
         </div>
     );
 };
