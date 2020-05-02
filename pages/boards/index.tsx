@@ -6,8 +6,8 @@ import axios from "axios";
 const columns = [
     {
         title: "게시글 번호",
-        dataIndex: "_id",
-        key: "_id",
+        dataIndex: "id",
+        key: "id",
         render: (text: string) => (
             <Link href={`/boards/${text}`}>
                 <a>{text}</a>
@@ -19,7 +19,7 @@ const columns = [
         dataIndex: "title",
         key: "title",
         render: (text: string, record: any) => (
-            <Link href={`/boards/${record._id}`}>
+            <Link href={`/boards/${record.id}`}>
                 <a>{text}</a>
             </Link>
         ),
@@ -29,7 +29,7 @@ const columns = [
         dataIndex: "content",
         key: "content",
         render: (text: string, record: any) => (
-            <Link href={`/boards/${record._id}`}>
+            <Link href={`/boards/${record.id}`}>
                 <a>{text}</a>
             </Link>
         ),
