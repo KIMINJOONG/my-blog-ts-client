@@ -44,7 +44,34 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
     const [config, setConfig] = useState({
         preset,
         disabled: preset === "none" ? false : true,
-        uploader: { insertImageAsBase64URI: true },
+        uploader: {
+            url: "http://localhost:4000/images/upload",
+            insertImageAsBase64URI: false,
+            imagesExtensions: ["jpg", "png", "jpeg", "gif"],
+            headers: {
+                Authorization: "zjdkjfkld",
+            },
+            filesVariableName(i: number): string {
+                console.log("i : ", i);
+                return `files`;
+            },
+            withCredentials: true,
+            pathVariableName: "path",
+            format: "json",
+            method: "POST",
+            isSuccess: function (resp: any) {
+                return !resp.error;
+            },
+            process: function (resp: any) {
+                return {
+                    files: resp.files,
+                    path: resp.path,
+                    baseurl: resp.baseurl,
+                    error: resp.error,
+                    message: resp.message,
+                };
+            },
+        },
         readonly: false,
         showXPathInStatusbar: false,
         showCharsCounter: false,
