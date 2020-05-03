@@ -59,17 +59,36 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
             pathVariableName: "path",
             format: "json",
             method: "POST",
+            prepareData: function (data: any) {
+                console.log("prepareData : ", data);
+                return data;
+            },
             isSuccess: function (resp: any) {
+                console.log("isSucess : ", resp);
                 return !resp.error;
             },
             process: function (resp: any) {
+                console.log("process : ", resp);
                 return {
-                    files: resp.files,
-                    path: resp.path,
-                    baseurl: resp.baseurl,
-                    error: resp.error,
-                    message: resp.message,
+                    fileName: resp[0],
+                    baseurl: "http://localhost:4000/",
                 };
+            },
+
+            defaultHandlerSuccess: function (
+                this: any,
+                data: { fileName: string; baseurl: string }
+            ) {
+                setContent(
+                    `${this.value} <img src=${data.baseurl + data.fileName} />`
+                );
+                // if (data[field] && data[field].length) {
+                //     for (i = 0; i < data[field].length; i += 1) {
+                //         this.selection.insertImage(
+                //             data.baseurl + data[field][i]
+                //         );
+                //     }
+                // }
             },
         },
         readonly: false,
