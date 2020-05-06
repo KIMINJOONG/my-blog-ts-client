@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { createGlobalStyle } from "styled-components";
 import { reset } from "styled-reset";
 import AppLayout from "../components/AppLayout";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import UserStore from "../stores/userStore";
 import axios from "axios";
 import { NextComponentType } from "next";
@@ -45,7 +45,7 @@ const useForm = (initValue: any) => {
     const [value, setValue] = useState(initValue);
 
     const serverDataInit = useCallback(
-        (serverData) => {
+        (serverData: any) => {
             setValue({ ...serverData });
         },
         [value]
@@ -74,6 +74,7 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
     pageProps,
     serverData,
 }) => {
+    console.log("serverData111111 : ", serverData);
     message.config({
         top: 65,
         duration: 2,
@@ -81,7 +82,11 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
         rtl: true,
     });
 
-    const userForm = useForm(serverData);
+    const userForm = useForm({});
+
+    useEffect(() => {
+        userForm.serverDataInit(serverData);
+    }, []);
 
     return (
         <div>
@@ -101,15 +106,19 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
 MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
     let pageProps = {};
     const cookie = ctx.req?.headers.cookie ? ctx.req?.headers.cookie : "";
-    axios.defaults.headers.Authorization = cookie;
-    const result = await axios.get("http://localhost:4000/users/me", {
-        withCredentials: true,
-    });
-
     let serverData = null;
-    const { data, status: httpStatus } = result;
-    if (httpStatus === 200) {
+    try {
+        axios.defaults.headers.Authorization = cookie;
+        const result = await axios.get("http://localhost:4000/users/me", {
+            withCredentials: true,
+        });
+
+        const { data } = result;
         serverData = data.data;
+    } catch (error) {
+        const { data } = error.response;
+        console.log(data);
+        serverData = null;
     }
 
     if (Component.getInitialProps) {

@@ -67,7 +67,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                                 <li>
                                     {userState &&
                                     userState.value &&
-                                    userState.value._id ? (
+                                    userState.value.id ? (
                                         <Button
                                             onClick={onClickLogout}
                                             type="link"

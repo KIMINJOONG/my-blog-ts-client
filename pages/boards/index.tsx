@@ -44,6 +44,7 @@ const boards = () => {
     const init = useCallback(async () => {
         const result = await axios.get("http://localhost:4000/boards");
         const { data, status: httpStatus } = result;
+        console.log(data.data);
 
         if (httpStatus === 200) {
             setBoards(data.data);
@@ -62,6 +63,7 @@ const boards = () => {
             </Col>
             {boards && (
                 <Table
+                    rowKey={(record) => record.id}
                     columns={columns}
                     dataSource={boards}
                     pagination={{ position: ["bottomCenter"] }}
