@@ -74,7 +74,6 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
     pageProps,
     serverData,
 }) => {
-    console.log("serverData111111 : ", serverData);
     message.config({
         top: 65,
         duration: 2,
@@ -86,7 +85,7 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
 
     useEffect(() => {
         userForm.serverDataInit(serverData);
-    }, []);
+    }, [serverData]);
 
     return (
         <div>
@@ -105,10 +104,17 @@ const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
 
 MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
     let pageProps = {};
-    const cookie = ctx.req?.headers.cookie ? ctx.req?.headers.cookie : "";
+    let cookie: string | undefined = "";
+    //server
+    if (ctx.req) {
+        cookie = ctx.req.headers.cookie;
+        axios.defaults.headers.Authorization = cookie;
+    } else {
+        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
+        axios.defaults.headers.Authorization = `token=${token}`;
+    }
     let serverData = null;
     try {
-        axios.defaults.headers.Authorization = cookie;
         const result = await axios.get("http://localhost:4000/users/me", {
             withCredentials: true,
         });

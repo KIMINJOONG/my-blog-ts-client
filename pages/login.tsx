@@ -5,7 +5,6 @@ import { useCallback, useState, ChangeEvent, useContext } from "react";
 import api from "../api";
 import jsCookie from "js-cookie";
 import userStore from "../stores/userStore";
-import axios from "axios";
 
 interface ILoginForm {
     email: string;
