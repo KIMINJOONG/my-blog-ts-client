@@ -53,15 +53,19 @@ const useForm = (initValue: any) => {
 
     const getMe = useCallback(async () => {
         const token = jsCookie.get("token") ? jsCookie.get("token") : "";
-        const result = await axios.get("http://localhost:4000/users/me", {
-            headers: {
-                Authorization: `token=${token}`,
-            },
-        });
-        const { data, status: httpStatus } = result;
-        if (data && httpStatus === 200) {
-            setValue({ ...data.data });
-        } else {
+
+        try {
+            const result = await axios.get("http://localhost:4000/users/me", {
+                headers: {
+                    Authorization: `token=${token}`,
+                },
+            });
+            const { data, status: httpStatus } = result;
+            if (data && httpStatus === 200) {
+                setValue({ ...data.data });
+            }
+        } catch (error) {
+            const { data } = error.response;
             setValue(null);
         }
     }, [value]);

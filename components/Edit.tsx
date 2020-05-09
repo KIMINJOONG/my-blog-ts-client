@@ -45,7 +45,7 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
         preset,
         disabled: preset === "none" ? false : true,
         uploader: {
-            url: "http://localhost:4000/images/upload",
+            url: `http://localhost:4000/images/upload`,
             insertImageAsBase64URI: false,
             imagesExtensions: ["jpg", "png", "jpeg", "gif"],
             headers: {
@@ -82,13 +82,6 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
                 setContent(
                     `${this.value} <img src=${data.baseurl + data.fileName} />`
                 );
-                // if (data[field] && data[field].length) {
-                //     for (i = 0; i < data[field].length; i += 1) {
-                //         this.selection.insertImage(
-                //             data.baseurl + data[field][i]
-                //         );
-                //     }
-                // }
             },
         },
         readonly: false,
