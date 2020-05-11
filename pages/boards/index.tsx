@@ -1,7 +1,8 @@
-import { Table, Tag, Col } from "antd";
+import { Table, Tag, Col, Input } from "antd";
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import Router, { useRouter } from "next/router";
 
 const columns = [
     {
@@ -40,19 +41,39 @@ const columns = [
 
 const boards = () => {
     const [boards, setBoards] = useState([]);
+    const router = useRouter();
 
     const init = useCallback(async () => {
-        const result = await axios.get("http://localhost:4000/boards");
+        let result = null;
+        if (router.query.title) {
+            result = await axios.get(
+                `http://localhost:4000/boards?title=${router.query.title}`
+            );
+        } else {
+            result = await axios.get("http://localhost:4000/boards");
+        }
         const { data, status: httpStatus } = result;
-        console.log(data.data);
 
         if (httpStatus === 200) {
             setBoards(data.data);
         }
-    }, []);
+    }, [router]);
 
     useEffect(() => {
         init();
+    }, [router.query]);
+
+    const onSearch = useCallback((value: string) => {
+        if (!value) {
+            Router.push({
+                pathname: "/boards",
+            });
+        } else {
+            Router.push({
+                pathname: "/boards",
+                query: { title: value },
+            });
+        }
     }, []);
     return (
         <div style={{ marginTop: "58px" }}>
@@ -69,6 +90,13 @@ const boards = () => {
                     pagination={{ position: ["bottomCenter"] }}
                 />
             )}
+            <Col>
+                <Input.Search
+                    placeholder="input search text"
+                    onSearch={onSearch}
+                    enterButton
+                />
+            </Col>
         </div>
     );
 };
