@@ -16,8 +16,8 @@ import jsCookie from "js-cookie";
 const AppLayout: FunctionComponent = ({ children }) => {
     const userState = useContext(userStore);
 
-    const onClickLogout = useCallback(() => {
-        jsCookie.remove("token");
+    const onClickLogout = useCallback(async () => {
+        await jsCookie.remove("token");
         userState.getMe();
         message.success("로그아웃 되었습니다");
     }, [userState]);

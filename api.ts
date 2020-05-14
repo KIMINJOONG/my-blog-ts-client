@@ -17,13 +17,9 @@ export default {
     },
     getMe: async () => {
         try {
-            const Authorization = await jsCookie.get("token");
-            const result = await api.get("/users/me", {
-                params: {},
-                headers: {
-                    Authorization,
-                },
-            });
+            const token = await jsCookie.get("token");
+            api.defaults.headers.Authorization = token ? `token=${token}` : "";
+            const result = await api.get("/users/me");
             return result;
         } catch (error) {
             return error.response;

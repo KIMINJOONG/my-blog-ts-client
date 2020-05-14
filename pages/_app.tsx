@@ -11,6 +11,7 @@ import jsCookie from "js-cookie";
 import "../node_modules/antd/dist/antd.css";
 import "jodit/build/jodit.min.css";
 import { message } from "antd";
+import api from "../api";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};
@@ -52,20 +53,11 @@ const useForm = (initValue: any) => {
     );
 
     const getMe = useCallback(async () => {
-        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
-
-        try {
-            const result = await axios.get("http://localhost:4000/users/me", {
-                headers: {
-                    Authorization: `token=${token}`,
-                },
-            });
-            const { data, status: httpStatus } = result;
-            if (data && httpStatus === 200) {
-                setValue({ ...data.data });
-            }
-        } catch (error) {
-            const { data } = error.response;
+        const result = await api.getMe();
+        const { data, status: httpStatus } = result;
+        if (data && httpStatus === 200) {
+            setValue({ ...data.data });
+        } else {
             setValue(null);
         }
     }, [value]);
@@ -126,8 +118,6 @@ MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
         const { data } = result;
         serverData = data.data;
     } catch (error) {
-        const { data } = error.response;
-        console.log(data);
         serverData = null;
     }
 
