@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
+import api from "../../api";
 
 const columns = [
     {
@@ -46,11 +47,9 @@ const boards = () => {
     const init = useCallback(async () => {
         let result = null;
         if (router.query.title) {
-            result = await axios.get(
-                `http://localhost:4000/boards?title=${router.query.title}`
-            );
+            result = await api.index(`/boards?title=${router.query.title}`);
         } else {
-            result = await axios.get("http://localhost:4000/boards");
+            result = await api.index("/boards");
         }
         const { data, status: httpStatus } = result;
 

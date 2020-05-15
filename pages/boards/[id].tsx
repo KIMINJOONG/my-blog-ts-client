@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Edit from "../../components/Edit";
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import api from "../../api";
 
 const edit = () => {
     const router = useRouter();
@@ -9,7 +9,7 @@ const edit = () => {
     const [data, setData] = useState(null);
 
     const init = useCallback(async () => {
-        const result = await axios.get(`http://localhost:4000/boards/${id}`);
+        const result = await api.show(`/boards/${id}`);
         const { data, status: httpStatus } = result;
         setData(data.data);
     }, []);

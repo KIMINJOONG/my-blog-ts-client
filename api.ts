@@ -25,4 +25,44 @@ export default {
             return error.response;
         }
     },
+    index: async (path: string) => {
+        try {
+            const result = await api.get(path);
+            return result;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    show: async (path: string) => {
+        try {
+            const result = await api.get(path);
+            return result;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    create: async (path: string, data: any) => {
+        try {
+            const result = await api.post(path, data);
+            return result;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    update: async (path: string, data: any) => {
+        try {
+            const result = await api.put(path, data);
+            return result;
+        } catch (error) {
+            return error.response;
+        }
+    },
+    destroy: async (path: string) => {
+        try {
+            const result = await api.delete(path);
+            return result;
+        } catch (error) {
+            return error.response;
+        }
+    },
 };

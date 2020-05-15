@@ -1,16 +1,9 @@
 import { Form, Input, Button, message } from "antd";
-import {
-    Dispatch,
-    SetStateAction,
-    ChangeEvent,
-    useState,
-    useCallback,
-    useEffect,
-} from "react";
+import { ChangeEvent, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
-import jsCookie from "js-cookie";
 import axios from "axios";
 import Router from "next/router";
+import api from "../api";
 
 const importJodit = () => import("jodit-react");
 
@@ -136,11 +129,7 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
     }, [data]);
 
     const onClickRemove = useCallback(async () => {
-        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
-
-        const result = await axios.delete(
-            `http://localhost:4000/boards/${param}`
-        );
+        const result = await api.destroy(`boards/${param}`);
 
         const { data, status: httpStatus } = result;
 
@@ -156,28 +145,11 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
             title: title.value,
         };
 
-        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
         let result;
         if (param) {
-            result = await axios.put(
-                `http://localhost:4000/boards/${param}`,
-                dataForm,
-                {
-                    headers: {
-                        Authorization: `token=${token}`,
-                    },
-                }
-            );
+            result = await api.update(`/boards/${param}`, dataForm);
         } else {
-            result = await axios.post(
-                "http://localhost:4000/boards",
-                dataForm,
-                {
-                    headers: {
-                        Authorization: `token=${token}`,
-                    },
-                }
-            );
+            result = await api.create("/boards", dataForm);
         }
 
         const { data, status: httpStatus } = result;
