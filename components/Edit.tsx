@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import axios from "axios";
 import Router from "next/router";
 import api from "../api";
+import Jodit from "jodit";
 
 const importJodit = () => import("jodit-react");
 
@@ -110,6 +111,15 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
                 Background: "배경색",
                 Text: "글자색",
                 "Fill color or set the text color": "색상변경",
+            },
+        },
+        events: {
+            afterRemoveNode(node: any) {
+                if (node.nodeName === "IMG") {
+                    //이미지 삭제시
+                    // 해당 seq의 파일이름에 해당하는 파일 삭제
+                    console.log(node.src);
+                }
             },
         },
         minWidth: "300px",
