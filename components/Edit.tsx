@@ -65,7 +65,8 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
                 console.log("process : ", resp);
                 return {
                     fileName: resp[0],
-                    baseurl: "http://localhost:4000/",
+                    baseurl:
+                        "https://kohubi-test.s3.ap-northeast-2.amazonaws.com/images/",
                 };
             },
 
@@ -114,11 +115,14 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
             },
         },
         events: {
-            afterRemoveNode(node: any) {
+            async afterRemoveNode(node: any) {
                 if (node.nodeName === "IMG") {
                     //이미지 삭제시
                     // 해당 seq의 파일이름에 해당하는 파일 삭제
-                    console.log(node.src);
+                    let imageKey = node.src.split("/");
+                    imageKey = imageKey[imageKey.length - 1];
+                    const result = await api.destroy(`/images/${imageKey}`);
+                    console.log("result : ", result);
                 }
             },
         },
