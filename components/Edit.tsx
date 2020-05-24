@@ -122,7 +122,6 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
                     let imageKey = node.src.split("/");
                     imageKey = imageKey[imageKey.length - 1];
                     const result = await api.destroy(`/images/${imageKey}`);
-                    console.log("result : ", result);
                 }
             },
         },

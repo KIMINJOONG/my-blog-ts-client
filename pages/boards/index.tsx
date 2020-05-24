@@ -1,9 +1,10 @@
 import { Table, Tag, Col, Input } from "antd";
 import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 import Router, { useRouter } from "next/router";
 import api from "../../api";
+import UserStore from "../../stores/userStore";
 
 const columns = [
     {
@@ -43,6 +44,7 @@ const columns = [
 const boards = () => {
     const [boards, setBoards] = useState([]);
     const router = useRouter();
+    const userState = useContext(UserStore);
 
     const init = useCallback(async () => {
         let result = null;
@@ -76,6 +78,9 @@ const boards = () => {
     }, []);
     return (
         <div style={{ marginTop: "58px" }}>
+            {userState &&
+                userState.value.role &&
+                userState.value.role === 1 && <Col>관리자</Col>}
             <Col style={{ textAlign: "right" }}>
                 <Link href="/boards/edit">
                     <a>글쓰기</a>
