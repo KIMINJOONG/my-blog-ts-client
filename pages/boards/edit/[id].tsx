@@ -3,7 +3,7 @@ import Edit from "../../../components/Edit";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const edit = () => {
+const edit = (props: any) => {
     const router = useRouter();
     const { id } = router.query;
     const [data, setData] = useState(null);

@@ -24,7 +24,8 @@ const AppLayout: FunctionComponent = ({ children }) => {
     return (
         <Layout>
             <Row>
-                <Header>
+                {/* pc헤더 */}
+                <Header xs={0}>
                     <Row style={{ height: "100%" }}>
                         <Navigation span={16}>
                             <Ul>
@@ -86,10 +87,10 @@ const AppLayout: FunctionComponent = ({ children }) => {
                     </Row>
                 </Header>
             </Row>
-            <MainContentRow>
+            <MainContentRow style={{ height: "100%" }}>
                 <Col span={24}>
                     <Row style={{ height: "100%" }}>
-                        <MainContentCol span={16}>
+                        <MainContentCol xs={24} sm={24} md={16}>
                             <Row style={{ height: "100%" }}>
                                 <Col span={24} style={{ height: "100%" }}>
                                     {children}
