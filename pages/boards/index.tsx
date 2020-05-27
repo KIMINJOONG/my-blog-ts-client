@@ -6,12 +6,14 @@ import Router, { useRouter } from "next/router";
 import api from "../../api";
 import UserStore from "../../stores/userStore";
 
+type Align = "left" | "right" | "center";
 const columns = [
     {
-        title: "게시글 번호",
+        title: "번호",
         dataIndex: "id",
         key: "id",
-        width: "10%",
+        width: "20%",
+        align: "center" as Align,
         render: (text: string) => (
             <Link href={`/boards/${text}`}>
                 <a>{text}</a>
@@ -22,6 +24,7 @@ const columns = [
         title: "제목",
         dataIndex: "title",
         key: "title",
+        align: "center" as Align,
         render: (text: string, record: any) => (
             <Link href={`/boards/${record.id}`}>
                 <a>{text}</a>
@@ -32,7 +35,8 @@ const columns = [
         title: "날짜",
         dataIndex: "createdAt",
         key: "createdAt",
-        width: "15%",
+        width: "20%",
+        align: "center" as Align,
         render: (text: string, record: any) => (
             <Link href={`/boards/${record.id}`}>
                 <a>{text.substring(0, 10)}</a>

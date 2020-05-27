@@ -13,6 +13,7 @@ import Link from "next/link";
 import userStore from "../../stores/userStore";
 import jsCookie from "js-cookie";
 import { MdFormatIndentIncrease, MdFormatIndentDecrease } from "react-icons/md";
+import Router from "next/router";
 
 const AppLayout: FunctionComponent = ({ children }) => {
     const userState = useContext(userStore);
@@ -27,6 +28,11 @@ const AppLayout: FunctionComponent = ({ children }) => {
     const onClose = useCallback(() => {
         setVisible(false);
     }, [visible]);
+
+    const clickPage = useCallback((path) => {
+        Router.push(path);
+        setVisible(false);
+    }, []);
     return (
         <Layout>
             <Row>
@@ -109,9 +115,13 @@ const AppLayout: FunctionComponent = ({ children }) => {
                                 visible={visible}
                                 key={"key"}
                             >
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
-                                <p>Some contents...</p>
+                                <p onClick={() => clickPage("/boards")}>
+                                    Board
+                                </p>
+                                <p onClick={() => clickPage("/videos")}>
+                                    Video
+                                </p>
+                                <p onClick={() => clickPage("/about")}>About</p>
                             </Drawer>
                         </Col>
                     </Row>

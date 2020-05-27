@@ -1,4 +1,4 @@
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Typography } from "antd";
 import { ChangeEvent, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
@@ -178,13 +178,14 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
 
     return (
         <Form name="boardForm" onFinish={onSubmit}>
-            <Form.Item label="제목" rules={[{ required: true }]}>
-                {preset === "inline" ? (
-                    <p>{title.value}</p>
-                ) : (
+            {preset === "inline" ? (
+                <Typography.Title>{title.value}</Typography.Title>
+            ) : (
+                <Form.Item label="제목" rules={[{ required: true }]}>
                     <Input value={title.value} onChange={title.onChange} />
-                )}
-            </Form.Item>
+                </Form.Item>
+            )}
+
             <Form.Item>
                 <JoditEditor
                     value={content}
