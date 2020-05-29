@@ -93,19 +93,32 @@ const AppLayout: FunctionComponent = ({ children }) => {
                         </Col>
                         {/* 모바일 헤더 */}
                         <Col xs={24} md={0}>
-                            {visible ? (
-                                <MdFormatIndentDecrease
-                                    style={{ color: "white" }}
-                                    size={30}
-                                    onClick={() => setVisible(false)}
-                                />
-                            ) : (
-                                <MdFormatIndentIncrease
-                                    style={{ color: "white" }}
-                                    size={30}
-                                    onClick={() => setVisible(true)}
-                                />
-                            )}
+                            <Row>
+                                <Col>
+                                    {visible ? (
+                                        <MdFormatIndentDecrease
+                                            style={{ color: "white" }}
+                                            size={30}
+                                            onClick={() => setVisible(false)}
+                                        />
+                                    ) : (
+                                        <MdFormatIndentIncrease
+                                            style={{ color: "white" }}
+                                            size={30}
+                                            onClick={() => setVisible(true)}
+                                        />
+                                    )}
+                                </Col>
+                                <Col style={{ margin: "0 auto" }}>
+                                    <Logo>
+                                        <Link href="/">
+                                            <a>
+                                                <h1>Kohubi's Blog</h1>
+                                            </a>
+                                        </Link>
+                                    </Logo>
+                                </Col>
+                            </Row>
 
                             <Drawer
                                 title="Basic Drawer"
@@ -122,6 +135,18 @@ const AppLayout: FunctionComponent = ({ children }) => {
                                     Video
                                 </p>
                                 <p onClick={() => clickPage("/about")}>About</p>
+
+                                {userState &&
+                                userState.value &&
+                                userState.value.id ? (
+                                    <p onClick={onClickLogout}>
+                                        <a>로그아웃</a>
+                                    </p>
+                                ) : (
+                                    <p onClick={() => clickPage("/login")}>
+                                        로그인
+                                    </p>
+                                )}
                             </Drawer>
                         </Col>
                     </Row>
