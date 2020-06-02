@@ -1,4 +1,10 @@
-import { FunctionComponent, useContext, useCallback, useState } from "react";
+import {
+  FunctionComponent,
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+} from "react";
 import { Layout, Row, Col, Button, message, Drawer, Card } from "antd";
 import {
   Header,
@@ -14,10 +20,13 @@ import userStore from "../../stores/userStore";
 import jsCookie from "js-cookie";
 import { MdFormatIndentIncrease, MdFormatIndentDecrease } from "react-icons/md";
 import Router from "next/router";
+import api from "../../api";
+import { stringify } from "querystring";
 
 const AppLayout: FunctionComponent = ({ children }) => {
   const userState = useContext(userStore);
   const [visible, setVisible] = useState(false);
+  const [hashtags, setHashtags] = useState([]);
 
   const onClickLogout = useCallback(async () => {
     await jsCookie.remove("token");
@@ -33,6 +42,22 @@ const AppLayout: FunctionComponent = ({ children }) => {
     Router.push(path);
     setVisible(false);
   }, []);
+  const init = useCallback(async () => {
+    const result = await api.index("hashtags");
+    const { data, status } = result;
+    const { data: hashtagsData } = data;
+    if (status === 200) {
+      setHashtags(hashtagsData);
+    }
+  }, []);
+  useEffect(() => {
+    init();
+  }, []);
+
+  interface IHashtag {
+    id: number;
+    name: string;
+  }
   return (
     <Layout>
       <Row>
@@ -159,21 +184,21 @@ const AppLayout: FunctionComponent = ({ children }) => {
         </Header>
       </Row>
       <MainContentRow>
-        <Col span={24}>
+        <Col span={24} style={{ marginTop: "58px" }}>
           <Row style={{ height: "100%" }}>
             <MainContentCol xs={24} sm={24} md={16}>
               <Row style={{ height: "100%" }}>
                 <Col md={4}>
                   <Card
                     title="Default size card"
-                    extra={<a href="#">More</a>}
                   >
-                    <p>Card content</p>
-                    <p>Card content</p>
-                    <p>Card content</p>
+                    {hashtags.length > 0 &&
+                      hashtags.map((hashtag: IHashtag) => (
+                        <p key={hashtag.id}>{hashtag.name}</p>
+                      ))}
                   </Card>
                 </Col>
-                <Col md={12} style={{ height: "100%", padding: "10px" }}>
+                <Col md={20} style={{ height: "100%", padding: "10px" }}>
                   {children}
                 </Col>
               </Row>

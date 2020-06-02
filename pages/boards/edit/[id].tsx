@@ -4,26 +4,26 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const edit = (props: any) => {
-    const router = useRouter();
-    const { id } = router.query;
-    const [data, setData] = useState(null);
+  const router = useRouter();
+  const { id } = router.query;
+  const [data, setData] = useState(null);
 
-    const init = useCallback(async () => {
-        const result = await axios.get(`http://localhost:4000/boards/${id}`);
-        const { data, status: httpStatus } = result;
-        if (httpStatus === 200) {
-            setData(data.data);
-        }
-    }, []);
-    useEffect(() => {
-        init();
-    }, []);
+  const init = useCallback(async () => {
+    const result = await axios.get(`http://localhost:4000/boards/${id}`);
+    const { data, status: httpStatus } = result;
+    if (httpStatus === 200) {
+      setData(data.data);
+    }
+  }, []);
+  useEffect(() => {
+    init();
+  }, []);
 
-    return (
-        <div style={{ marginTop: "58px" }}>
-            <Edit param={id} data={data} preset={"none"} />
-        </div>
-    );
+  return (
+    <div>
+      <Edit param={id} data={data} preset={"none"} />
+    </div>
+  );
 };
 
 export default edit;
