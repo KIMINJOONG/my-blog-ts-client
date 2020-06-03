@@ -190,7 +190,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
               <Row style={{ height: "100%" }}>
                 <Col md={4}>
                   <Card
-                    title="Default size card"
+                    title="태그"
                   >
                     {hashtags.length > 0 &&
                       hashtags.map((hashtag: IHashtag) => (
