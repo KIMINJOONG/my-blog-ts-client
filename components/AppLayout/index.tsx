@@ -193,8 +193,10 @@ const AppLayout: FunctionComponent = ({ children }) => {
                     title="태그"
                   >
                     {hashtags.length > 0 &&
-                      hashtags.map((hashtag: IHashtag) => (
-                        <p key={hashtag.id}>{hashtag.name}</p>
+                      hashtags.map((hashtag: IHashtag, index: number) => (
+                        <Link href={`/hashtag/${hashtag.name}`} key={index}>
+                          {hashtag.name}
+                        </Link>
                       ))}
                   </Card>
                 </Col>
