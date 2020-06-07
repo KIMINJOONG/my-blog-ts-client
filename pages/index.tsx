@@ -8,6 +8,8 @@ interface IBoard {
   id: number;
   title: string;
   content: string;
+  mainImg: string;
+  shortContent: string;
 }
 const Home: NextPage = () => {
   const [boards, setBoards] = useState([]);
@@ -15,6 +17,17 @@ const Home: NextPage = () => {
     const result = await api.index("/boards");
 
     const { data, status:httpStatus } = result;
+
+    const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
+    for (let board of data.data) {
+      const imgRegex = imgRegexPattern.exec(board.content);
+      if (imgRegex) {
+        const mainImg = imgRegex[1];
+        board.mainImg = mainImg;
+        board.shortContent = board.content.replace(/(<([^>]+)>)/ig, "");
+      }
+    }
+    console.log(data.data);
 
     if (httpStatus === 200) {
       setBoards(data.data);
@@ -42,7 +55,8 @@ const Home: NextPage = () => {
               bordered={true}
               headStyle={{ textAlign: "center" }}
             >
-              {board.content}
+              <img src={board.mainImg} style={{ float: "left" }} />
+              <p>{board.shortContent}</p>
             </Card>
           </Col>
         ))}
