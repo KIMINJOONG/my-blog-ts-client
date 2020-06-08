@@ -7,6 +7,8 @@ interface IBoard {
   id: number;
   title: string;
   content: string;
+  mainImg: string;
+  shortContent: string;
 }
 
 const hashtag = () => {
@@ -19,6 +21,16 @@ const hashtag = () => {
     const encodedUriTag = encodeURIComponent(tag as string);
     const result = await api.show(`hashtags/${encodedUriTag}`);
     const { data, status: httpStatus } = result;
+
+    const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
+    for (let board of data.data) {
+      const imgRegex = imgRegexPattern.exec(board.content);
+      if (imgRegex) {
+        const mainImg = imgRegex[1];
+        board.mainImg = mainImg;
+        board.shortContent = board.content.replace(/(<([^>]+)>)/ig, "");
+      }
+    }
     if (httpStatus === 200) {
       setBoards(data.data);
     }
@@ -44,7 +56,8 @@ const hashtag = () => {
             bordered={true}
             headStyle={{ textAlign: "center" }}
           >
-            {board.content}
+            <img src={board.mainImg} style={{ float: "left" }} />
+            <p>{board.shortContent}</p>
           </Card>
         </Col>
       ))}

@@ -2,7 +2,6 @@ import { Row, Col, Card, Divider } from "antd";
 import { NextPage } from "next";
 import { useEffect, useCallback, useState } from "react";
 import api from "../api";
-import Edit from "../components/Edit";
 
 interface IBoard {
   id: number;
@@ -27,7 +26,6 @@ const Home: NextPage = () => {
         board.shortContent = board.content.replace(/(<([^>]+)>)/ig, "");
       }
     }
-    console.log(data.data);
 
     if (httpStatus === 200) {
       setBoards(data.data);

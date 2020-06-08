@@ -194,9 +194,12 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   >
                     {hashtags.length > 0 &&
                       hashtags.map((hashtag: IHashtag, index: number) => (
-                        <Link href={`/hashtag/${hashtag.name}`} key={index}>
-                          <a>
-                            {hashtag.name}
+                        <Link
+                          href={`/hashtag/${hashtag.name}`}
+                          key={index}
+                        >
+                          <a style={{ margin: "5px" }}>
+                            #{hashtag.name}
                           </a>
                         </Link>
                       ))}
