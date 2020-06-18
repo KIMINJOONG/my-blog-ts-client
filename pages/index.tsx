@@ -47,7 +47,7 @@ const Home: NextPage = () => {
           </Divider>
         </Col>
         {boards && boards.map((board: IBoard) => (
-          <Col span={24} key={board.id}>
+          <Col span={24} key={board.id} style={{ marginTop: "10px" }}>
             <Card
               title={board.title}
               bordered={true}
