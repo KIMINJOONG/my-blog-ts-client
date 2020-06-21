@@ -21,7 +21,6 @@ import jsCookie from "js-cookie";
 import { MdFormatIndentIncrease, MdFormatIndentDecrease } from "react-icons/md";
 import Router from "next/router";
 import api from "../../api";
-import { stringify } from "querystring";
 
 const AppLayout: FunctionComponent = ({ children }) => {
   const userState = useContext(userStore);

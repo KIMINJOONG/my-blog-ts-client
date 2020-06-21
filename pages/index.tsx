@@ -13,7 +13,7 @@ interface IBoard {
 const Home: NextPage = () => {
   const [boards, setBoards] = useState([]);
   const init = useCallback(async () => {
-    const result = await api.index("/boards");
+    const result = await api.index("/boards?limit=5");
 
     const { data, status:httpStatus } = result;
 
