@@ -47,20 +47,32 @@ const columns = [
 
 const boards = () => {
   const [boards, setBoards] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const router = useRouter();
   const userState = useContext(UserStore);
 
   const init = useCallback(async () => {
+    const { title, page, limit = 10 } = router.query;
     let result = null;
-    if (router.query.title) {
-      result = await api.index(`/boards?title=${router.query.title}`);
-    } else {
-      result = await api.index("/boards");
+    let searchArray = [];
+    let endPoint = "/boards";
+
+    if (title) {
+      searchArray.push(`title=${title}`);
     }
+    if (page) {
+      searchArray.push(`page=${page}`);
+    }
+    if (limit) {
+      searchArray.push(`limit=${limit}`);
+    }
+    endPoint = `${endPoint}?${searchArray.join("&")}`;
+    result = await api.index(endPoint);
     const { data, status: httpStatus } = result;
 
     if (httpStatus === 200) {
       setBoards(data.data);
+      setTotalCount(data.totalCount);
     }
   }, [router]);
 
@@ -80,6 +92,14 @@ const boards = () => {
       });
     }
   }, []);
+
+  const onChangePage = useCallback((page, pageSize) => {
+    const { title } = router.query;
+    Router.push({
+      pathname: "/boards",
+      query: { page, title },
+    });
+  }, []);
   return (
     <div>
       {userState &&
@@ -95,7 +115,11 @@ const boards = () => {
           rowKey={(record) => record.id}
           columns={columns}
           dataSource={boards}
-          pagination={{ position: ["bottomCenter"] }}
+          pagination={{
+            position: ["bottomCenter"],
+            total: totalCount,
+            onChange: onChangePage,
+          }}
         />
       )}
       <Col>
