@@ -97,7 +97,15 @@ const boards = () => {
     const { title } = router.query;
     Router.push({
       pathname: "/boards",
-      query: { page, title },
+      query: { page, title, limit: pageSize },
+    });
+  }, []);
+
+  const onShowSizeChange = useCallback((current, size) => {
+    const { title } = router.query;
+    Router.push({
+      pathname: "/boards",
+      query: { page: current, title, limit: size },
     });
   }, []);
   return (
@@ -118,7 +126,11 @@ const boards = () => {
           pagination={{
             position: ["bottomCenter"],
             total: totalCount,
+            current: router.query.page
+              ? parseInt(router.query.page as string, 10)
+              : 1,
             onChange: onChangePage,
+            onShowSizeChange,
           }}
         />
       )}
