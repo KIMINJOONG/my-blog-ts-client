@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Edit from "../../components/Edit";
 import { useState, useEffect, useCallback } from "react";
 import api from "../../api";
 import ReactHtmlParser from "react-html-parser";
