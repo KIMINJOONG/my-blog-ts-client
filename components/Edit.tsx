@@ -1,22 +1,25 @@
-import { Form, Input, Button, message, Typography } from "antd";
+import { Form, Input, Button, message, Typography, Select } from "antd";
 import { ChangeEvent, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
-import axios from "axios";
 import Router from "next/router";
 import api from "../api";
-import Jodit from "jodit";
 
 const importJodit = () => import("jodit-react");
 
 const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });
+interface ICategory {
+  code: number;
+  name: string;
+}
 
 interface IProps {
   param?: string | string[] | number;
   data?: any;
   preset?: string;
   disabled?: boolean;
+  categories?: Array<ICategory>;
 }
 
 const useInput = (initValue: any) => {
@@ -32,7 +35,9 @@ const useInput = (initValue: any) => {
   return { value, initdata, onChange };
 };
 
-const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
+const Edit = (
+  { param, data, preset = "none", disabled = false, categories = [] }: IProps,
+) => {
   const title = useInput("");
   const [content, setContent] = useState("");
   const [config, setConfig] = useState({
@@ -187,6 +192,14 @@ const Edit = ({ param, data, preset = "none", disabled = false }: IProps) => {
             <Input value={title.value} onChange={title.onChange} />
           </Form.Item>
         )}
+
+      <Form.Item>
+        <Select>
+          {categories && categories.map((category: ICategory) => (
+            <Select.Option value={category.code}>{category.name}</Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
 
       <Form.Item>
         <JoditEditor
