@@ -86,6 +86,11 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       <a>About</a>
                     </Link>
                   </li>
+                  <li>
+                    <Link href="/admin/category">
+                      <a>카테고리 관리</a>
+                    </Link>
+                  </li>
                 </Ul>
                 <Logo>
                   <Link href="/">
@@ -162,7 +167,11 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 <p onClick={() => clickPage("/videos")}>
                   Video
                 </p>
+
                 <p onClick={() => clickPage("/about")}>About</p>
+                <p onClick={() => clickPage("/admin/category")}>
+                  카테고리 추가
+                </p>
 
                 {userState &&
                   userState.value &&
