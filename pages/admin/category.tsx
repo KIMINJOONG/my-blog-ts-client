@@ -1,37 +1,20 @@
 import { Col, Table, Input, Divider, Button, Row, Form } from "antd";
 import { useEffect, useCallback, useState } from "react";
 import api from "../../api";
-import { stat } from "fs";
 
+interface IRecord {
+  id: number;
+  code: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
 const dummy: any = [
   { id: 1, code: 1, name: "게시글" },
   { id: 2, code: 2, name: "동영상" },
 ];
 
 type Align = "left" | "right" | "center";
-
-const columns = [
-  {
-    title: "번호",
-    dataIndex: "id",
-    key: "id",
-    width: "20%",
-    align: "center" as Align,
-  },
-  {
-    title: "코드",
-    dataIndex: "code",
-    key: "code",
-    align: "center" as Align,
-  },
-  {
-    title: "이름",
-    dataIndex: "name",
-    key: "name",
-    width: "20%",
-    align: "center" as Align,
-  },
-];
 
 const useInput = (defaultValue: string | number) => {
   const [value, setValue] = useState(defaultValue);
@@ -72,12 +55,48 @@ const category = () => {
   }, [nameInput, codeInput, categories]);
 
   const onClickRemove = useCallback(async (id: number) => {
-    // const result = await api.destroy(`/categories/${id}`);
-    // const { status } = result;
-    // if (status === 200) {
-    setCategories(categories.filter((category: any) => category.id !== id));
-    // }
+    const result = await api.destroy(`/categories/${id}`);
+    const { status } = result;
+    if (status === 200) {
+      setCategories(categories.filter((category: any) => category.id !== id));
+    }
   }, [categories]);
+
+  const columns = [
+    {
+      title: "번호",
+      dataIndex: "id",
+      key: "id",
+      width: "20%",
+      align: "center" as Align,
+    },
+    {
+      title: "코드",
+      dataIndex: "code",
+      key: "code",
+      align: "center" as Align,
+    },
+    {
+      title: "이름",
+      dataIndex: "name",
+      key: "name",
+      width: "20%",
+      align: "center" as Align,
+    },
+    {
+      title: "action",
+      render: (text: string, record: IRecord) => {
+        return (
+          <Button
+            type="danger"
+            onClick={() => onClickRemove(record.id)}
+          >
+            Delete
+          </Button>
+        );
+      },
+    },
+  ];
   return (
     <div>
       <Col span={24}>
