@@ -9,10 +9,6 @@ interface IRecord {
   createdAt: string;
   updatedAt: string;
 }
-const dummy: any = [
-  { id: 1, code: 1, name: "게시글" },
-  { id: 2, code: 2, name: "동영상" },
-];
 
 type Align = "left" | "right" | "center";
 

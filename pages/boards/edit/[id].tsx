@@ -8,8 +8,10 @@ const edit = (props: any) => {
   const { id } = router.query;
   const [data, setData] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const init = useCallback(async () => {
+    setLoading(true);
     const result = await api.show(`/boards/${id}`);
     const { data, status: httpStatus } = result;
 
@@ -20,8 +22,9 @@ const edit = (props: any) => {
     }
 
     if (categoriesStatus === 200) {
-      setCategories(categories);
+      setCategories(categories.data);
     }
+    setLoading(false);
   }, []);
   useEffect(() => {
     init();
@@ -29,7 +32,20 @@ const edit = (props: any) => {
 
   return (
     <div>
-      <Edit param={id} data={data} categories={categories} preset={"none"} />
+      {loading
+        ? (
+          <div>로딩</div>
+        )
+        : (
+          <div>
+            <Edit
+              param={id}
+              data={data}
+              categories={categories}
+              preset={"none"}
+            />
+          </div>
+        )}
     </div>
   );
 };

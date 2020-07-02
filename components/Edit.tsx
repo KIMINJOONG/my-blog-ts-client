@@ -10,6 +10,7 @@ const JoditEditor = dynamic(importJodit, {
   ssr: false,
 });
 interface ICategory {
+  id: number;
   code: number;
   name: string;
 }
@@ -195,9 +196,12 @@ const Edit = (
 
       <Form.Item>
         <Select>
-          {categories && categories.map((category: ICategory) => (
-            <Select.Option value={category.code}>{category.name}</Select.Option>
-          ))}
+          {categories && categories.length > 0 &&
+            categories.map((category: ICategory) => (
+              <Select.Option key={category.id} value={category.code}>
+                {category.name}
+              </Select.Option>
+            ))}
         </Select>
       </Form.Item>
 
@@ -213,21 +217,9 @@ const Edit = (
       {param
         ? (
           <Form.Item>
-            {preset === "inline"
-              ? (
-                <Button
-                  type="primary"
-                  onClick={() => Router.push(`/boards/edit/${param}`)}
-                >
-                  수정
-                </Button>
-              )
-              : (
-                <Button type="primary" onClick={onSubmit}>
-                  수정
-                </Button>
-              )}
-
+            <Button type="primary" onClick={onSubmit}>
+              수정
+            </Button>
             <Button type="danger" onClick={onClickRemove}>
               삭제
             </Button>

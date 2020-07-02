@@ -86,11 +86,16 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       <a>About</a>
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/admin/category">
-                      <a>카테고리 관리</a>
-                    </Link>
-                  </li>
+                  {userState &&
+                    userState.value &&
+                    userState.value.role &&
+                    userState.value.role === 99 && (
+                      <li>
+                        <Link href="/admin/category">
+                          <a>카테고리 관리</a>
+                        </Link>
+                      </li>
+                    )}
                 </Ul>
                 <Logo>
                   <Link href="/">
@@ -169,9 +174,14 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 </p>
 
                 <p onClick={() => clickPage("/about")}>About</p>
-                <p onClick={() => clickPage("/admin/category")}>
-                  카테고리 추가
-                </p>
+                {userState &&
+                  userState.value &&
+                  userState.value.role &&
+                  userState.value.role === 99 && (
+                    <p onClick={() => clickPage("/admin/category")}>
+                      카테고리 추가
+                    </p>
+                  )}
 
                 {userState &&
                   userState.value &&
@@ -196,7 +206,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
           <Row style={{ height: "100%" }}>
             <MainContentCol xs={24} sm={24} md={16}>
               <Row style={{ height: "100%" }}>
-                <Col md={4}>
+                <Col md={4} xs={0}>
                   <Card
                     title="태그"
                   >
@@ -213,7 +223,11 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       ))}
                   </Card>
                 </Col>
-                <Col md={20} style={{ height: "100%", padding: "10px" }}>
+                <Col
+                  md={20}
+                  xs={24}
+                  style={{ height: "100%", padding: "10px" }}
+                >
                   {children}
                 </Col>
               </Row>

@@ -55,6 +55,7 @@ const hashtag = () => {
             title={board.title}
             bordered={true}
             headStyle={{ textAlign: "center" }}
+            extra={<a href={`/boards/${board.id}`}>More</a>}
           >
             <img src={board.mainImg} style={{ float: "left" }} />
             <p>{board.shortContent}</p>
