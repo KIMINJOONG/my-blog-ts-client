@@ -29,7 +29,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
 
   const onClickLogout = useCallback(async () => {
     await jsCookie.remove("token");
-    userState.getMe();
+    userState.logout();
     message.success("로그아웃 되었습니다");
   }, [userState]);
 
@@ -226,7 +226,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 <Col
                   md={20}
                   xs={24}
-                  style={{ height: "100%", padding: "10px" }}
+                  style={{ height: "100%", padding: "0px 10px" }}
                 >
                   {children}
                 </Col>

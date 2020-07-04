@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import api from "../../api";
 import { useRouter } from "next/router";
 import { Row, Col, Card, Divider } from "antd";
+import ReactHtmlParser from "react-html-parser";
 
 interface IBoard {
   id: number;
@@ -26,7 +27,7 @@ const hashtag = () => {
     for (let board of data.data) {
       const imgRegex = imgRegexPattern.exec(board.content);
       if (imgRegex) {
-        const mainImg = imgRegex[1];
+        const mainImg = imgRegex[0];
         board.mainImg = mainImg;
         board.shortContent = board.content.replace(/(<([^>]+)>)/ig, "");
       }
@@ -57,7 +58,7 @@ const hashtag = () => {
             headStyle={{ textAlign: "center" }}
             extra={<a href={`/boards/${board.id}`}>More</a>}
           >
-            <img src={board.mainImg} style={{ float: "left" }} />
+            {ReactHtmlParser(board.mainImg)}
             <p>{board.shortContent}</p>
           </Card>
         </Col>

@@ -1,6 +1,7 @@
 import { Row, Col, Card, Divider } from "antd";
 import { NextPage } from "next";
 import { useEffect, useCallback, useState } from "react";
+import ReactHtmlParser from "react-html-parser";
 import api from "../api";
 
 interface IBoard {
@@ -9,6 +10,7 @@ interface IBoard {
   content: string;
   mainImg: string;
   shortContent: string;
+  mainImgStyleValue: any;
 }
 const Home: NextPage = () => {
   const [boards, setBoards] = useState([]);
@@ -18,10 +20,18 @@ const Home: NextPage = () => {
     const { data, status:httpStatus } = result;
 
     const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
+    const styleRegexPattern = /style\s*=\s*"([^"]*)/g;
     for (let board of data.data) {
       const imgRegex = imgRegexPattern.exec(board.content);
+
       if (imgRegex) {
-        const mainImg = imgRegex[1];
+        const mainImg = imgRegex[0];
+        const imgStyleRegex = styleRegexPattern.exec(mainImg);
+        if (imgStyleRegex) {
+          const styleValue = imgStyleRegex[1];
+          board.mainImgStyleValue = styleValue;
+        }
+
         board.mainImg = mainImg;
         board.shortContent = board.content.replace(/(<([^>]+)>)/ig, "");
       }
@@ -54,7 +64,7 @@ const Home: NextPage = () => {
               headStyle={{ textAlign: "center" }}
               extra={<a href={`boards/${board.id}`}>More</a>}
             >
-              <img src={board.mainImg} style={{ float: "left" }} />
+              {ReactHtmlParser(board.mainImg)}
               <p>{board.shortContent}</p>
             </Card>
           </Col>

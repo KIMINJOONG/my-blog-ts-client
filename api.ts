@@ -14,6 +14,7 @@ const makeHeader = async () => {
 export default {
   join: async (path: string, data: any) => {
     try {
+      makeHeader();
       const result = await api.post(path, data);
       return result;
     } catch (error) {
@@ -22,6 +23,7 @@ export default {
   },
   login: async (path: string, data: any) => {
     try {
+      makeHeader();
       const result = await api.post(path, data);
       return result;
     } catch (error) {
@@ -39,6 +41,7 @@ export default {
   },
   index: async (path: string) => {
     try {
+      makeHeader();
       const result = await api.get(path);
       return result;
     } catch (error) {
@@ -47,6 +50,7 @@ export default {
   },
   show: async (path: string) => {
     try {
+      makeHeader();
       const result = await api.get(path);
       return result;
     } catch (error) {

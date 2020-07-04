@@ -40,8 +40,8 @@ const Login = () => {
       if (httpStatus === 200) {
         if (data.success) {
           message.success("로그인되었습니다.");
-          jsCookie.set("token", data.data);
-          userState.getMe();
+          await jsCookie.set("token", data.data);
+          userState.getMe(jsCookie.get("token"));
           Router.push("/");
         } else {
           message.error(data.data.message);

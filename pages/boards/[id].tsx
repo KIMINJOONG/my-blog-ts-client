@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import api from "../../api";
 import ReactHtmlParser from "react-html-parser";
-import { Button } from "antd";
+import { Button, Card } from "antd";
 import Router from "next/router";
+import UserStore from "../../stores/userStore";
 
 interface board {
   content: string;
@@ -17,6 +18,7 @@ const edit = () => {
   const router = useRouter();
   const { id } = router.query;
   const [data, setData] = useState({} as board);
+  const userState = useContext(UserStore);
 
   const init = useCallback(async () => {
     const result = await api.show(`/boards/${id}`);
@@ -30,15 +32,22 @@ const edit = () => {
   return (
     <div>
       <div>
-        {data && ReactHtmlParser(data.content)}
+        <Card title={data.title}>
+          {data && ReactHtmlParser(data.content)}
+        </Card>
       </div>
       <div>
-        <Button
-          type="primary"
-          onClick={() => Router.push(`/boards/edit/${id}`)}
-        >
-          수정
-        </Button>
+        {userState &&
+          userState.value &&
+          userState.value.role &&
+          userState.value.role === 99 && (
+            <Button
+              type="primary"
+              onClick={() => Router.push(`/boards/edit/${id}`)}
+            >
+              수정
+            </Button>
+          )}
       </div>
     </div>
   );
