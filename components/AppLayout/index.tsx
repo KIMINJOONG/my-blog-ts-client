@@ -22,10 +22,17 @@ import { MdFormatIndentIncrease, MdFormatIndentDecrease } from "react-icons/md";
 import Router from "next/router";
 import api from "../../api";
 
+interface ICategory {
+  id: number;
+  code: number;
+  name: string;
+}
+
 const AppLayout: FunctionComponent = ({ children }) => {
   const userState = useContext(userStore);
   const [visible, setVisible] = useState(false);
   const [hashtags, setHashtags] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const onClickLogout = useCallback(async () => {
     await jsCookie.remove("token");
@@ -47,6 +54,14 @@ const AppLayout: FunctionComponent = ({ children }) => {
     const { data: hashtagsData } = data;
     if (status === 200) {
       setHashtags(hashtagsData);
+    }
+
+    const categoriesResult = await api.index("/categories");
+
+    const { data: categories, status: categoriesStatus } = categoriesResult;
+
+    if (categoriesStatus === 200) {
+      setCategories(categories.data);
     }
   }, []);
   useEffect(() => {
@@ -71,16 +86,14 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       <a>Home</a>
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/boards">
-                      <a>Board</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/videos">
-                      <a>Video</a>
-                    </Link>
-                  </li>
+                  {categories && categories.length > 0 &&
+                    categories.map((category: ICategory) => (
+                      <li>
+                        <Link href={`/boards/category/${category.id}`}>
+                          <a>{category.name}</a>
+                        </Link>
+                      </li>
+                    ))}
                   <li>
                     <Link href="/about">
                       <a>About</a>

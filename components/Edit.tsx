@@ -3,6 +3,7 @@ import { ChangeEvent, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Router from "next/router";
 import api from "../api";
+import category from "../pages/admin/category";
 
 const importJodit = () => import("jodit-react");
 
@@ -29,17 +30,35 @@ const useInput = (initValue: any) => {
   const initdata = useCallback((title) => {
     setValue(title);
   }, []);
-  const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  }, []);
+  const onChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+      setValue(e.target.value);
+    },
+    [],
+  );
 
   return { value, initdata, onChange };
+};
+
+const useSelectBox = (initValue: any) => {
+  const [value, setValue] = useState(initValue);
+
+  const initData = useCallback((categoryValue) => {
+    setValue(categoryValue);
+  }, []);
+
+  const onChange = useCallback((value) => {
+    setValue(value);
+  }, []);
+
+  return { value, onChange, initData };
 };
 
 const Edit = (
   { param, data, preset = "none", disabled = false, categories = [] }: IProps,
 ) => {
   const title = useInput("");
+  const categorySelect = useSelectBox("");
   const [content, setContent] = useState("");
   const [config, setConfig] = useState({
     preset,
@@ -139,9 +158,10 @@ const Edit = (
   const dataInit = useCallback(() => {
     if (data) {
       title.initdata(data.title);
+      categorySelect.initData(data.category);
       setContent(data.content);
     }
-  }, [title, config]);
+  }, [title, config, categorySelect]);
 
   useEffect(() => {
     dataInit();
@@ -162,6 +182,7 @@ const Edit = (
     const dataForm = {
       content,
       title: title.value,
+      category: categorySelect.value,
     };
 
     let result;
@@ -180,7 +201,7 @@ const Edit = (
       }
       Router.push(`/boards/${data.data.id}`);
     }
-  }, [content, title]);
+  }, [content, title, categorySelect]);
 
   return (
     <Form name="boardForm" onFinish={onSubmit}>
@@ -195,7 +216,11 @@ const Edit = (
         )}
 
       <Form.Item>
-        <Select>
+        <Select
+          value={categorySelect.value}
+          onChange={(value) => categorySelect.onChange(value)}
+        >
+          {console.log(categories)}
           {categories && categories.length > 0 &&
             categories.map((category: ICategory) => (
               <Select.Option key={category.id} value={category.code}>

@@ -11,7 +11,7 @@ const edit = () => {
     const { data: categories, status: categoriesStatus } = categoriesResult;
 
     if (categoriesStatus === 200) {
-      setCategories(categories);
+      setCategories(categories.data);
     }
   }, []);
 
