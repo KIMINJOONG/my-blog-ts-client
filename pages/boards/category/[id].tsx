@@ -68,7 +68,6 @@ const boards = () => {
     }
     endPoint = `${endPoint}?${searchArray.join("&")}`;
     result = await api.index(endPoint);
-    console.log(result);
     const { data, status: httpStatus } = result;
 
     if (httpStatus === 200) {

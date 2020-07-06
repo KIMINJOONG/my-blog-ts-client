@@ -76,11 +76,12 @@ const category = () => {
       title: "이름",
       dataIndex: "name",
       key: "name",
-      width: "20%",
+      width: "50%",
       align: "center" as Align,
     },
     {
       title: "action",
+      align: "center" as Align,
       render: (text: string, record: IRecord) => {
         return (
           <Button
@@ -129,6 +130,9 @@ const category = () => {
             rowKey={(record: any) => record.id}
             columns={columns}
             dataSource={categories}
+            pagination={{
+              position: ["bottomCenter"],
+            }}
           >
           </Table>
         )}

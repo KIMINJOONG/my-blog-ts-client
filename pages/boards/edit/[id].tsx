@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import Edit from "../../../components/Edit";
 import { useState, useEffect, useCallback } from "react";
 import api from "../../../api";
+import React from "react";
 
 const edit = (props: any) => {
   const router = useRouter();
@@ -50,4 +51,4 @@ const edit = (props: any) => {
   );
 };
 
-export default edit;
+export default React.memo(edit);
