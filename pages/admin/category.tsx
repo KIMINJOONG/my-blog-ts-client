@@ -1,6 +1,7 @@
 import { Col, Table, Input, Divider, Button, Row, Form } from "antd";
 import { useEffect, useCallback, useState } from "react";
 import api from "../../api";
+import Router, { useRouter } from "next/router";
 
 interface IRecord {
   id: number;
@@ -24,14 +25,17 @@ const useInput = (defaultValue: string | number) => {
 
 const category = () => {
   const [categories, setCategories] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const nameInput = useInput("");
   const codeInput = useInput("");
+  const router = useRouter();
   const init = useCallback(async () => {
     const result = await api.index("/categories");
 
     const { data, status } = result;
     if (status === 200) {
       setCategories(data.data);
+      setTotalCount(data.totalCount);
     }
   }, []);
   useEffect(() => {
@@ -57,6 +61,22 @@ const category = () => {
       setCategories(categories.filter((category: any) => category.id !== id));
     }
   }, [categories]);
+
+  const onChangePage = useCallback((page, pageSize) => {
+    const { title } = router.query;
+    Router.push({
+      pathname: "/categories",
+      query: { page, title, limit: pageSize },
+    });
+  }, []);
+
+  const onShowSizeChange = useCallback((current, size) => {
+    const { title } = router.query;
+    Router.push({
+      pathname: "/categories",
+      query: { page: current, title, limit: size },
+    });
+  }, []);
 
   const columns = [
     {
@@ -132,6 +152,12 @@ const category = () => {
             dataSource={categories}
             pagination={{
               position: ["bottomCenter"],
+              total: totalCount,
+              current: router.query.page
+                ? parseInt(router.query.page as string, 10)
+                : 1,
+              onChange: onChangePage,
+              onShowSizeChange,
             }}
           >
           </Table>
