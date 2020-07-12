@@ -1,7 +1,18 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
+        "target": "es2015",
+        "lib": [
+            "es5",
+            "es2015.iterable",
+            "es2015.collection",
+            "es2015.symbol.wellknown",
+            "es2015.promise",
+            "es2015.symbol",
+            "es2015.generator",
+            "dom.iterable",
+            "dom",
+            "scripthost"
+        ],
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
