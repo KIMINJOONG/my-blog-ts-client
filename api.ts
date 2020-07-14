@@ -2,7 +2,9 @@ import axios from "axios";
 import jsCookie from "js-cookie";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: process.env.NODE_ENV === "production"
+    ? "ec2-18-181-201-66.ap-northeast-1.compute.amazonaws.com:4000"
+    : "http://localhost:4000",
   withCredentials: true,
 });
 
