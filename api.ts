@@ -4,7 +4,7 @@ import jsCookie from "js-cookie";
 const api = axios.create({
     baseURL:
         process.env.NODE_ENV === "production"
-            ? "http://18.183.90.224"
+            ? "http://18.181.201.66"
             : "http://localhost:4000",
     withCredentials: true,
 });
