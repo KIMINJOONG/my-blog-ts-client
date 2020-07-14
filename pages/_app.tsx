@@ -118,7 +118,7 @@ MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
     const endPoint = process.env.NODE_ENV === "production"
       ? "http://18.181.201.66"
       : "http://localhost:4000";
-    const result = await axios.get(endPoint, {
+    const result = await axios.get(`${endPoint}/users/me`, {
       withCredentials: true,
     });
 
