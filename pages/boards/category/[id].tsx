@@ -112,12 +112,13 @@ const boards = () => {
     <div>
       {userState &&
         userState.value.role &&
-        userState.value.role === 1 && <Col>관리자</Col>}
-      <Col style={{ textAlign: "right" }}>
-        <Link href="/boards/edit">
-          <a>글쓰기</a>
-        </Link>
-      </Col>
+        userState.value.role === 99 &&
+        <Col style={{ textAlign: "right" }}>
+          <Link href="/boards/edit">
+            <a>글쓰기</a>
+          </Link>
+        </Col>}
+
       {boards && (
         <Table
           rowKey={(record) => record.id}
