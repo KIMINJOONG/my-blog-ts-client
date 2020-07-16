@@ -233,7 +233,7 @@ const Edit = (
       <Form.Item>
         <JoditEditor
           value={content}
-          config={config}
+          config={config as any}
           onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
           onChange={(newContent) => {}}
         />
