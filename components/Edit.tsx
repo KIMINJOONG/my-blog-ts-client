@@ -245,7 +245,7 @@ const Edit = (
             <Button type="primary" onClick={onSubmit}>
               수정
             </Button>
-            <Button type="danger" onClick={onClickRemove}>
+            <Button danger onClick={onClickRemove}>
               삭제
             </Button>
           </Form.Item>
