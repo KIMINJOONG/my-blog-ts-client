@@ -91,7 +91,7 @@ const Edit = (
         return {
           fileName: resp[0],
           baseurl:
-            "https://kohubi-test.s3.ap-northeast-2.amazonaws.com/images/",
+            "https://kohubi-renual-blog.s3-ap-northeast-1.amazonaws.com/images/",
         };
       },
 
