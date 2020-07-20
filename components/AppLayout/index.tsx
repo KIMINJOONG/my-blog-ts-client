@@ -49,7 +49,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
     setVisible(false);
   }, []);
   const init = useCallback(async () => {
-    const result = await api.index("hashtags");
+    const result = await api.index("/hashtags");
     const { data, status } = result;
     const { data: hashtagsData } = data;
     if (status === 200) {
@@ -179,13 +179,15 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 visible={visible}
                 key={"key"}
               >
-                <p onClick={() => clickPage("/boards")}>
-                  Board
-                </p>
-                <p onClick={() => clickPage("/videos")}>
-                  Video
-                </p>
-
+                {categories && categories.length > 0 &&
+                  categories.map((category: ICategory) => (
+                    <p
+                      onClick={() =>
+                        clickPage(`/boards/category/${category.code}`)}
+                    >
+                      {category.name}
+                    </p>
+                  ))}
                 <p onClick={() => clickPage("/about")}>About</p>
                 {userState &&
                   userState.value &&
