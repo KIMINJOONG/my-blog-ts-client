@@ -64,7 +64,7 @@ const Edit = (
     preset,
     disabled: preset === "none" ? false : true,
     uploader: {
-      url: `http://localhost:4000/images/upload`,
+      url: `https://api.kohubi.xyz/images/upload`,
       insertImageAsBase64URI: false,
       imagesExtensions: ["jpg", "png", "jpeg", "gif"],
       headers: {
