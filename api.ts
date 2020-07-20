@@ -3,7 +3,7 @@ import jsCookie from "js-cookie";
 
 const api = axios.create({
   baseURL: process.env.NODE_ENV === "production"
-    ? "https://api.kohubi.me"
+    ? "https://api.kohubi.xyz"
     : "http://localhost:4000",
   withCredentials: true,
 });
