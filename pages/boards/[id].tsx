@@ -60,6 +60,7 @@ const edit = () => {
     const result = await api.create(`/comments/${id}`, { comment });
     const { data, status:httpStatus } = result;
     if (httpStatus === 200) {
+      setComment("");
       setComments(comments.concat(data.data));
     }
   }, [comments, comment]);
