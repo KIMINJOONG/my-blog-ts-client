@@ -20,6 +20,7 @@ interface IUser {
   name: string;
 }
 interface IComment {
+  id: number;
   content: string;
   createdAt: string;
   user: IUser;
@@ -91,7 +92,7 @@ const edit = () => {
             itemLayout="horizontal"
             dataSource={comments}
             renderItem={(comment: IComment) => (
-              <Card>
+              <Card key={comment.id}>
                 <li>
                   <Comment
                     author={`${comment.user.email}(${comment.user.name})`}

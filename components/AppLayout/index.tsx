@@ -88,7 +88,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   </li>
                   {categories && categories.length > 0 &&
                     categories.map((category: ICategory) => (
-                      <li>
+                      <li key={category.id}>
                         <Link href={`/boards/category/${category.code}`}>
                           <a>{category.name}</a>
                         </Link>
