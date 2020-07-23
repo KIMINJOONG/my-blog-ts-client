@@ -56,7 +56,6 @@ const edit = () => {
   }, []);
 
   const onSubmit = useCallback(async (e) => {
-    // setComments(comments.concat(comment as any));
     const result = await api.create(`/comments/${id}`, { comment });
     const { data, status:httpStatus } = result;
     if (httpStatus === 200) {
@@ -120,8 +119,9 @@ const edit = () => {
               loading={submitting}
               onClick={onSubmit}
               type="primary"
+              disabled={Object.keys(userState.value).length > 0 ? false : true}
             >
-              Add Comment
+              댓글등록
             </Button>
           </Form.Item>
         </Card>
