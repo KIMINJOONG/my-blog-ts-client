@@ -6,6 +6,8 @@ import { Button, Card, Input, Form, List, Comment } from "antd";
 import Router from "next/router";
 import UserStore from "../../stores/userStore";
 import Link from "next/link";
+import { AppContext } from "next/app";
+import { NextPageContext } from "next";
 
 interface IBoard {
   content: string;
@@ -26,21 +28,17 @@ interface IComment {
   user: IUser;
 }
 
-const edit = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  const [data, setData] = useState({} as IBoard);
+interface IProps {
+  boardData: any;
+  id: string;
+}
+const edit = ({ boardData, id }: IProps) => {
   const userState = useContext(UserStore);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [comments, setComments] = useState([]);
 
   const init = useCallback(async () => {
-    const result = await api.show(`/boards/${id}`);
-    const { data, status: httpStatus } = result;
-    if (httpStatus === 200) {
-      setData(data.data);
-    }
     getComment();
   }, []);
 
@@ -68,8 +66,8 @@ const edit = () => {
   return (
     <div>
       <div>
-        <Card title={data.title}>
-          {data && ReactHtmlParser(data.content)}
+        <Card title={boardData.title}>
+          {boardData && ReactHtmlParser(boardData.content)}
         </Card>
       </div>
       <div>
@@ -130,6 +128,15 @@ const edit = () => {
       </div>
     </div>
   );
+};
+
+edit.getInitialProps = async ({ query }: any) => {
+  const { id } = query;
+  let boardResult = await api.show(`/boards/${id}`);
+  const { data, status: boardHttpStatus } = boardResult;
+  const boardData = data.data;
+
+  return { boardData, id };
 };
 
 export default edit;

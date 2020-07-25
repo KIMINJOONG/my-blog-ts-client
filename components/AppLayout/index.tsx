@@ -182,6 +182,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 {categories && categories.length > 0 &&
                   categories.map((category: ICategory) => (
                     <p
+                      key={category.id}
                       onClick={() =>
                         clickPage(`/boards/category/${category.code}`)}
                     >

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useContext } from "react";
 import Router, { useRouter } from "next/router";
 import UserStore from "../../../stores/userStore";
 import api from "../../../api";
+import { AppContext } from "next/app";
 
 type Align = "left" | "right" | "center";
 const columns = [
@@ -44,7 +45,7 @@ const columns = [
   },
 ];
 
-const boards = () => {
+const boards = ({ boardsData }: any) => {
   const [boards, setBoards] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const router = useRouter();
@@ -144,5 +145,14 @@ const boards = () => {
       </Col>
     </div>
   );
+};
+
+boards.getInitialProps = async ({ Component, ctx, router }: AppContext) => {
+  const result = await api.index("/boards");
+  const { data: boardsData, status: httpStatus } = result;
+
+  if (httpStatus === 200) {
+    return { boardsData };
+  }
 };
 export default boards;
