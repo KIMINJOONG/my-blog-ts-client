@@ -84,11 +84,11 @@ const boards = ({ boardsData }: any) => {
   const onSearch = useCallback((value: string) => {
     if (!value) {
       Router.push({
-        pathname: "/boards",
+        pathname: `/boards/category/${id}`,
       });
     } else {
       Router.push({
-        pathname: "/boards",
+        pathname: `/boards/category/${id}`,
         query: { title: value },
       });
     }
@@ -97,7 +97,7 @@ const boards = ({ boardsData }: any) => {
   const onChangePage = useCallback((page, pageSize) => {
     const { title } = router.query;
     Router.push({
-      pathname: "/boards",
+      pathname: `/boards/category/${id}`,
       query: { page, title, limit: pageSize },
     });
   }, []);
@@ -105,7 +105,7 @@ const boards = ({ boardsData }: any) => {
   const onShowSizeChange = useCallback((current, size) => {
     const { title } = router.query;
     Router.push({
-      pathname: "/boards",
+      pathname: `/boards/category/${id}`,
       query: { page: current, title, limit: size },
     });
   }, []);

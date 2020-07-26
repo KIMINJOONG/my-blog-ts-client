@@ -224,7 +224,8 @@ const AppLayout: FunctionComponent = ({ children }) => {
               <Row style={{ height: "100%" }}>
                 <Col md={4} xs={0}>
                   <Card
-                    title="태그"
+                    style={{ wordBreak: "break-word" }}
+                    title="해쉬태그"
                   >
                     {hashtags.length > 0 &&
                       hashtags.map((hashtag: IHashtag, index: number) => (
