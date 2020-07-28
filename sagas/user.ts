@@ -9,7 +9,7 @@ import axios from "axios";
 
 function loadUserAPI(userId: string) {
     // 서버에 요청을 보내는 부분
-    return axios.get(userId ? `/user/${userId}` : "/user/", {
+    return axios.get("/users/me", {
         withCredentials: true, // 클라이언트에서 요청 보낼 때는 브라우저가 쿠키를 같이 동봉
     }); // 서버사이드렌더링일 때는, 브라우저가 없다.
 }
@@ -18,15 +18,14 @@ function* loadUser(action: any) {
     try {
         // yield call(loadUserAPI);
         const result = yield call(loadUserAPI, action.data);
+
         yield put({
             // put은 dispatch 동일
             type: LOAD_USER_SUCCESS,
             data: result.data,
-            me: !action.data,
         });
     } catch (e) {
         // loginAPI 실패
-        console.error(e);
         yield put({
             type: LOAD_USER_FAILURE,
             error: e,

@@ -1,29 +1,30 @@
 import Edit from "../../components/Edit";
 import api from "../../api";
 import { useState, useCallback, useEffect } from "react";
+import AppLayout from "../../components/AppLayout";
 
 const edit = () => {
-  const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
 
-  const init = useCallback(async () => {
-    const categoriesResult = await api.index("/categories");
+    const init = useCallback(async () => {
+        const categoriesResult = await api.index("/categories");
 
-    const { data: categories, status: categoriesStatus } = categoriesResult;
+        const { data: categories, status: categoriesStatus } = categoriesResult;
 
-    if (categoriesStatus === 200) {
-      setCategories(categories.data);
-    }
-  }, []);
+        if (categoriesStatus === 200) {
+            setCategories(categories.data);
+        }
+    }, []);
 
-  useEffect(() => {
-    init();
-  }, []);
+    useEffect(() => {
+        init();
+    }, []);
 
-  return (
-    <div>
-      <Edit categories={categories} />
-    </div>
-  );
+    return (
+        <AppLayout>
+            <Edit categories={categories} />
+        </AppLayout>
+    );
 };
 
 export default edit;

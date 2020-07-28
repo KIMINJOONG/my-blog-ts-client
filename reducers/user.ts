@@ -39,6 +39,13 @@ export type UserActionType =
 
 // 동기요청
 
+export const loadUserAction = (data: any) => {
+    return {
+        type: LOAD_USER_REQUEST,
+        data: data,
+    };
+};
+
 // 동적인 데이터는 함수로 만들어줌 signup.js도 참고할것
 
 const reducer = (state = initialState, action: UserActionType) => {
@@ -50,15 +57,9 @@ const reducer = (state = initialState, action: UserActionType) => {
                 };
             }
             case LOAD_USER_SUCCESS: {
-                if (action.me) {
-                    return {
-                        ...state,
-                        me: action.data,
-                    };
-                }
                 return {
                     ...state,
-                    userInfo: action.data,
+                    me: action.data,
                 };
             }
             case LOAD_USER_FAILURE: {
