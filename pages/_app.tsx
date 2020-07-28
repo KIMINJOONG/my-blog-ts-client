@@ -12,6 +12,12 @@ import "../node_modules/antd/dist/antd.css";
 import "jodit/build/jodit.min.css";
 import { message } from "antd";
 import api from "../api";
+import createSagaMiddleware from "@redux-saga/core";
+import { createStore, compose, applyMiddleware } from "redux";
+import withRedux from "next-redux-wrapper";
+import withReduxSaga from "next-redux-saga";
+import reducer from "../reducers";
+import rootSaga from "../sagas";
 
 const GlobalStyle = createGlobalStyle`
      ${reset};
@@ -32,107 +38,129 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 interface Props extends AppProps {
-  serverData: {
-    role: number;
-    _id: string;
-    email: string;
-    password: string;
-    name: string;
-    __v: number;
-  };
+    serverData: {
+        role: number;
+        _id: string;
+        email: string;
+        password: string;
+        name: string;
+        __v: number;
+    };
 }
 
 const useForm = (initValue: any) => {
-  const [value, setValue] = useState(initValue);
+    const [value, setValue] = useState(initValue);
 
-  const serverDataInit = useCallback(
-    (serverData: any) => {
-      setValue({ ...serverData });
-    },
-    [value],
-  );
+    const serverDataInit = useCallback(
+        (serverData: any) => {
+            setValue({ ...serverData });
+        },
+        [value]
+    );
 
-  const getMe = useCallback(async () => {
-    const result = await api.getMe();
-    const { data, status: httpStatus } = result;
-    if (data && httpStatus === 200) {
-      setValue({ ...data.data });
-    } else {
-      setValue(null);
-    }
-  }, [value]);
+    const getMe = useCallback(async () => {
+        const result = await api.getMe();
+        const { data, status: httpStatus } = result;
+        if (data && httpStatus === 200) {
+            setValue({ ...data.data });
+        } else {
+            setValue(null);
+        }
+    }, [value]);
 
-  const logout = useCallback(async () => {
-    setValue(null);
-  }, [value]);
+    const logout = useCallback(async () => {
+        setValue(null);
+    }, [value]);
 
-  return { value, getMe, serverDataInit, logout };
+    return { value, getMe, serverDataInit, logout };
 };
 
 const MyBlog: NextComponentType<AppContext, AppInitialProps, Props> = ({
-  Component,
-  pageProps,
-  serverData,
+    Component,
+    pageProps,
+    serverData,
 }) => {
-  message.config({
-    top: 65,
-    duration: 2,
-    maxCount: 3,
-    rtl: true,
-  });
+    message.config({
+        top: 65,
+        duration: 2,
+        maxCount: 3,
+        rtl: true,
+    });
 
-  const userForm = useForm({});
+    const userForm = useForm({});
 
-  useEffect(() => {
-    userForm.serverDataInit(serverData);
-  }, [serverData]);
+    useEffect(() => {
+        userForm.serverDataInit(serverData);
+    }, [serverData]);
 
-  return (
-    <div>
-      <UserStore.Provider value={userForm}>
-        <Helmet>
-          <title>Kohubi's 블로그</title>
-        </Helmet>
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
-        <GlobalStyle />
-      </UserStore.Provider>
-    </div>
-  );
+    return (
+        <div>
+            <UserStore.Provider value={userForm}>
+                <Helmet>
+                    <title>Kohubi's 블로그</title>
+                </Helmet>
+                <AppLayout>
+                    <Component {...pageProps} />
+                </AppLayout>
+                <GlobalStyle />
+            </UserStore.Provider>
+        </div>
+    );
 };
 
 MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
-  let pageProps = {};
-  let cookie: string | undefined = "";
-  //server
-  if (ctx.req) {
-    cookie = ctx.req.headers.cookie;
-    axios.defaults.headers.Authorization = cookie;
-  } else {
-    const token = jsCookie.get("token") ? jsCookie.get("token") : "";
-    axios.defaults.headers.Authorization = `token=${token}`;
-  }
-  let serverData = null;
-  try {
-    const endPoint = process.env.NODE_ENV === "production"
-      ? "https://api.kohubi.xyz"
-      : "http://localhost:4000";
-    const result = await axios.get(`${endPoint}/users/me`, {
-      withCredentials: true,
-    });
+    let pageProps = {};
+    let cookie: string | undefined = "";
+    //server
+    if (ctx.req) {
+        cookie = ctx.req.headers.cookie;
+        axios.defaults.headers.Authorization = cookie;
+    } else {
+        const token = jsCookie.get("token") ? jsCookie.get("token") : "";
+        axios.defaults.headers.Authorization = `token=${token}`;
+    }
+    let serverData = null;
+    try {
+        const endPoint =
+            process.env.NODE_ENV === "production"
+                ? "https://api.kohubi.xyz"
+                : "http://localhost:4000";
+        const result = await axios.get(`${endPoint}/users/me`, {
+            withCredentials: true,
+        });
 
-    const { data } = result;
-    serverData = data.data;
-  } catch (error) {
-    serverData = null;
-  }
+        const { data } = result;
+        serverData = data.data;
+    } catch (error) {
+        serverData = null;
+    }
 
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
-  }
+    if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps(ctx);
+    }
 
-  return { pageProps, serverData };
+    return { pageProps, serverData };
+};
+
+const configureStore: any = (initialState: any, options: any) => {
+    const sagaMiddleware = createSagaMiddleware();
+    const middlewares = [sagaMiddleware];
+    console.log(initialState);
+    const enhancer =
+        process.env.NODE_ENV === "production"
+            ? compose(applyMiddleware(...middlewares))
+            : compose(applyMiddleware(...middlewares));
+    // : compose(
+    //       applyMiddleware(...middlewares),
+    //       !options.isServer &&
+    //           (window as any).__REDUX_DEVTOOLS_EXTENSION__ !==
+    //               "undefined"
+    //           ? (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    //           : (f: any) => f
+    //   );
+    const store: any = createStore(reducer, initialState, enhancer);
+    store.sagaTask = sagaMiddleware.run(rootSaga); // 이부분도 서버사이드 렌더링
+    return store;
 };
 
 // class MyBlog extends App<Props> {
@@ -170,4 +198,4 @@ MyBlog.getInitialProps = async ({ Component, ctx }: AppContext) => {
 //     }
 // }
 
-export default MyBlog;
+export default withRedux(configureStore)(MyBlog);
