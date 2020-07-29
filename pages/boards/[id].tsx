@@ -16,6 +16,13 @@ import {
 import Router from "next/router";
 import UserStore from "../../stores/userStore";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
+import wrapper from "../../stores/configureStore";
+import { END } from "redux-saga";
+import { BOARD_DETAIL_REQUEST } from "../../reducers/board";
+import { useSelector } from "react-redux";
+import { LOAD_USER_REQUEST } from "../../reducers/user";
+import axios from "axios";
+import AppLayout from "../../components/AppLayout";
 
 interface IBoard {
   content: string;
@@ -46,41 +53,42 @@ interface IProps {
   boardData: IBoard;
   id: string;
 }
-const edit = ({ boardData, id }: IProps) => {
-  const userState = useContext(UserStore);
+const edit = () => {
+  const { me } = useSelector((state: any) => state.user);
+  const { board } = useSelector((state: any) => state.board);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [comments, setComments] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(boardData.likes.length);
+  const [likeCount, setLikeCount] = useState(board.data.likes.length);
 
   const init = useCallback(async () => {
     getComment();
-  }, [boardData, userState]);
+  }, []);
 
   const getComment = useCallback(async () => {
-    const result = await api.index(`/comments/${id}`);
+    const result = await api.index(`/comments/${board.data.id}`);
     const { data, status: httpStatus } = result;
     if (httpStatus === 200) {
       setComments(data.data);
     }
-  }, []);
+  }, [board]);
 
   useEffect(() => {
     init();
   }, []);
 
   useEffect(() => {
-    for (let like of boardData.likes) {
-      if (like.userId === userState.value.id) {
+    for (let like of board.data.likes) {
+      if (like.userId === board.data.id) {
         setIsLiked(true);
         break;
       }
     }
-  }, [userState]);
+  }, [me]);
 
   const onSubmit = useCallback(async (e) => {
-    const result = await api.create(`/comments/${id}`, { comment });
+    const result = await api.create(`/comments/${board.data.id}`, { comment });
     const { data, status:httpStatus } = result;
     if (httpStatus === 200) {
       setComment("");
@@ -90,14 +98,14 @@ const edit = ({ boardData, id }: IProps) => {
 
   const onClickHelped = useCallback(async () => {
     if (
-      !userState ||
-      !userState.value ||
-      !userState.value.id
+      !me ||
+      !me.data ||
+      !me.data.id
     ) {
       message.error("로그인을 먼저 해주세요.");
       return;
     }
-    const result = await api.create(`/likes/${id}`, {});
+    const result = await api.create(`/likes/${board.data.id}`, {});
     const { data, status:httpStatus } = result;
     if (httpStatus === 200) {
       if (data.message === "liked") {
@@ -110,14 +118,14 @@ const edit = ({ boardData, id }: IProps) => {
         message.success("더 도움될 수 있도록 노력하겠습니다.");
       }
     }
-  }, [likeCount]);
+  }, [likeCount, board]);
 
   return (
-    <div>
+    <AppLayout>
       <Row>
         <Col md={24} xs={24} sm={24} lg={24}>
-          <Card title={boardData.title}>
-            {boardData && ReactHtmlParser(boardData.content)}
+          <Card title={board.data.title}>
+            {board && ReactHtmlParser(board.data.content)}
           </Card>
         </Col>
       </Row>
@@ -162,14 +170,13 @@ const edit = ({ boardData, id }: IProps) => {
         </Col>
       </Row>
       <Row>
-        {userState &&
-          userState.value &&
-          userState.value.role &&
-          userState.value.role === 99 && (
+        {me &&
+          me.data &&
+          me.data.role === 99 && (
             <Col md={24} xs={24} sm={24} lg={24}>
               <Button
                 type="primary"
-                onClick={() => Router.push(`/boards/edit/${id}`)}
+                onClick={() => Router.push(`/boards/edit/${board.data.id}`)}
               >
                 수정
               </Button>
@@ -217,8 +224,8 @@ const edit = ({ boardData, id }: IProps) => {
                 loading={submitting}
                 onClick={onSubmit}
                 type="primary"
-                disabled={userState.value &&
-                  Object.keys(userState.value).length > 0
+                disabled={me.data &&
+                  Object.keys(me.data).length > 0
                   ? false
                   : true}
               >
@@ -228,21 +235,28 @@ const edit = ({ boardData, id }: IProps) => {
           </Card>
         </Col>
       </Row>
-    </div>
+    </AppLayout>
   );
 };
 
-edit.getInitialProps = async ({ query, context }: any) => {
-  const { id } = query;
-  let boardResult = await api.show(`/boards/${id}`);
-  let boardData = null;
-  if (boardResult) {
-    const { data, status: boardHttpStatus } = boardResult;
-    if (data) {
-      boardData = data.data;
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context: any) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Authorization = "";
+    axios.defaults.withCredentials = true;
+    if (context.req && cookie) {
+      axios.defaults.headers.Authorization = cookie;
     }
-  }
-  return { boardData, id };
-};
+    context.store.dispatch({
+      type: LOAD_USER_REQUEST,
+    });
+    context.store.dispatch({
+      type: BOARD_DETAIL_REQUEST,
+      data: context.params.id,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  },
+);
 
 export default edit;
