@@ -1,8 +1,7 @@
-import { Table, Tag, Col, Input } from "antd";
+import { Table, Col, Input } from "antd";
 import Link from "next/link";
-import { useEffect, useState, useCallback, useContext } from "react";
-import Router, { useRouter } from "next/router";
-import api from "../../../api";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import AppLayout from "../../../components/AppLayout";
 import wrapper from "../../../stores/configureStore";
