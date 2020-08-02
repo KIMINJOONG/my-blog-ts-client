@@ -66,7 +66,54 @@ const Edit = ({
     const [content, setContent] = useState("");
     const [config, setConfig] = useState({
         preset,
+        buttons: [
+            "source",
+            "|",
+            "bold",
+            "strikethrough",
+            "underline",
+            "italic",
+            "eraser",
+            "|",
+            "superscript",
+            "subscript",
+            "|",
+            "ul",
+            "ol",
+            "|",
+            "outdent",
+            "indent",
+            "|",
+            "font",
+            "fontsize",
+            "brush",
+            "paragraph",
+            "|",
+            "image",
+            "file",
+            "video",
+            "table",
+            "link",
+            "|",
+            "align",
+            "undo",
+            "redo",
+            "\n",
+            "selectall",
+            "cut",
+            "copy",
+            "paste",
+            "copyformat",
+            "|",
+            "hr",
+            "symbol",
+            "fullsize",
+            "print",
+            "about",
+        ],
         disabled: preset === "none" ? false : true,
+        allowTabNavigation: true,
+        addNewLineTagsTriggers: ["table", "iframe", "img", "hr", "jodit"],
         uploader: {
             url: `https://api.kohubi.xyz/images/upload`,
             insertImageAsBase64URI: false,
@@ -75,7 +122,6 @@ const Edit = ({
                 Authorization: "zjdkjfkld",
             },
             filesVariableName(i: number): string {
-                console.log("i : ", i);
                 return `files`;
             },
             withCredentials: true,
@@ -83,7 +129,6 @@ const Edit = ({
             format: "json",
             method: "POST",
             prepareData: function (data: any) {
-                console.log("prepareData : ", data);
                 return data;
             },
             isSuccess: function (resp: any) {

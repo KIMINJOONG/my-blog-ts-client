@@ -10,20 +10,16 @@ import Head from "next/head";
 import "antd/dist/antd.css";
 
 const GlobalStyle = createGlobalStyle`
-     ${reset};
      a{
          text-decoration:none;
          color:inherit;
      }
-     *{
-         box-sizing:boerder-box;
-     }
-     body{
-         font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-         font-size: 14px;
-         font-weight: 400;
-         line-height: 24px;
-         background-color: #f3f3f3;
+
+     code {
+        background-color: #eee;
+        border-radius: 3px;
+        font-family: courier, monospace;
+        padding: 0 3px;
      }
 `;
 
@@ -62,8 +58,6 @@ const MyBlog: any = ({ Component }: any) => {
         maxCount: 3,
         rtl: true,
     });
-
-    const userForm = useForm({});
 
     return (
         <div>
