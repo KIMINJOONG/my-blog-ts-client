@@ -9,6 +9,7 @@
         "pm2-start": "next build && pm2 start npm --name 'client' -- start"
     },
     "dependencies": {
+        "@next/bundle-analyzer": "^9.5.1",
         "@types/axios": "^0.14.0",
         "@types/js-cookie": "^2.2.6",
         "@types/next-redux-saga": "^3.0.2",
