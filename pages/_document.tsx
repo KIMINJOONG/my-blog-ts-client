@@ -26,7 +26,6 @@ export default class MyDocument extends Document<IProps> {
         ),
       };
     } catch (error) {
-      console.log("11111111 : ", error);
       console.error(error);
     } finally {
       sheet.seal();

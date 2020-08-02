@@ -10,6 +10,11 @@ import {
   LOAD_BOARDS_FAILURE,
 } from "../reducers/board";
 
+interface IBOARDDETAILPROPS {
+  categoryId: string;
+  query: string;
+}
+
 function boardDetailAPI(boardId: string) {
   // 서버에 요청을 보내는 부분
   return axios.get(`/boards/${boardId}`, {
@@ -40,9 +45,9 @@ function* watchBoardDetail() {
   yield takeEvery(BOARD_DETAIL_REQUEST, boardDetail);
 }
 
-function loadBoardsAPI(categoryId: string) {
+function loadBoardsAPI(data: IBOARDDETAILPROPS) {
   // 서버에 요청을 보내는 부분
-  return axios.get(`/boards/category/${categoryId}`, {
+  return axios.get(`/boards/category/${data.categoryId}?${data.query}`, {
     withCredentials: true, // 클라이언트에서 요청 보낼 때는 브라우저가 쿠키를 같이 동봉
   }); // 서버사이드렌더링일 때는, 브라우저가 없다.
 }

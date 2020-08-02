@@ -224,10 +224,7 @@ const edit = () => {
                 loading={submitting}
                 onClick={onSubmit}
                 type="primary"
-                disabled={me.data &&
-                  Object.keys(me.data).length > 0
-                  ? false
-                  : true}
+                disabled={me && me.data ? false : true}
               >
                 댓글등록
               </Button>

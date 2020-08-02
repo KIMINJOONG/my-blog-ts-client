@@ -1,8 +1,9 @@
 import { Table, Col, Input } from "antd";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import Router from "next/router";
+import { useSelector, useDispatch } from "react-redux";
 import AppLayout from "../../../components/AppLayout";
 import wrapper from "../../../stores/configureStore";
 import { END } from "redux-saga";
@@ -50,70 +51,86 @@ const columns = [
 ];
 
 const boards = () => {
+  const dispatch = useDispatch();
   const { me } = useSelector((state: any) => state.user);
   const { boards } = useSelector((state: any) => state.board);
 
-  const [totalCount, setTotalCount] = useState(0);
   const router = useRouter();
   const { id } = router.query;
 
-  // const init = useCallback(async () => {
-  //   const { title, page, limit = 10 } = router.query;
-  //   let result = null;
-  //   let searchArray = [];
-  //   let endPoint = `/boards/category/${id}`;
+  const onSearch = useCallback((value: string = "", e) => {
+    let searchArray = [];
+    searchArray.push(`title=${value}`);
 
-  //   if (title) {
-  //     searchArray.push(`title=${title}`);
-  //   }
-  //   if (page) {
-  //     searchArray.push(`page=${page}`);
-  //   }
-  //   if (limit) {
-  //     searchArray.push(`limit=${limit}`);
-  //   }
-  //   endPoint = `${endPoint}?${searchArray.join("&")}`;
-  //   result = await api.index(endPoint);
-  //   const { data, status: httpStatus } = result;
+    Router.push({
+      pathname: `/boards/category/${id}`,
+      query: { title: value },
+    });
+    // dispatch({
+    //   type: LOAD_BOARDS_REQUEST,
+    //   data: {
+    //     categoryId: id,
+    //     query: searchArray.join("&"),
+    //   },
+    // });
+  }, [router]);
 
-  //   if (httpStatus === 200) {
-  //     setBoards(data.data);
-  //     setTotalCount(data.totalCount);
-  //   }
-  // }, [router]);
+  const onChangePage = useCallback((page, pageSize) => {
+    const { title } = router.query;
 
-  // useEffect(() => {
-  //   init();
-  // }, [router.query]);
+    Router.push({
+      pathname: `/boards/category/${id}`,
+      query: { page, title, limit: pageSize },
+    });
 
-  // const onSearch = useCallback((value: string) => {
-  //   if (!value) {
-  //     Router.push({
-  //       pathname: `/boards/category/${id}`,
-  //     });
-  //   } else {
-  //     Router.push({
-  //       pathname: `/boards/category/${id}`,
-  //       query: { title: value },
-  //     });
-  //   }
-  // }, []);
+    // let searchArray = [];
 
-  // const onChangePage = useCallback((page, pageSize) => {
-  //   const { title } = router.query;
-  //   Router.push({
-  //     pathname: `/boards/category/${id}`,
-  //     query: { page, title, limit: pageSize },
-  //   });
-  // }, []);
+    // if (title) {
+    //   searchArray.push(`title=${title}`);
+    // }
+    // if (page) {
+    //   searchArray.push(`page=${page}`);
+    // }
+    // if (pageSize) {
+    //   searchArray.push(`limit=${pageSize}`);
+    // }
 
-  // const onShowSizeChange = useCallback((current, size) => {
-  //   const { title } = router.query;
-  //   Router.push({
-  //     pathname: `/boards/category/${id}`,
-  //     query: { page: current, title, limit: size },
-  //   });
-  // }, []);
+    // dispatch({
+    //   type: LOAD_BOARDS_REQUEST,
+    //   data: {
+    //     categoryId: id,
+    //     query: searchArray.join("&"),
+    //   },
+    // });
+  }, []);
+
+  const onShowSizeChange = useCallback((current, size) => {
+    const { title } = router.query;
+
+    Router.push({
+      pathname: `/boards/category/${id}`,
+      query: { page: current, title, limit: size },
+    });
+    // let searchArray = [];
+
+    // if (title) {
+    //   searchArray.push(`title=${title}`);
+    // }
+    // if (current) {
+    //   searchArray.push(`page=${current}`);
+    // }
+    // if (size) {
+    //   searchArray.push(`limit=${size}`);
+    // }
+
+    // dispatch({
+    //   type: LOAD_BOARDS_REQUEST,
+    //   data: {
+    //     categoryId: id,
+    //     query: searchArray.join("&"),
+    //   },
+    // });
+  }, []);
   return (
     <AppLayout>
       <div>
@@ -133,19 +150,19 @@ const boards = () => {
             dataSource={boards.data}
             pagination={{
               position: ["bottomCenter"],
-              total: totalCount,
+              total: boards.totalCount,
               current: router.query.page
                 ? parseInt(router.query.page as string, 10)
                 : 1,
-              // onChange: onChangePage,
-              // onShowSizeChange,
+              onChange: onChangePage,
+              onShowSizeChange,
             }}
           />
         )}
         <Col>
           <Input.Search
             placeholder="input search text"
-            // onSearch={}
+            onSearch={onSearch}
             enterButton
           />
         </Col>
@@ -162,12 +179,29 @@ export const getServerSideProps = wrapper.getServerSideProps(
     if (context.req && cookie) {
       axios.defaults.headers.Authorization = cookie;
     }
+
+    const { title, page, limit = 10 } = context.query;
+
+    let searchArray = [];
+    if (title) {
+      searchArray.push(`title=${title}`);
+    }
+    if (page) {
+      searchArray.push(`page=${page}`);
+    }
+    if (limit) {
+      searchArray.push(`limit=${limit}`);
+    }
+
     context.store.dispatch({
       type: LOAD_USER_REQUEST,
     });
     context.store.dispatch({
       type: LOAD_BOARDS_REQUEST,
-      data: context.params.id,
+      data: {
+        categoryId: context.params.id,
+        query: searchArray.join("&"),
+      },
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();
