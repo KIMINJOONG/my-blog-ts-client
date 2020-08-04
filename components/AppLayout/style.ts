@@ -63,3 +63,88 @@ export const MainContentCol = styled(Col)`
     height: 100%;
     margin: 0 auto;
 `;
+
+export const MenuSpan = styled.span`
+    width: 29px;
+    height: 22px;
+    font-family: AppleSDGothicNeo;
+    font-size: 17px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: -0.41px;
+    color: #ffffff;
+    cursor: pointer;
+`;
+
+export const ProfileSpan = styled.span`
+    font-family: AppleSDGothicNeo;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: normal;
+    text-align: center;
+    color: rgba(60, 60, 67, 0.6);
+`;
+
+export const ProfileResultSpan = styled.span`
+    font-family: SFProDisplay;
+    font-size: 20px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: 0.38px;
+    text-align: center;
+    color: #03e0c5;
+`;
+
+export const BoardDate = styled.span`
+    font-family: SFProText;
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: normal;
+    color: rgba(60, 60, 67, 0.6);
+`;
+
+export const BoardContentSumary = styled.span`
+    font-family: AppleSDGothicNeo;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: -0.08px;
+    color: rgba(60, 60, 67, 0.6);
+`;
+
+export const MoreA = styled.a`
+    font-family: SFProText;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: -0.08px;
+    text-align: right;
+    color: #03e0c5;
+    cursor: pointer;
+
+`;
+
+export const HashtagA = styled.a`
+    font-family: SFProText;
+    font-size: 17px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.29;
+    letter-spacing: -0.41px;
+    color: #03e0c5;
+`;
