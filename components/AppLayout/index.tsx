@@ -166,7 +166,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
               </Link>
             </Col>
             <Col md={8} xs={2}></Col>
-            <Col md={9} xs={0}>
+            <Col md={10} xs={0}>
               <Row
                 align={"middle"}
                 style={{
@@ -180,7 +180,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   categories.length > 0 &&
                   categories.map(
                     (category: ICategory) => (
-                      <Col md={5} key={category.id}>
+                      <Col md={4} key={category.id}>
                         <Link href={`/boards/category/${category.code}`}>
                           <MenuSpan>
                             {category.name}
@@ -189,7 +189,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       </Col>
                     ),
                   )}
-                <Col md={5}>
+                <Col md={4}>
                   <MenuSpan>
                     ABOUT
                   </MenuSpan>

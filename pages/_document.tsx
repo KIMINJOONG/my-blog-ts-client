@@ -36,6 +36,59 @@ export default class MyDocument extends Document<IProps> {
     return (
       <Html>
         <Head>
+          <meta charSet="utf-8" />
+          <title>Kohubi's Blog</title>
+          <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+          <meta name="subject" content="Kohubi's Blog" />
+          <meta name="title" content="Kohubi's Blog" />
+          <meta name="author" content="김인중 / kohubi" />
+          <meta name="keywords" content="$keyword" />
+          <meta
+            name="description"
+            content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
+          />
+          <meta name="copyright" content="Kohubi's Blog" />
+          <meta name="og:title" content="Kohubi's Blog" />
+          <meta property="og:url" content="https://kohubi.xyz" />
+          <meta
+            name="og:description"
+            content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
+          />
+          <meta property="og:image" content="/logo.png" />
+          <meta property="og:type" content="website" />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+          />
+          <link rel="canonical" href="https://kohubi.xyz" />
+          <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
+          <link rel="apple-touch-icon" href="/logo.png" />
+          <link
+            rel="apple-touch-icon-precomposed"
+            sizes="152x152"
+            href="/logo.png"
+          />
+          <link
+            rel="apple-touch-icon-precomposed"
+            sizes="144x144"
+            href="/logo.png"
+          />
+          <link
+            rel="apple-touch-icon-precomposed"
+            sizes="120x120"
+            href="/logo.png"
+          />
+          <link
+            rel="apple-touch-icon-precomposed"
+            sizes="114x114"
+            href="$metaImage"
+          />
+          <link
+            rel="apple-touch-icon-precomposed"
+            sizes="72x72"
+            href="/logo.png"
+          />
+          <link rel="apple-touch-icon-precomposed" href="/logo.png" />
           <link rel="shortcut icon" href="/favicon.ico" />
           {this.props.styleTags}
         </Head>
