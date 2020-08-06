@@ -17,7 +17,8 @@ import jsCookie from "js-cookie";
 import { MdFormatIndentIncrease, MdFormatIndentDecrease } from "react-icons/md";
 import Router from "next/router";
 import api from "../../api";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { LOGOUT_USER_REQUEST } from "../../reducers/user";
 
 interface ICategory {
   id: number;
@@ -30,9 +31,13 @@ const AppLayout: FunctionComponent = ({ children }) => {
   const [visible, setVisible] = useState(false);
   const [hashtags, setHashtags] = useState([]);
   const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
 
   const onClickLogout = useCallback(async () => {
     await jsCookie.remove("token");
+    dispatch({
+      type: LOGOUT_USER_REQUEST,
+    });
     message.success("로그아웃 되었습니다");
   }, []);
 
@@ -68,203 +73,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
     id: number;
     name: string;
   }
-  // return (
-  //     <Layout>
-  //         <Row>
-  //             <Header>
-  //                 <Row justify="center">
-  //                     {/* pc헤더 */}
-  //                     <Col xs={0} md={16}>
-  //                         <Navigation>
-  //                             <Ul>
-  //                                 <li>
-  //                                     <Link href="/">
-  //                                         <a>Home</a>
-  //                                     </Link>
-  //                                 </li>
-  //                                 {categories &&
-  //                                     categories.length > 0 &&
-  //                                     categories.map(
-  //                                         (category: ICategory) => (
-  //                                             <li key={category.id}>
-  //                                                 <Link
-  //                                                     href={`/boards/category/${category.code}`}
-  //                                                 >
-  //                                                     <a>{category.name}</a>
-  //                                                 </Link>
-  //                                             </li>
-  //                                         )
-  //                                     )}
-  //                                 <li>
-  //                                     <Link href="/about">
-  //                                         <a>About</a>
-  //                                     </Link>
-  //                                 </li>
-  //                                 {me &&
-  //                                     me.data &&
-  //                                     me.data.role &&
-  //                                     me.data.role === 99 && (
-  //                                         <li>
-  //                                             <Link href="/admin/category">
-  //                                                 <a>카테고리 관리</a>
-  //                                             </Link>
-  //                                         </li>
-  //                                     )}
-  //                             </Ul>
-  //                             <Logo>
-  //                                 <Link href="/">
-  //                                     <a>
-  //                                         <h1>Kohubi's Blog</h1>
-  //                                     </a>
-  //                                 </Link>
-  //                             </Logo>
-  //                             <LeftUl>
-  //                                 <li>
-  //                                     {me && me.data && me.data.id ? (
-  //                                         <Button
-  //                                             onClick={onClickLogout}
-  //                                             type="link"
-  //                                             ghost
-  //                                         >
-  //                                             <a>로그아웃</a>
-  //                                         </Button>
-  //                                     ) : (
-  //                                         <Link href="/login">
-  //                                             <a>로그인</a>
-  //                                         </Link>
-  //                                     )}
-  //                                 </li>
-  //                             </LeftUl>
-  //                         </Navigation>
-  //                     </Col>
-  //                     {/* 모바일 헤더 */}
-  //                     <Col xs={24} md={0}>
-  //                         <Row>
-  //                             <Col>
-  //                                 {visible ? (
-  //                                     <MdFormatIndentDecrease
-  //                                         style={{ color: "white" }}
-  //                                         size={30}
-  //                                         onClick={() => setVisible(false)}
-  //                                     />
-  //                                 ) : (
-  //                                     <MdFormatIndentIncrease
-  //                                         style={{ color: "white" }}
-  //                                         size={30}
-  //                                         onClick={() => setVisible(true)}
-  //                                     />
-  //                                 )}
-  //                             </Col>
-  //                             <Col style={{ margin: "0 auto" }}>
-  //                                 <Logo>
-  //                                     <Link href="/">
-  //                                         <a>
-  //                                             <h1>Kohubi's Blog</h1>
-  //                                         </a>
-  //                                     </Link>
-  //                                 </Logo>
-  //                             </Col>
-  //                         </Row>
 
-  //                         <Drawer
-  //                             title="Basic Drawer"
-  //                             placement={"left"}
-  //                             closable={false}
-  //                             onClose={onClose}
-  //                             visible={visible}
-  //                             key={"key"}
-  //                         >
-  //                             {categories &&
-  //                                 categories.length > 0 &&
-  //                                 categories.map((category: ICategory) => (
-  //                                     <p
-  //                                         key={category.id}
-  //                                         onClick={() =>
-  //                                             clickPage(
-  //                                                 `/boards/category/${category.code}`
-  //                                             )
-  //                                         }
-  //                                     >
-  //                                         {category.name}
-  //                                     </p>
-  //                                 ))}
-  //                             <p onClick={() => clickPage("/about")}>About</p>
-  //                             {me &&
-  //                                 me.data &&
-  //                                 me.data.role &&
-  //                                 me.data.role === 99 && (
-  //                                     <p
-  //                                         onClick={() =>
-  //                                             clickPage("/admin/category")
-  //                                         }
-  //                                     >
-  //                                         카테고리 추가
-  //                                     </p>
-  //                                 )}
-
-  //                             {me && me.data && me.data.id ? (
-  //                                 <p onClick={onClickLogout}>
-  //                                     <a>로그아웃</a>
-  //                                 </p>
-  //                             ) : (
-  //                                 <p onClick={() => clickPage("/login")}>
-  //                                     로그인
-  //                                 </p>
-  //                             )}
-  //                         </Drawer>
-  //                     </Col>
-  //                 </Row>
-  //             </Header>
-  //         </Row>
-  //         <MainContentRow>
-  //             <Col span={24} style={{ marginTop: "58px" }}>
-  //                 <Row style={{ height: "100%" }}>
-  //                     <MainContentCol xs={24} sm={24} md={16}>
-  //                         <Row style={{ height: "100%" }}>
-  //                             <Col md={4} xs={0}>
-  //                                 <Card
-  //                                     style={{ wordBreak: "break-word" }}
-  //                                     title="해쉬태그"
-  //                                 >
-  //                                     {hashtags.length > 0 &&
-  //                                         hashtags.map(
-  //                                             (
-  //                                                 hashtag: IHashtag,
-  //                                                 index: number
-  //                                             ) => (
-  //                                                 <Link
-  //                                                     href={`/hashtag/${hashtag.name}`}
-  //                                                     key={index}
-  //                                                 >
-  //                                                     <a
-  //                                                         style={{
-  //                                                             margin: "5px",
-  //                                                         }}
-  //                                                     >
-  //                                                         #{hashtag.name}
-  //                                                     </a>
-  //                                                 </Link>
-  //                                             )
-  //                                         )}
-  //                                 </Card>
-  //                             </Col>
-  //                             <Col
-  //                                 md={20}
-  //                                 xs={24}
-  //                                 style={{
-  //                                     height: "100%",
-  //                                     padding: "0px 10px",
-  //                                 }}
-  //                             >
-  //                                 {children}
-  //                             </Col>
-  //                         </Row>
-  //                     </MainContentCol>
-  //                 </Row>
-  //             </Col>
-  //         </MainContentRow>
-  //     </Layout>
-  // );
   return (
     <div>
       <Row
@@ -272,9 +81,77 @@ const AppLayout: FunctionComponent = ({ children }) => {
         style={{ backgroundColor: "#fafafa", height: "100vh" }}
       >
         <Col xs={24} md={20}>
+          <Row>
+            <Col xs={24} md={0}>
+              <Row>
+                <Col>
+                  {visible
+                    ? (
+                      <MdFormatIndentDecrease
+                        style={{ color: "#03e0c5" }}
+                        size={30}
+                        onClick={() => setVisible(false)}
+                      />
+                    )
+                    : (
+                      <MdFormatIndentIncrease
+                        style={{ color: "#03e0c5" }}
+                        size={30}
+                        onClick={() => setVisible(true)}
+                      />
+                    )}
+                </Col>
+              </Row>
+              <Drawer
+                title="메뉴"
+                placement={"left"}
+                closable={false}
+                onClose={onClose}
+                visible={visible}
+                key={"key"}
+              >
+                {categories &&
+                  categories.length > 0 &&
+                  categories.map((category: ICategory) => (
+                    <p
+                      key={category.id}
+                      onClick={() =>
+                        clickPage(
+                          `/boards/category/${category.code}`,
+                        )}
+                    >
+                      {category.name}
+                    </p>
+                  ))}
+                <p onClick={() => clickPage("/about")}>About</p>
+                {me &&
+                  me.data &&
+                  me.data.role &&
+                  me.data.role === 99 && (
+                    <p
+                      onClick={() => clickPage("/admin/category")}
+                    >
+                      카테고리 추가
+                    </p>
+                  )}
+
+                {me && me.data && me.data.id
+                  ? (
+                    <p onClick={onClickLogout}>
+                      <a>로그아웃</a>
+                    </p>
+                  )
+                  : (
+                    <p onClick={() => clickPage("/login")}>
+                      로그인
+                    </p>
+                  )}
+              </Drawer>
+            </Col>
+          </Row>
           <Row style={{ height: "154px" }} align={"middle"}>
-            <Col md={2} xs={0}></Col>
-            <Col md={2}>
+            <Col md={2} xs={4}></Col>
+            <Col md={2} xs={5}>
               <Link href="/">
                 <a>
                   <img
@@ -289,7 +166,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
               </Link>
             </Col>
             <Col md={8} xs={2}></Col>
-            <Col md={9} xs={20}>
+            <Col md={9} xs={0}>
               <Row
                 align={"middle"}
                 style={{
@@ -303,7 +180,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   categories.length > 0 &&
                   categories.map(
                     (category: ICategory) => (
-                      <Col md={6} key={category.id}>
+                      <Col md={5} key={category.id}>
                         <Link href={`/boards/category/${category.code}`}>
                           <MenuSpan>
                             {category.name}
@@ -312,16 +189,33 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       </Col>
                     ),
                   )}
-                <Col md={6}>
+                <Col md={5}>
                   <MenuSpan>
                     ABOUT
                   </MenuSpan>
+                </Col>
+                <Col md={5}>
+                  {me && me.data && me.data.id
+                    ? (
+                      <MenuSpan onClick={onClickLogout}>
+                        LOGOUT
+                      </MenuSpan>
+                    )
+                    : (
+                      <MenuSpan>
+                        <Link href="/login">
+                          <a>
+                            LOGIN
+                          </a>
+                        </Link>
+                      </MenuSpan>
+                    )}
                 </Col>
               </Row>
             </Col>
             <Col md={3} xs={0}></Col>
           </Row>
-          <Row style={{ marginTop: "117px" }}>
+          <Row>
             <Col md={2} xs={0}></Col>
             <Col
               md={4}
@@ -379,7 +273,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                           hashtag: IHashtag,
                           index: number,
                         ) => (
-                          <Col xs={8}>
+                          <Col xs={8} key={index}>
                             <Link
                               href={`/hashtag/${hashtag.name}`}
                               key={index}

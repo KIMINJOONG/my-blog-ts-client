@@ -16,6 +16,12 @@ import {
 } from "../components/AppLayout/style";
 import Link from "next/link";
 
+interface ICategory {
+  id: string;
+  code: number;
+  name: string;
+  createdAt: string;
+}
 interface IBoard {
   id: number;
   title: string;
@@ -24,6 +30,7 @@ interface IBoard {
   shortContent: string;
   mainImgStyleValue: any;
   createdAt: string;
+  category: ICategory;
 }
 const Home: NextPage = () => {
   const [boards, setBoards] = useState([]);
@@ -106,50 +113,15 @@ const Home: NextPage = () => {
   }, []);
   return (
     <AppLayout>
-      {/* <Row>
-                <Col span={24}>
-                    <Divider
-                        style={{
-                            borderBottom: "1px solid black",
-                        }}
-                    >
-                        Latest
-                    </Divider>
-                </Col>
-                {boards &&
-                    boards.map((board: IBoard) => (
-                        <Col
-                            span={24}
-                            key={board.id}
-                            style={{ marginTop: "10px" }}
-                        >
-                            <Card
-                                title={board.title}
-                                bordered={true}
-                                headStyle={{ textAlign: "center" }}
-                                extra={<a href={`boards/${board.id}`}>More</a>}
-                            >
-                                {ReactHtmlParser(board.mainImg)}
-                                <p>{board.shortContent}</p>
-                            </Card>
-                        </Col>
-                    ))}
-            </Row>
-            <Row>
-                {dates.length > 0 && counts.length > 0 && (
-                    <Chart
-                        dates={dates}
-                        countByDate={counts}
-                        thisMonth={thisMonth}
-                    />
-                )}
-            </Row> */}
       <Row>
-        <Col xs={24}>
+        <Col xs={0} md={24}>
+          <h2>LATEST</h2>
+        </Col>
+        <Col xs={24} md={0} style={{ textAlign: "center" }}>
           <h2>LATEST</h2>
         </Col>
         <Col xs={24} style={{ marginTop: "15px" }}>
-          <Row justify="space-between">
+          <Row justify="space-around">
             {boards &&
               boards.map((board: IBoard) => (
                 <Col
@@ -175,7 +147,7 @@ const Home: NextPage = () => {
                           textAlign: "center",
                         }}
                       >
-                        TIL
+                        {board.category.name}
                       </div>
                     </Col>
                   </Row>
