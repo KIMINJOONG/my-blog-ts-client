@@ -81,7 +81,7 @@ export default class MyDocument extends Document<IProps> {
           <link
             rel="apple-touch-icon-precomposed"
             sizes="114x114"
-            href="$metaImage"
+            href="/logo.png"
           />
           <link
             rel="apple-touch-icon-precomposed"
@@ -90,6 +90,10 @@ export default class MyDocument extends Document<IProps> {
           />
           <link rel="apple-touch-icon-precomposed" href="/logo.png" />
           <link rel="shortcut icon" href="/favicon.ico" />
+          <meta
+            name="naver-site-verification"
+            content="b859482b7c9f0278e01a56189ba14a7b55f7489d"
+          />
           {this.props.styleTags}
         </Head>
 
