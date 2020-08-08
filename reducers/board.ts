@@ -3,6 +3,7 @@ import produce from "immer";
 export const initialState = {
   board: null,
   boards: [],
+  countByToday: 0,
 };
 
 // 비동기 요청
@@ -13,6 +14,10 @@ export const BOARD_DETAIL_FAILURE = "BOARD_DETAIL_FAILURE";
 export const LOAD_BOARDS_REQUEST = "LOAD_BOARDS_REQUEST";
 export const LOAD_BOARDS_SUCCESS = "LOAD_BOARDS_SUCCESS";
 export const LOAD_BOARDS_FAILURE = "LOAD_BOARDS_FAILURE";
+
+export const LOAD_COUNT_BY_TODAY_REQUEST = "LOAD_COUNT_BY_TODAY_REQUEST";
+export const LOAD_COUNT_BY_TODAY_SUCCESS = "LOAD_COUNT_BY_TODAY_SUCCESS";
+export const LOAD_COUNT_BY_TODAY_FAILURE = "LOAD_COUNT_BY_TODAY_FAILURE";
 
 interface IBOARD_DETAIL_REQUEST {
   type: typeof BOARD_DETAIL_REQUEST;
@@ -42,13 +47,29 @@ interface ILOAD_BOARDS_FAILURE {
   type: typeof LOAD_BOARDS_FAILURE;
 }
 
+interface ILOAD_COUNT_BY_TODAY_REUQEST {
+  type: typeof LOAD_COUNT_BY_TODAY_REQUEST;
+}
+
+interface ILOAD_COUNT_BY_TODAY_SUCCESS {
+  type: typeof LOAD_COUNT_BY_TODAY_SUCCESS;
+  data: any;
+}
+
+interface ILOAD_COUNT_BY_TODAY_FAILURE {
+  type: typeof LOAD_COUNT_BY_TODAY_FAILURE;
+}
+
 export type BoardActionType =
   | IBOARD_DETAIL_REQUEST
   | IBOARD_DETAIL_SUCCESS
   | IBOARD_DETAIL_FAILURE
   | ILOAD_BOARDS_REQUEST
   | ILOAD_BOARDS_SUCCESS
-  | ILOAD_BOARDS_FAILURE;
+  | ILOAD_BOARDS_FAILURE
+  | ILOAD_COUNT_BY_TODAY_REUQEST
+  | ILOAD_COUNT_BY_TODAY_SUCCESS
+  | ILOAD_COUNT_BY_TODAY_FAILURE;
 
 // 동기요청
 
@@ -85,6 +106,24 @@ const reducer = (state = initialState, action: BoardActionType) => {
         };
       }
       case LOAD_BOARDS_FAILURE: {
+        return {
+          ...state,
+        };
+      }
+
+      case LOAD_COUNT_BY_TODAY_REQUEST: {
+        return {
+          ...state,
+        };
+      }
+
+      case LOAD_COUNT_BY_TODAY_SUCCESS: {
+        return {
+          ...state,
+          countByToday: action.data.data,
+        };
+      }
+      case LOAD_COUNT_BY_TODAY_FAILURE: {
         return {
           ...state,
         };

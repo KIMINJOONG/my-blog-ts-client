@@ -1,7 +1,6 @@
 import { Row, Col, Card, Divider } from "antd";
 import { NextPage } from "next";
 import { useEffect, useCallback, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
 import api from "../api";
 import Chart from "../components/Chart";
 import wrapper from "../stores/configureStore";
@@ -15,6 +14,7 @@ import {
   MoreA,
 } from "../components/AppLayout/style";
 import Link from "next/link";
+import { LOAD_COUNT_BY_TODAY_REQUEST } from "../reducers/board";
 
 interface ICategory {
   id: string;
@@ -131,7 +131,7 @@ const Home: NextPage = () => {
                   style={{
                     boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
                     backgroundColor: "#ffffff",
-                    padding: "20px 20px",
+                    padding: "0px 20px",
                     marginTop: "24px",
                   }}
                 >
@@ -178,6 +178,19 @@ const Home: NextPage = () => {
                 </Col>
               ))}
           </Row>
+          <Row style={{ marginTop: "100px" }}>
+            <Col xs={24} md={12}>
+              {dates.length > 0 && counts.length > 0 && (
+                <Chart
+                  dates={dates}
+                  countByDate={counts}
+                  thisMonth={thisMonth}
+                />
+              )}
+            </Col>
+            <Col xs={24} md={12}>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </AppLayout>
@@ -194,6 +207,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
     context.store.dispatch({
       type: LOAD_USER_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: LOAD_COUNT_BY_TODAY_REQUEST,
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();

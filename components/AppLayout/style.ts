@@ -56,7 +56,6 @@ export const LeftUl = styled.ul`
 
 export const MainContentRow = styled(Row)`
     padding-top: 50px;
-    height: 100vh;
 `;
 
 export const MainContentCol = styled(Col)`

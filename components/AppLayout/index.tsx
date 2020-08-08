@@ -27,6 +27,7 @@ interface ICategory {
 }
 
 const AppLayout: FunctionComponent = ({ children }) => {
+  const { countByToday } = useSelector((state: any) => state.board);
   const { me } = useSelector((state: any) => state.user);
   const [visible, setVisible] = useState(false);
   const [hashtags, setHashtags] = useState([]);
@@ -78,7 +79,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
     <div>
       <Row
         justify="center"
-        style={{ backgroundColor: "#fafafa", height: "100vh" }}
+        style={{ backgroundColor: "#fafafa" }}
       >
         <Col xs={24} md={20}>
           <Row>
@@ -252,7 +253,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       <ProfileResultSpan>00</ProfileResultSpan>
                     </Col>
                     <Col span={8} style={{ textAlign: "center" }}>
-                      <ProfileResultSpan>12</ProfileResultSpan>
+                      <ProfileResultSpan>{countByToday}</ProfileResultSpan>
                     </Col>
                     <Col span={8} style={{ textAlign: "center" }}>
                       <ProfileResultSpan>3</ProfileResultSpan>

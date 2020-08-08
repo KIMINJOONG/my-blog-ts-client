@@ -12,6 +12,16 @@ const options = {
           max: 5,
           stepSize: 1, // 스케일에 대한 사용자 고정 정의 값
         },
+        gridLines: {
+          display: true,
+        },
+      },
+    ],
+    xAxes: [
+      {
+        gridLines: {
+          display: false,
+        },
       },
     ],
   },
