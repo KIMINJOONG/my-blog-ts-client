@@ -89,7 +89,6 @@ function* loadCountByToday() {
   try {
     // yield call(loadUserAPI);
     const result = yield call(loadCountByTodayAPI);
-    console.log("result : ", result.data);
 
     yield put({
       // put은 dispatch 동일

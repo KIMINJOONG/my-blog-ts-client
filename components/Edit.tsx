@@ -132,7 +132,6 @@ const Edit = ({
         return data;
       },
       isSuccess: function (resp: any) {
-        console.log("isSucess : ", resp);
         return !resp.error;
       },
       process: function (resp: any) {
