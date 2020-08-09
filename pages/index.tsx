@@ -15,6 +15,7 @@ import {
 } from "../components/AppLayout/style";
 import Link from "next/link";
 import { LOAD_COUNT_BY_TODAY_REQUEST } from "../reducers/board";
+import ReactHtmlParser from "react-html-parser";
 
 interface ICategory {
   id: string;
@@ -57,6 +58,9 @@ const Home: NextPage = () => {
 
         board.mainImg = mainImg;
         board.shortContent = board.content.replace(/(<([^>]+)>)/gi, "");
+        board.shortContent = board.shortContent.length > 60
+          ? `${board.shortContent.substring(0, 60)}...`
+          : board.shortContent;
       }
     }
 
@@ -164,7 +168,7 @@ const Home: NextPage = () => {
                   <Row style={{ marginTop: "32px", height: "54px" }}>
                     <Col xs={24}>
                       <BoardContentSumary>
-                        {board.shortContent}
+                        {ReactHtmlParser(board.shortContent)}
                       </BoardContentSumary>
                     </Col>
                   </Row>

@@ -38,7 +38,7 @@ export default class MyDocument extends Document<IProps> {
         <Head>
           <meta charSet="utf-8" />
           <title>Kohubi's Blog</title>
-          <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+          <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
           <meta name="subject" content="Kohubi's Blog" />
           <meta name="title" content="Kohubi's Blog" />
           <meta name="author" content="김인중 / kohubi" />
@@ -61,7 +61,7 @@ export default class MyDocument extends Document<IProps> {
             content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
           />
           <link rel="canonical" href="https://kohubi.xyz" />
-          <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
+          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="apple-touch-icon" href="/logo.png" />
           <link
             rel="apple-touch-icon-precomposed"
@@ -89,7 +89,6 @@ export default class MyDocument extends Document<IProps> {
             href="/logo.png"
           />
           <link rel="apple-touch-icon-precomposed" href="/logo.png" />
-          <link rel="shortcut icon" href="/favicon.ico" />
           <meta
             name="naver-site-verification"
             content="b859482b7c9f0278e01a56189ba14a7b55f7489d"
