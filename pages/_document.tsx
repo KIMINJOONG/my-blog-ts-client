@@ -1,4 +1,4 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Html, Main, Head, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
 interface IProps {
@@ -37,7 +37,6 @@ export default class MyDocument extends Document<IProps> {
       <Html>
         <Head>
           <meta charSet="utf-8" />
-          <title>Kohubi's Blog</title>
           <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
           <meta name="subject" content="Kohubi's Blog" />
           <meta name="title" content="Kohubi's Blog" />

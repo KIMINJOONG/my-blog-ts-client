@@ -61,6 +61,9 @@ const MyBlog: any = ({ Component }: any) => {
 
   return (
     <div>
+      <Head>
+        <title>Kohubi's Blog</title>
+      </Head>
       <Component />
       <GlobalStyle />
     </div>
