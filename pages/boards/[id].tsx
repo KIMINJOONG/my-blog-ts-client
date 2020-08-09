@@ -55,6 +55,7 @@ interface IProps {
 }
 
 const ContentCard = styled(Card)`
+    word-break: break-word;
     & img {
         max-width: 100%;
     }
@@ -64,6 +65,11 @@ const ContentCard = styled(Card)`
     }
 
     & div {
+        max-width: 100%;
+        white-space: pre-wrap;
+    }
+
+    & pre {
         max-width: 100%;
         white-space: pre-wrap;
     }
