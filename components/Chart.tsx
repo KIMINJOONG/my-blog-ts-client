@@ -1,4 +1,4 @@
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 
 const options = {
   legend: {
@@ -21,6 +21,7 @@ const options = {
       {
         gridLines: {
           display: false,
+          maxBarThickness: 2,
         },
       },
     ],
@@ -35,9 +36,12 @@ interface IPropse {
   dates: Array<string>;
   countByDate: Array<number>;
   thisMonth: string;
+  isBar: boolean;
 }
 
-const Chart = ({ dates = [], countByDate = [], thisMonth = "" }: IPropse) => {
+const Chart = (
+  { dates = [], countByDate = [], thisMonth = "", isBar = false }: IPropse,
+) => {
   const data = {
     labels: dates,
     datasets: [
@@ -86,7 +90,15 @@ const Chart = ({ dates = [], countByDate = [], thisMonth = "" }: IPropse) => {
     ],
   };
 
-  return <Line height={500} data={data} options={options} />;
+  return (
+    isBar === false
+      ? (
+        <Line height={500} data={data} options={options} />
+      )
+      : (
+        <Bar height={500} data={data} options={options} />
+      )
+  );
 };
 
 export default Chart;

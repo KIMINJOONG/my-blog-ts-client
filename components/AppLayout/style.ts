@@ -147,3 +147,17 @@ export const HashtagA = styled.a`
     letter-spacing: -0.41px;
     color: #03e0c5;
 `;
+
+export const CategoryNameLabel = styled.label`
+    width: 1.438rem;
+    height: 1.125rem;
+    font-family: SFProText;
+    font-size: 0.813rem;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: -0.08px;
+    text-align: center;
+    color: #ffffff;
+`;

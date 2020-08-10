@@ -12,6 +12,7 @@ import {
   BoardContentSumary,
   BoardDate,
   MoreA,
+  CategoryNameLabel,
 } from "../components/AppLayout/style";
 import Link from "next/link";
 import { LOAD_COUNT_BY_TODAY_REQUEST } from "../reducers/board";
@@ -115,6 +116,16 @@ const Home: NextPage = () => {
   useEffect(() => {
     init();
   }, []);
+
+  const getCreatedAt = (createdAt: string) => {
+    let createdAtSplit = [];
+    let createdat = "";
+    let createdAtSubstring = createdAt.substring(0, 10);
+    createdAtSplit = createdAtSubstring.split("-");
+
+    createdat = createdAtSplit.join(".");
+    return createdat;
+  };
   return (
     <AppLayout>
       <Row>
@@ -135,7 +146,7 @@ const Home: NextPage = () => {
                   style={{
                     boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
                     backgroundColor: "#ffffff",
-                    padding: "0px 20px",
+                    padding: "10px 20px",
                     marginTop: "24px",
                   }}
                 >
@@ -151,7 +162,9 @@ const Home: NextPage = () => {
                           textAlign: "center",
                         }}
                       >
-                        {board.category.name}
+                        <CategoryNameLabel>
+                          {board.category.name}
+                        </CategoryNameLabel>
                       </div>
                     </Col>
                   </Row>
@@ -162,7 +175,7 @@ const Home: NextPage = () => {
                   </Row>
                   <Row>
                     <Col xs={24} style={{ textAlign: "left" }}>
-                      <BoardDate>{board.createdAt.substring(0, 10)}</BoardDate>
+                      <BoardDate>{getCreatedAt(board.createdAt)}</BoardDate>
                     </Col>
                   </Row>
                   <Row style={{ marginTop: "32px", height: "54px" }}>
@@ -189,6 +202,7 @@ const Home: NextPage = () => {
                   dates={dates}
                   countByDate={counts}
                   thisMonth={thisMonth}
+                  isBar={false}
                 />
               )}
             </Col>
