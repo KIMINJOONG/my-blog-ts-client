@@ -227,9 +227,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
       type: LOAD_USER_REQUEST,
     });
 
-    context.store.dispatch({
-      type: LOAD_COUNT_BY_TODAY_REQUEST,
-    });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();
   },

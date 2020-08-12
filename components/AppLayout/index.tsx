@@ -19,6 +19,9 @@ import Router from "next/router";
 import api from "../../api";
 import { useSelector, useDispatch } from "react-redux";
 import { LOGOUT_USER_REQUEST } from "../../reducers/user";
+import wrapper from "../../stores/configureStore";
+import { LOAD_COUNT_BY_TODAY_REQUEST } from "../../reducers/board";
+import { END } from "redux-saga";
 
 interface ICategory {
   id: number;
@@ -51,6 +54,9 @@ const AppLayout: FunctionComponent = ({ children }) => {
     setVisible(false);
   }, []);
   const init = useCallback(async () => {
+    dispatch({
+      type: LOAD_COUNT_BY_TODAY_REQUEST,
+    });
     const result = await api.index("/hashtags");
     const { data, status } = result;
     const { data: hashtagsData } = data;
