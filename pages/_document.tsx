@@ -92,6 +92,10 @@ export default class MyDocument extends Document<IProps> {
             name="naver-site-verification"
             content="b859482b7c9f0278e01a56189ba14a7b55f7489d"
           />
+          <meta
+            name="google-site-verification"
+            content="O4gmbMWol2odBM0qvx_2cY02Ilbp_3l-Px69viCH2Ng"
+          />
           {this.props.styleTags}
         </Head>
 
