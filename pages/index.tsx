@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { LOAD_COUNT_BY_TODAY_REQUEST } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
+import { useSelector } from "react-redux";
 
 interface ICategory {
   id: string;
@@ -35,6 +36,7 @@ interface IBoard {
   category: ICategory;
 }
 const Home: NextPage = () => {
+  const { countByToday } = useSelector((state: any) => state.board);
   const [boards, setBoards] = useState([]);
   const [dates, setDates] = useState([]);
   const [counts, setCounts] = useState([]);
@@ -112,7 +114,17 @@ const Home: NextPage = () => {
       }`;
       setThisMonth(thisYearAndMonth);
     }
-  }, []);
+
+    let countByCategory: any = {};
+    for (let countByTodayData of countByToday.data) {
+      if (countByCategory[countByTodayData.categoryId]) {
+        countByCategory[countByTodayData.categoryId].push(countByTodayData);
+      } else {
+        countByCategory[countByTodayData.categoryId] = [countByTodayData];
+      }
+    }
+    console.log(countByCategory);
+  }, [countByToday]);
   useEffect(() => {
     init();
   }, []);
@@ -199,14 +211,20 @@ const Home: NextPage = () => {
             <Col xs={24} md={12}>
               {dates.length > 0 && counts.length > 0 && (
                 <Chart
-                  dates={dates}
-                  countByDate={counts}
+                  labels={dates}
+                  datas={counts}
                   thisMonth={thisMonth}
                   isBar={false}
                 />
               )}
             </Col>
             <Col xs={24} md={12}>
+              <Chart
+                labels={["개발", "취미", "TIL"]}
+                datas={[1, 2, 3]}
+                thisMonth={thisMonth}
+                isBar={true}
+              />
             </Col>
           </Row>
         </Col>

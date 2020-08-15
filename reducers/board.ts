@@ -3,7 +3,7 @@ import produce from "immer";
 export const initialState = {
   board: null,
   boards: [],
-  countByToday: 0,
+  countByToday: {},
 };
 
 // 비동기 요청
@@ -120,7 +120,7 @@ const reducer = (state = initialState, action: BoardActionType) => {
       case LOAD_COUNT_BY_TODAY_SUCCESS: {
         return {
           ...state,
-          countByToday: action.data.data,
+          countByToday: action.data,
         };
       }
       case LOAD_COUNT_BY_TODAY_FAILURE: {

@@ -23,6 +23,7 @@ import { LOAD_USER_REQUEST } from "../../reducers/user";
 import axios from "axios";
 import AppLayout from "../../components/AppLayout";
 import styled from "styled-components";
+import Head from "next/head";
 
 interface IBoard {
   content: string;
@@ -144,6 +145,12 @@ const edit = () => {
 
   return (
     <AppLayout>
+      <Head>
+        <title>{board.data.title}</title>
+        <meta property="og:title" content={board.data.title} key="title" />
+        <meta name="subject" content={board.data.title} />
+        <meta name="title" content={board.data.title} />
+      </Head>
       <Row>
         <Col md={24} xs={24} sm={24} lg={24}>
           <ContentCard title={board.data.title}>

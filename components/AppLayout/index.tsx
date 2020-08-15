@@ -1,11 +1,10 @@
 import {
   FunctionComponent,
-  useContext,
   useCallback,
   useState,
   useEffect,
 } from "react";
-import { Layout, Row, Col, Button, message, Drawer, Card } from "antd";
+import { Row, Col, Button, message, Drawer } from "antd";
 import {
   MenuSpan,
   ProfileResultSpan,
@@ -19,9 +18,7 @@ import Router from "next/router";
 import api from "../../api";
 import { useSelector, useDispatch } from "react-redux";
 import { LOGOUT_USER_REQUEST } from "../../reducers/user";
-import wrapper from "../../stores/configureStore";
 import { LOAD_COUNT_BY_TODAY_REQUEST } from "../../reducers/board";
-import { END } from "redux-saga";
 
 interface ICategory {
   id: number;
@@ -259,7 +256,9 @@ const AppLayout: FunctionComponent = ({ children }) => {
                       <ProfileResultSpan>00</ProfileResultSpan>
                     </Col>
                     <Col span={8} style={{ textAlign: "center" }}>
-                      <ProfileResultSpan>{countByToday}</ProfileResultSpan>
+                      <ProfileResultSpan>
+                        {countByToday.totalCount}
+                      </ProfileResultSpan>
                     </Col>
                     <Col span={8} style={{ textAlign: "center" }}>
                       <ProfileResultSpan>3</ProfileResultSpan>

@@ -21,7 +21,7 @@ const options = {
       {
         gridLines: {
           display: false,
-          maxBarThickness: 2,
+          maxBarThickness: 0.3,
         },
       },
     ],
@@ -33,17 +33,17 @@ const options = {
 };
 
 interface IPropse {
-  dates: Array<string>;
-  countByDate: Array<number>;
+  labels: Array<string>;
+  datas: Array<number>;
   thisMonth: string;
   isBar: boolean;
 }
 
 const Chart = (
-  { dates = [], countByDate = [], thisMonth = "", isBar = false }: IPropse,
+  { labels = [], datas = [], thisMonth = "", isBar = false }: IPropse,
 ) => {
   const data = {
-    labels: dates,
+    labels,
     datasets: [
       {
         label: thisMonth,
@@ -64,7 +64,7 @@ const Chart = (
         pointHoverBorderWidth: 1,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: countByDate,
+        data: datas,
       },
       // {
       //     label: "방문자",
