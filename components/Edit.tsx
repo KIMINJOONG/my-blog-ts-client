@@ -115,7 +115,7 @@ const Edit = ({
     allowTabNavigation: true,
     addNewLineTagsTriggers: ["table", "iframe", "img", "hr", "jodit"],
     uploader: {
-      url: `https://api.kohubi.xyz/images/upload`,
+      url: `http://api.kohubi.xyz/images/upload`,
       insertImageAsBase64URI: false,
       imagesExtensions: ["jpg", "png", "jpeg", "gif"],
       headers: {
@@ -138,7 +138,7 @@ const Edit = ({
         return {
           fileName: resp[0],
           baseurl:
-            "https://kohubi-renual-blog.s3-ap-northeast-1.amazonaws.com/images/",
+            "http://kohubi-renual-blog.s3-ap-northeast-1.amazonaws.com/images/",
         };
       },
 
