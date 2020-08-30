@@ -1,4 +1,11 @@
-import { all, fork, takeEvery, call, put } from "redux-saga/effects";
+import {
+  all,
+  fork,
+  takeEvery,
+  call,
+  put,
+  takeLatest,
+} from "redux-saga/effects";
 import {
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
@@ -6,6 +13,12 @@ import {
   LOGOUT_USER_REQUEST,
   LOGOUT_USER_SUCCESS,
   LOGOUT_USER_FAILURE,
+  LOG_IN_FAILURE,
+  LOG_IN_REQUEST,
+  ILOG_IN_REQUEST_ACTION,
+  UserActionType,
+  ILOG_IN_REQUEST,
+  LOG_IN_SUCCESS,
 } from "../reducers/user";
 
 import axios from "axios";
@@ -61,10 +74,34 @@ function* logoutUser() {
   }
 }
 
+function logInAPI(data: any) {
+  return axios.post("/users/login", data, {
+    withCredentials: true,
+  });
+}
+
+function* logIn(action: ILOG_IN_REQUEST) {
+  try {
+    const result = yield call(logInAPI, action.data);
+    yield put({
+      type: LOG_IN_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: LOG_IN_REQUEST,
+      error: e.response.data,
+    });
+  }
+}
+
 function* watchLogoutUser() {
   yield takeEvery(LOGOUT_USER_REQUEST, logoutUser);
 }
 
+function* watchLogIn() {
+  yield takeLatest(LOG_IN_REQUEST, logIn);
+}
 export default function* userSaga() {
-  yield all([fork(watchLoadUser), fork(watchLogoutUser)]);
+  yield all([fork(watchLoadUser), fork(watchLogoutUser), fork(watchLogIn)]);
 }

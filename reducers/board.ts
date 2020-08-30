@@ -2,7 +2,13 @@ import produce from "immer";
 
 export const initialState = {
   board: null,
+  boardDetailLoading: false,
+  boardDetailDone: false,
+  boardDetailError: null,
   boards: [],
+  boardsLoading: false,
+  boardsDone: false,
+  boardsError: null,
   countByToday: {},
 };
 
@@ -31,6 +37,7 @@ interface IBOARD_DETAIL_SUCCESS {
 
 interface IBOARD_DETAIL_FAILURE {
   type: typeof BOARD_DETAIL_FAILURE;
+  error: any;
 }
 
 interface ILOAD_BOARDS_REQUEST {
@@ -45,6 +52,7 @@ interface ILOAD_BOARDS_SUCCESS {
 
 interface ILOAD_BOARDS_FAILURE {
   type: typeof LOAD_BOARDS_FAILURE;
+  error: any;
 }
 
 interface ILOAD_COUNT_BY_TODAY_REUQEST {
@@ -58,6 +66,7 @@ interface ILOAD_COUNT_BY_TODAY_SUCCESS {
 
 interface ILOAD_COUNT_BY_TODAY_FAILURE {
   type: typeof LOAD_COUNT_BY_TODAY_FAILURE;
+  error: any;
 }
 
 export type BoardActionType =
@@ -81,33 +90,47 @@ const reducer = (state = initialState, action: BoardActionType) => {
       case BOARD_DETAIL_REQUEST: {
         return {
           ...state,
+          boardDetailLoading: true,
+          boardDetailDone: false,
+          boardDetailError: null,
         };
       }
       case BOARD_DETAIL_SUCCESS: {
         return {
           ...state,
-          board: action.data,
+          board: { ...action.data },
+          boardDetailLoading: false,
+          boardDetailDone: true,
         };
       }
       case BOARD_DETAIL_FAILURE: {
         return {
           ...state,
+          boardDetailError: action.error,
+          boardDetailLoading: false,
         };
       }
       case LOAD_BOARDS_REQUEST: {
         return {
           ...state,
+          boardsLoading: true,
+          boardsDone: false,
+          boardsError: null,
         };
       }
       case LOAD_BOARDS_SUCCESS: {
         return {
           ...state,
-          boards: action.data,
+          boards: [...action.data],
+          boardsLoading: false,
+          boardsDone: true,
         };
       }
       case LOAD_BOARDS_FAILURE: {
         return {
           ...state,
+          boardsLoading: false,
+          boardsError: action.error,
         };
       }
 

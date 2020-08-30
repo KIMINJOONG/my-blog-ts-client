@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 const init: any = {
-    me: {},
+  me: {},
 };
 
 const UserStore = createContext(init);
