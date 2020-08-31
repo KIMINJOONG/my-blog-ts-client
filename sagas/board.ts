@@ -1,4 +1,11 @@
-import { all, fork, takeEvery, call, put } from "redux-saga/effects";
+import {
+  all,
+  fork,
+  takeEvery,
+  call,
+  put,
+  takeLatest,
+} from "redux-saga/effects";
 
 import axios from "axios";
 import {
@@ -11,6 +18,9 @@ import {
   LOAD_COUNT_BY_TODAY_REQUEST,
   LOAD_COUNT_BY_TODAY_SUCCESS,
   LOAD_COUNT_BY_TODAY_FAILURE,
+  LOAD_BOARDS_FOR_MAIN_REQUEST,
+  LOAD_BOARDS_FOR_MAIN_SUCCESS,
+  LOAD_BOARDS_FOR_MAIN_FAILURE,
 } from "../reducers/board";
 
 interface IBOARDDETAILPROPS {
@@ -104,8 +114,34 @@ function* loadCountByToday() {
   }
 }
 
+function loadBoardsForMainAPI() {
+  return axios.get("/boards?limit=5");
+}
+
+function* loadBoardsForMain() {
+  try {
+    const result = yield call(loadBoardsForMainAPI);
+
+    yield put({
+      // put은 dispatch 동일
+      type: LOAD_BOARDS_FOR_MAIN_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: LOAD_BOARDS_FOR_MAIN_FAILURE,
+      error: e,
+    });
+  }
+}
+
 function* watchLoadCountByToday() {
   yield takeEvery(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
+}
+
+function* watchLoadBoardsForMain() {
+  yield takeLatest(LOAD_BOARDS_FOR_MAIN_REQUEST, loadBoardsForMain);
 }
 
 export default function* userSaga() {
@@ -114,6 +150,7 @@ export default function* userSaga() {
       fork(watchBoardDetail),
       fork(watchLoadBoards),
       fork(watchLoadCountByToday),
+      fork(watchLoadBoardsForMain),
     ],
   );
 }

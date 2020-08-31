@@ -15,7 +15,10 @@ import {
   CategoryNameLabel,
 } from "../components/AppLayout/style";
 import Link from "next/link";
-import { LOAD_COUNT_BY_TODAY_REQUEST } from "../reducers/board";
+import {
+  LOAD_COUNT_BY_TODAY_REQUEST,
+  LOAD_BOARDS_FOR_MAIN_REQUEST,
+} from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
 
@@ -36,41 +39,13 @@ interface IBoard {
   category: ICategory;
 }
 const Home: NextPage = () => {
-  const { countByToday } = useSelector((state: any) => state.board);
-  const [boards, setBoards] = useState([]);
+  const { countByToday, boardsForMain } = useSelector((state: any) =>
+    state.board
+  );
   const [dates, setDates] = useState([]);
   const [counts, setCounts] = useState([]);
   const [thisMonth, setThisMonth] = useState("");
   const init = useCallback(async () => {
-    const result = await api.index("/boards?limit=5");
-
-    const { data, status: httpStatus } = result;
-
-    const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
-    const styleRegexPattern = /style\s*=\s*"([^"]*)/g;
-    for (let board of data.data) {
-      const imgRegex = imgRegexPattern.exec(board.content);
-
-      if (imgRegex) {
-        const mainImg = imgRegex[0];
-        const imgStyleRegex = styleRegexPattern.exec(mainImg);
-        if (imgStyleRegex) {
-          const styleValue = imgStyleRegex[1];
-          board.mainImgStyleValue = styleValue;
-        }
-
-        board.mainImg = mainImg;
-        board.shortContent = board.content.replace(/(<([^>]+)>)/gi, "");
-        board.shortContent = board.shortContent.length > 60
-          ? `${board.shortContent.substring(0, 60)}...`
-          : board.shortContent;
-      }
-    }
-
-    if (httpStatus === 200) {
-      setBoards(data.data);
-    }
-
     const getCountByDate = await api.index("/boards/countByDate");
 
     const {
@@ -116,14 +91,15 @@ const Home: NextPage = () => {
     }
 
     let countByCategory: any = {};
-    for (let countByTodayData of countByToday.data) {
-      if (countByCategory[countByTodayData.categoryId]) {
-        countByCategory[countByTodayData.categoryId].push(countByTodayData);
-      } else {
-        countByCategory[countByTodayData.categoryId] = [countByTodayData];
+    if (countByToday && countByToday.data) {
+      for (let countByTodayData of countByToday.data) {
+        if (countByCategory[countByTodayData.categoryId]) {
+          countByCategory[countByTodayData.categoryId].push(countByTodayData);
+        } else {
+          countByCategory[countByTodayData.categoryId] = [countByTodayData];
+        }
       }
     }
-    console.log(countByCategory);
   }, [countByToday]);
   useEffect(() => {
     init();
@@ -149,8 +125,8 @@ const Home: NextPage = () => {
         </Col>
         <Col xs={24} style={{ marginTop: "15px" }}>
           <Row justify="space-around">
-            {boards &&
-              boards.map((board: IBoard) => (
+            {boardsForMain.length > 0 &&
+              boardsForMain.map((board: IBoard) => (
                 <Col
                   key={board.id}
                   xs={24}
@@ -243,6 +219,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
     context.store.dispatch({
       type: LOAD_USER_REQUEST,
+    });
+
+    context.store.dispatch({
+      type: LOAD_BOARDS_FOR_MAIN_REQUEST,
     });
 
     context.store.dispatch(END);
