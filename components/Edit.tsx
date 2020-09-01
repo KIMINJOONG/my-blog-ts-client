@@ -193,7 +193,7 @@ const Edit = ({
           // 해당 seq의 파일이름에 해당하는 파일 삭제
           let imageKey = node.src.split("/");
           imageKey = imageKey[imageKey.length - 1];
-          const result = await api.destroy(`/images/${imageKey}`);
+          await api.destroy(`/images/${imageKey}`);
         }
       },
     },

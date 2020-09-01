@@ -14,6 +14,12 @@ export const initialState = {
   boardsForMainDone: false,
   boardsForMainError: null,
   countByToday: {},
+  addBoardLoading: false,
+  addBoardDone: false,
+  addBoardError: null,
+  removeBoardLoading: false,
+  removeBoardDone: false,
+  removeBoardError: null,
 };
 
 // 비동기 요청
@@ -32,6 +38,24 @@ export const LOAD_COUNT_BY_TODAY_FAILURE = "LOAD_COUNT_BY_TODAY_FAILURE";
 export const LOAD_BOARDS_FOR_MAIN_REQUEST = "LOAD_BOARDS_FOR_MAIN_REQUEST";
 export const LOAD_BOARDS_FOR_MAIN_SUCCESS = "LOAD_BOARDS_FOR_MAIN_SUCCESS";
 export const LOAD_BOARDS_FOR_MAIN_FAILURE = "LOAD_BOARDS_FOR_MAIN_FAILURE";
+
+export const ADD_BOARD_REQUEST = "ADD_BOARD_REQUEST";
+export const ADD_BOARD_SUCCESS = "ADD_BOARD_SUCCESS";
+export const ADD_BOARD_FAILURE = "ADD_BOARD_FAILURE";
+
+interface IADD_BOARD_REQUEST {
+  type: typeof ADD_BOARD_REQUEST;
+}
+
+interface IADD_BOARD_SUCCESS {
+  type: typeof ADD_BOARD_SUCCESS;
+  data: any;
+}
+
+interface IADD_BOARD_FAILURE {
+  type: typeof ADD_BOARD_FAILURE;
+  error: any;
+}
 
 interface IBOARD_DETAIL_REQUEST {
   type: typeof BOARD_DETAIL_REQUEST;
@@ -103,7 +127,10 @@ export type BoardActionType =
   | ILOAD_COUNT_BY_TODAY_FAILURE
   | ILOAD_BOARDS_FOR_MAIN_REQUEST
   | ILOAD_BOARDS_FOR_MAIN_SUCCESS
-  | ILOAD_BOARDS_FOR_MAIN_FAILURE;
+  | ILOAD_BOARDS_FOR_MAIN_FAILURE
+  | IADD_BOARD_REQUEST
+  | IADD_BOARD_SUCCESS
+  | IADD_BOARD_FAILURE;
 
 // 동기요청
 
@@ -112,6 +139,29 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case ADD_BOARD_REQUEST: {
+        return {
+          ...state,
+          addBoardLoading: true,
+          addBoardDone: false,
+          addBoardError: null,
+        };
+      }
+      case ADD_BOARD_SUCCESS: {
+        return {
+          ...state,
+          board: action.data,
+          addBoardLoading: false,
+          addBoardDone: true,
+        };
+      }
+      case ADD_BOARD_FAILURE: {
+        return {
+          ...state,
+          addBoardError: action.error,
+          addBoardLoading: false,
+        };
+      }
       case BOARD_DETAIL_REQUEST: {
         return {
           ...state,

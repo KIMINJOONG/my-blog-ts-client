@@ -1,7 +1,7 @@
 import { Row, Col, Form, Input, Button, message } from "antd";
 import Link from "next/link";
 import Router from "next/router";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import jsCookie from "js-cookie";
 import userStore from "../stores/userStore";
 import AppLayout from "../components/AppLayout";
@@ -15,19 +15,22 @@ const Login = () => {
   const [email, onChangeEmail, setEmail] = useInput("");
   const [password, onChangePassword, setPassword] = useInput("");
 
+  useEffect(() => {
+    if (logInDone) {
+      message.success("로그인되었습니다.");
+      setPassword("");
+      Router.push("/");
+    }
+  }, [logInDone]);
+
   const onSubmit = useCallback(
     async (values) => {
       dispatch({
         type: LOG_IN_REQUEST,
         data: values,
       });
-      message.success("로그인되었습니다.");
-      if (logInDone) {
-        setPassword("");
-        Router.push("/");
-      }
     },
-    [logInDone],
+    [],
   );
   return (
     <AppLayout>
