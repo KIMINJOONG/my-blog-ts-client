@@ -20,6 +20,9 @@ export const initialState = {
   removeBoardLoading: false,
   removeBoardDone: false,
   removeBoardError: null,
+  loadCountByTodayLoading: false,
+  loadCountByTodayDone: false,
+  loadCountByTodayError: null,
 };
 
 // 비동기 요청
@@ -42,6 +45,11 @@ export const LOAD_BOARDS_FOR_MAIN_FAILURE = "LOAD_BOARDS_FOR_MAIN_FAILURE";
 export const ADD_BOARD_REQUEST = "ADD_BOARD_REQUEST";
 export const ADD_BOARD_SUCCESS = "ADD_BOARD_SUCCESS";
 export const ADD_BOARD_FAILURE = "ADD_BOARD_FAILURE";
+
+export const addBoard = (data: any) => ({
+  type: ADD_BOARD_REQUEST,
+  data,
+});
 
 interface IADD_BOARD_REQUEST {
   type: typeof ADD_BOARD_REQUEST;
@@ -140,100 +148,81 @@ const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
       case ADD_BOARD_REQUEST: {
-        return {
-          ...state,
-          addBoardLoading: true,
-          addBoardDone: false,
-          addBoardError: null,
-        };
+        draft.addBoardLoading = true;
+        draft.addBoardDone = false;
+        draft.addBoardError = null;
+        break;
       }
       case ADD_BOARD_SUCCESS: {
-        return {
-          ...state,
-          board: action.data,
-          addBoardLoading: false,
-          addBoardDone: true,
-        };
+        draft.addBoardLoading = false;
+        draft.addBoardDone = true;
+        draft.board = action.data;
+        break;
       }
       case ADD_BOARD_FAILURE: {
-        return {
-          ...state,
-          addBoardError: action.error,
-          addBoardLoading: false,
-        };
+        draft.addBoardLoading = false;
+        draft.addBoardError = action.error;
+        break;
       }
       case BOARD_DETAIL_REQUEST: {
-        return {
-          ...state,
-          boardDetailLoading: true,
-          boardDetailDone: false,
-          boardDetailError: null,
-        };
+        draft.boardDetailLoading = true;
+        draft.boardDetailDone = false;
+        draft.boardDetailError = null;
+        break;
       }
       case BOARD_DETAIL_SUCCESS: {
-        return {
-          ...state,
-          board: { ...action.data },
-          boardDetailLoading: false,
-          boardDetailDone: true,
-        };
+        draft.boardDetailLoading = false;
+        draft.boardDetailDone = true;
+        draft.board = action.data;
+        break;
       }
       case BOARD_DETAIL_FAILURE: {
-        return {
-          ...state,
-          boardDetailError: action.error,
-          boardDetailLoading: false,
-        };
+        draft.boardDetailLoading = false;
+        draft.boardDetailError = action.error;
+        break;
       }
       case LOAD_BOARDS_REQUEST: {
-        return {
-          ...state,
-          boardsLoading: true,
-          boardsDone: false,
-          boardsError: null,
-        };
+        draft.boardsLoading = true;
+        draft.boardsDone = false;
+        draft.boardsError = null;
+        break;
       }
       case LOAD_BOARDS_SUCCESS: {
-        return {
-          ...state,
-          boards: action.data,
-          boardsLoading: false,
-          boardsDone: true,
-        };
+        draft.boardsLoading = false;
+        draft.boardsDone = true;
+        draft.boards = action.data;
+        break;
       }
       case LOAD_BOARDS_FAILURE: {
-        return {
-          ...state,
-          boardsLoading: false,
-          boardsError: action.error,
-        };
+        draft.boardsLoading = false;
+        draft.boardsError = action.error;
+        break;
       }
 
       case LOAD_COUNT_BY_TODAY_REQUEST: {
-        return {
-          ...state,
-        };
+        draft.loadCountByTodayLoading = true;
+        draft.loadCountByTodayDone = false;
+        draft.loadCountByTodayError = null;
+        break;
       }
 
       case LOAD_COUNT_BY_TODAY_SUCCESS: {
-        return {
-          ...state,
-          countByToday: action.data,
-        };
+        draft.loadCountByTodayLoading = false;
+        draft.loadCountByTodayDone = true;
+        draft.countByToday = action.data;
+        break;
       }
       case LOAD_COUNT_BY_TODAY_FAILURE: {
-        return {
-          ...state,
-        };
+        draft.loadCountByTodayLoading = false;
+        draft.loadCountByTodayError = action.error;
+        break;
       }
 
       case LOAD_BOARDS_FOR_MAIN_REQUEST: {
-        return {
-          ...state,
-          boardsForMainLoading: true,
-          boardsForMainDone: false,
-          boardsForMainError: null,
-        };
+        draft.boardsForMainLoading = true;
+        draft.boardsForMainDone = false;
+        draft.boardsForMainError = null;
+        break;
       }
       case LOAD_BOARDS_FOR_MAIN_SUCCESS: {
         const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
@@ -256,24 +245,18 @@ const reducer = (state = initialState, action: BoardActionType) => {
               : board.shortContent;
           }
         }
-        return {
-          ...state,
-          boardsForMain: action.data.data,
-          boardsForMainLoading: false,
-          boardsForMainDone: true,
-        };
+        draft.boardsForMainLoading = false;
+        draft.boardsForMainDone = true;
+        draft.boardsForMain = action.data.data;
+        break;
       }
       case LOAD_BOARDS_FOR_MAIN_FAILURE: {
-        return {
-          ...state,
-          boardsForMainLoading: false,
-          boardsForMainError: action.error,
-        };
+        draft.boardsForMainLoading = false;
+        draft.boardsForMainError = action.error;
+        break;
       }
       default: {
-        return {
-          ...state,
-        };
+        break;
       }
     }
   });

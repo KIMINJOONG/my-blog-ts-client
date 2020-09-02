@@ -16,6 +16,7 @@ const Login = () => {
   const [password, onChangePassword, setPassword] = useInput("");
 
   useEffect(() => {
+    console.log(logInDone);
     if (logInDone) {
       message.success("로그인되었습니다.");
       setPassword("");

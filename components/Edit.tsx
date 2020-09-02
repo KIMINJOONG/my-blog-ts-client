@@ -3,7 +3,8 @@ import { ChangeEvent, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Router from "next/router";
 import api from "../api";
-import category from "../pages/admin/category";
+import { useDispatch } from "react-redux";
+import { addBoard } from "../reducers/board";
 
 const importJodit = () => import("jodit-react");
 
@@ -61,6 +62,7 @@ const Edit = ({
   disabled = false,
   categories = [],
 }: IProps) => {
+  const dispatch = useDispatch();
   const title = useInput("");
   const categorySelect = useSelectBox("");
   const [content, setContent] = useState("");
@@ -236,7 +238,8 @@ const Edit = ({
     if (param) {
       result = await api.update(`/boards/${param}`, dataForm);
     } else {
-      result = await api.create("/boards", dataForm);
+      addBoard(dataForm);
+      // result = await api.create("/boards", dataForm);
     }
 
     const { data, status: httpStatus } = result;

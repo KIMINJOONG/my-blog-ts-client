@@ -21,6 +21,9 @@ import {
   LOAD_BOARDS_FOR_MAIN_REQUEST,
   LOAD_BOARDS_FOR_MAIN_SUCCESS,
   LOAD_BOARDS_FOR_MAIN_FAILURE,
+  ADD_BOARD_SUCCESS,
+  ADD_BOARD_FAILURE,
+  ADD_BOARD_REQUEST,
 } from "../reducers/board";
 
 interface IBOARDDETAILPROPS {
@@ -136,12 +139,38 @@ function* loadBoardsForMain() {
   }
 }
 
+function addBoardAPI(data: any) {
+  return axios.post("/boards", data);
+}
+
+function* addBoard(action: any) {
+  try {
+    const result = yield call(addBoardAPI, action.data);
+
+    yield put({
+      // put은 dispatch 동일
+      type: ADD_BOARD_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: ADD_BOARD_FAILURE,
+      error: e,
+    });
+  }
+}
+
 function* watchLoadCountByToday() {
   yield takeEvery(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
 }
 
 function* watchLoadBoardsForMain() {
   yield takeLatest(LOAD_BOARDS_FOR_MAIN_REQUEST, loadBoardsForMain);
+}
+
+function* watchAddBoard() {
+  yield takeLatest(ADD_BOARD_REQUEST, addBoard);
 }
 
 export default function* userSaga() {
@@ -151,6 +180,7 @@ export default function* userSaga() {
       fork(watchLoadBoards),
       fork(watchLoadCountByToday),
       fork(watchLoadBoardsForMain),
+      fork(watchAddBoard),
     ],
   );
 }

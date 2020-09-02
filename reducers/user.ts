@@ -10,6 +10,9 @@ export const initialState = {
   signUpLoading: false,
   signUpDone: false,
   signUpError: null,
+  loadUserLoading: false,
+  loadUserDone: false,
+  loadUserError: null,
   me: null,
   signUpData: {},
   loginData: {},
@@ -56,6 +59,7 @@ interface ILOGOUT_USER_SUCCESS {
 
 interface ILOGOUT_USER_FAILURE {
   type: typeof LOGOUT_USER_FAILURE;
+  error: any;
 }
 
 interface ILOAD_USER_REQUEST {
@@ -79,6 +83,7 @@ interface ILOAD_USER_SUCCESS {
 
 interface ILOAD_USER_FAILURE {
   type: typeof LOAD_USER_FAILURE;
+  error: any;
 }
 
 export type UserActionType =
@@ -128,64 +133,58 @@ const reducer = (state = initialState, action: UserActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
       case LOG_IN_REQUEST: {
-        return {
-          ...state,
-          logInLoading: true,
-          logInDone: false,
-          logInError: null,
-        };
+        draft.logInLoading = true;
+        draft.logInDone = false;
+        draft.logInError = null;
+        break;
       }
       case LOG_IN_SUCCESS: {
-        return {
-          ...state,
-          logInLoading: false,
-          logInDone: true,
-          me: action.data.data,
-        };
+        draft.logInLoading = false;
+        draft.logInDone = true;
+        draft.me = action.data.data;
+        break;
       }
       case LOG_IN_FAILURE: {
-        return {
-          ...state,
-          logInLoading: false,
-          logInError: action.error,
-        };
+        draft.logInLoading = false;
+        draft.logInError = action.error;
+        break;
       }
       case LOAD_USER_REQUEST: {
-        return {
-          ...state,
-        };
+        draft.loadUserLoading = true;
+        draft.loadUserDone = false;
+        draft.loadUserError = null;
+        break;
       }
       case LOAD_USER_SUCCESS: {
-        return {
-          ...state,
-          me: action.data,
-        };
+        draft.me = action.data as any;
+        draft.loadUserLoading = false;
+        draft.loadUserDone = true;
+        break;
       }
       case LOAD_USER_FAILURE: {
-        return {
-          ...state,
-        };
+        draft.loadUserLoading = false;
+        draft.loadUserError = action.error;
+        break;
       }
       case LOGOUT_USER_REQUEST: {
-        return {
-          ...state,
-        };
+        draft.logOutLoading = true;
+        draft.logOutDone = false;
+        draft.logOutError = null;
+        break;
       }
       case LOGOUT_USER_SUCCESS: {
-        return {
-          ...state,
-          me: null,
-        };
+        draft.logOutLoading = false;
+        draft.logOutDone = true;
+        draft.me = null;
+        break;
       }
       case LOGOUT_USER_FAILURE: {
-        return {
-          ...state,
-        };
+        draft.logOutLoading = false;
+        draft.logOutError = action.error;
+        break;
       }
       default: {
-        return {
-          ...state,
-        };
+        break;
       }
     }
   });
