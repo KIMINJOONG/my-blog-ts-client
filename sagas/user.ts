@@ -96,7 +96,7 @@ function* logIn(action: ILOG_IN_REQUEST) {
 }
 
 function* watchLogoutUser() {
-  yield takeEvery(LOGOUT_USER_REQUEST, logoutUser);
+  yield takeLatest(LOGOUT_USER_REQUEST, logoutUser);
 }
 
 function* watchLogIn() {

@@ -25,6 +25,7 @@ import {
   ADD_BOARD_FAILURE,
   ADD_BOARD_REQUEST,
 } from "../reducers/board";
+import jsCookie from "js-cookie";
 
 interface IBOARDDETAILPROPS {
   categoryId: string;
@@ -140,7 +141,9 @@ function* loadBoardsForMain() {
 }
 
 function addBoardAPI(data: any) {
-  return axios.post("/boards", data);
+  const token = jsCookie.get("token");
+  const Authorization = token ? `token=${token}` : "";
+  return axios.post("/boards", data, { headers: { Authorization } });
 }
 
 function* addBoard(action: any) {
@@ -162,7 +165,7 @@ function* addBoard(action: any) {
 }
 
 function* watchLoadCountByToday() {
-  yield takeEvery(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
+  yield takeLatest(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
 }
 
 function* watchLoadBoardsForMain() {

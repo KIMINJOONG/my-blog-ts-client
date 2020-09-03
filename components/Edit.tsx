@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Router from "next/router";
 import api from "../api";
 import { useDispatch } from "react-redux";
-import { addBoard } from "../reducers/board";
+import { addBoardAction } from "../reducers/board";
 
 const importJodit = () => import("jodit-react");
 
@@ -238,19 +238,19 @@ const Edit = ({
     if (param) {
       result = await api.update(`/boards/${param}`, dataForm);
     } else {
-      addBoard(dataForm);
+      dispatch(addBoardAction(dataForm));
       // result = await api.create("/boards", dataForm);
     }
 
-    const { data, status: httpStatus } = result;
-    if (httpStatus === 200) {
-      if (param) {
-        message.success("수정되었습니다.");
-      } else {
-        message.success("등록되었습니다.");
-      }
-      Router.push(`/boards/${data.data.id}`);
-    }
+    // const { data, status: httpStatus } = result;
+    // if (httpStatus === 200) {
+    //   if (param) {
+    //     message.success("수정되었습니다.");
+    //   } else {
+    //     // message.success("등록되었습니다.");
+    //   }
+    //   Router.push(`/boards/${data.data.id}`);
+    // }
   }, [content, title, categorySelect]);
 
   return (

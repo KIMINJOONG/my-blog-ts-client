@@ -46,7 +46,7 @@ export const ADD_BOARD_REQUEST = "ADD_BOARD_REQUEST";
 export const ADD_BOARD_SUCCESS = "ADD_BOARD_SUCCESS";
 export const ADD_BOARD_FAILURE = "ADD_BOARD_FAILURE";
 
-export const addBoard = (data: any) => ({
+export const addBoardAction = (data: any) => ({
   type: ADD_BOARD_REQUEST,
   data,
 });
@@ -148,6 +148,7 @@ const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
       case ADD_BOARD_REQUEST: {
+        console.log("hi");
         draft.addBoardLoading = true;
         draft.addBoardDone = false;
         draft.addBoardError = null;
