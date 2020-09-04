@@ -17,6 +17,9 @@ export const initialState = {
   addBoardLoading: false,
   addBoardDone: false,
   addBoardError: null,
+  updateBoardLoading: false,
+  updateBoardDone: false,
+  updateBoardError: null,
   removeBoardLoading: false,
   removeBoardDone: false,
   removeBoardError: null,
@@ -46,10 +49,57 @@ export const ADD_BOARD_REQUEST = "ADD_BOARD_REQUEST";
 export const ADD_BOARD_SUCCESS = "ADD_BOARD_SUCCESS";
 export const ADD_BOARD_FAILURE = "ADD_BOARD_FAILURE";
 
+export const UPDATE_BOARD_REQUEST = "UPDATE_BOARD_REQUEST";
+export const UPDATE_BOARD_SUCCESS = "UPDATE_BOARD_SUCCESS";
+export const UPDATE_BOARD_FAILURE = "UPDATE_BOARD_FAILURE";
+
+export const REMOVE_BOARD_REQUEST = "REMOVE_BOARD_REQUEST";
+export const REMOVE_BOARD_SUCCESS = "REMOVE_BOARD_SUCCESS";
+export const REMOVE_BOARD_FAILURE = "REMOVE_BOARD_FAILURE";
+
 export const addBoardAction = (data: any) => ({
   type: ADD_BOARD_REQUEST,
   data,
 });
+
+export const updateBoardAction = (boardId: string, data: any) => ({
+  type: UPDATE_BOARD_REQUEST,
+  data,
+  boardId,
+});
+
+export const removeBoardAction = (boardId: string) => ({
+  type: REMOVE_BOARD_REQUEST,
+  boardId,
+});
+
+interface IREMOVE_BOARD_REQUEST {
+  type: typeof REMOVE_BOARD_REQUEST;
+}
+
+interface IREMOVE_BOARD_SUCCESS {
+  type: typeof REMOVE_BOARD_SUCCESS;
+  data: any;
+}
+
+interface IREMOVE_BOARD_FAILURE {
+  type: typeof REMOVE_BOARD_FAILURE;
+  error: any;
+}
+
+interface IUPDATE_BOARD_REQUEST {
+  type: typeof UPDATE_BOARD_REQUEST;
+}
+
+interface IUPDATE_BOARD_SUCCESS {
+  type: typeof UPDATE_BOARD_SUCCESS;
+  data: any;
+}
+
+interface IUPDATE_BOARD_FAILURE {
+  type: typeof UPDATE_BOARD_FAILURE;
+  error: any;
+}
 
 interface IADD_BOARD_REQUEST {
   type: typeof ADD_BOARD_REQUEST;
@@ -138,7 +188,13 @@ export type BoardActionType =
   | ILOAD_BOARDS_FOR_MAIN_FAILURE
   | IADD_BOARD_REQUEST
   | IADD_BOARD_SUCCESS
-  | IADD_BOARD_FAILURE;
+  | IADD_BOARD_FAILURE
+  | IUPDATE_BOARD_REQUEST
+  | IUPDATE_BOARD_SUCCESS
+  | IUPDATE_BOARD_FAILURE
+  | IREMOVE_BOARD_REQUEST
+  | IREMOVE_BOARD_SUCCESS
+  | IREMOVE_BOARD_FAILURE;
 
 // 동기요청
 
@@ -147,8 +203,41 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case REMOVE_BOARD_REQUEST: {
+        draft.removeBoardLoading = true;
+        draft.removeBoardDone = false;
+        draft.removeBoardError = null;
+        break;
+      }
+      case REMOVE_BOARD_SUCCESS: {
+        draft.removeBoardLoading = false;
+        draft.removeBoardDone = true;
+        draft.board = action.data;
+        break;
+      }
+      case REMOVE_BOARD_FAILURE: {
+        draft.removeBoardLoading = false;
+        draft.removeBoardError = action.error;
+        break;
+      }
+      case UPDATE_BOARD_REQUEST: {
+        draft.updateBoardLoading = true;
+        draft.updateBoardDone = false;
+        draft.updateBoardError = null;
+        break;
+      }
+      case UPDATE_BOARD_SUCCESS: {
+        draft.updateBoardLoading = false;
+        draft.updateBoardDone = true;
+        draft.board = action.data;
+        break;
+      }
+      case UPDATE_BOARD_FAILURE: {
+        draft.updateBoardLoading = false;
+        draft.updateBoardError = action.error;
+        break;
+      }
       case ADD_BOARD_REQUEST: {
-        console.log("hi");
         draft.addBoardLoading = true;
         draft.addBoardDone = false;
         draft.addBoardError = null;

@@ -24,6 +24,12 @@ import {
   ADD_BOARD_SUCCESS,
   ADD_BOARD_FAILURE,
   ADD_BOARD_REQUEST,
+  UPDATE_BOARD_REQUEST,
+  UPDATE_BOARD_SUCCESS,
+  UPDATE_BOARD_FAILURE,
+  REMOVE_BOARD_REQUEST,
+  REMOVE_BOARD_SUCCESS,
+  REMOVE_BOARD_FAILURE,
 } from "../reducers/board";
 import jsCookie from "js-cookie";
 
@@ -53,7 +59,7 @@ function* boardDetail(action: any) {
     // loginAPI 실패
     yield put({
       type: BOARD_DETAIL_FAILURE,
-      error: e,
+      error: e.response.data,
     });
   }
 }
@@ -83,7 +89,7 @@ function* loadBoards(action: any) {
     // loginAPI 실패
     yield put({
       type: LOAD_BOARDS_FAILURE,
-      error: e,
+      error: e.response.data,
     });
   }
 }
@@ -113,7 +119,7 @@ function* loadCountByToday() {
     // loginAPI 실패
     yield put({
       type: LOAD_COUNT_BY_TODAY_FAILURE,
-      error: e,
+      error: e.response.data,
     });
   }
 }
@@ -135,7 +141,7 @@ function* loadBoardsForMain() {
     // loginAPI 실패
     yield put({
       type: LOAD_BOARDS_FOR_MAIN_FAILURE,
-      error: e,
+      error: e.response.data,
     });
   }
 }
@@ -159,7 +165,55 @@ function* addBoard(action: any) {
     // loginAPI 실패
     yield put({
       type: ADD_BOARD_FAILURE,
-      error: e,
+      error: e.response.data,
+    });
+  }
+}
+
+function updateBoardAPI(boardId: string, data: any) {
+  const token = jsCookie.get("token");
+  const Authorization = token ? `token=${token}` : "";
+  return axios.put(`/boards/${boardId}`, data, { headers: { Authorization } });
+}
+
+function* updateBoard(action: any) {
+  try {
+    const result = yield call(updateBoardAPI, action.boardId, action.data);
+
+    yield put({
+      // put은 dispatch 동일
+      type: UPDATE_BOARD_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: UPDATE_BOARD_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
+function removeBoardAPI(boardId: string | number) {
+  const token = jsCookie.get("token");
+  const Authorization = token ? `token=${token}` : "";
+  return axios.delete(`/boards/${boardId}`, { headers: { Authorization } });
+}
+
+function* removeBoard(action: any) {
+  try {
+    const result = yield call(removeBoardAPI, action.boardId);
+
+    yield put({
+      // put은 dispatch 동일
+      type: REMOVE_BOARD_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: REMOVE_BOARD_FAILURE,
+      error: e.response.data,
     });
   }
 }
@@ -176,6 +230,14 @@ function* watchAddBoard() {
   yield takeLatest(ADD_BOARD_REQUEST, addBoard);
 }
 
+function* watchUpdateBoard() {
+  yield takeLatest(UPDATE_BOARD_REQUEST, updateBoard);
+}
+
+function* watchRemoveBoard() {
+  yield takeLatest(REMOVE_BOARD_REQUEST, removeBoard);
+}
+
 export default function* userSaga() {
   yield all(
     [
@@ -184,6 +246,8 @@ export default function* userSaga() {
       fork(watchLoadCountByToday),
       fork(watchLoadBoardsForMain),
       fork(watchAddBoard),
+      fork(watchUpdateBoard),
+      fork(watchRemoveBoard),
     ],
   );
 }

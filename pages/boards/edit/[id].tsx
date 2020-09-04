@@ -12,10 +12,14 @@ import {
   BOARD_DETAIL_REQUEST,
 } from "../../../reducers/board";
 import AppLayout from "../../../components/AppLayout";
+import Router from "next/router";
+import { message } from "antd";
 
 const edit = (props: any) => {
   const router = useRouter();
-  const { board } = useSelector((state: any) => state.board);
+  const { board, updateBoardDone, removeBoardDone } = useSelector((
+    state: any,
+  ) => state.board);
   const { id } = router.query;
   const [data, setData] = useState();
   const [categories, setCategories] = useState([]);
@@ -35,6 +39,17 @@ const edit = (props: any) => {
   useEffect(() => {
     init();
   }, []);
+
+  useEffect(() => {
+    if (updateBoardDone) {
+      Router.push(`/boards/${board.data.id}`);
+    }
+
+    if (removeBoardDone) {
+      message.success("삭제되었습니다.");
+      Router.push("/");
+    }
+  }, [updateBoardDone, removeBoardDone]);
 
   return (
     <AppLayout>
