@@ -7,7 +7,7 @@ import userStore from "../stores/userStore";
 import AppLayout from "../components/AppLayout";
 import { useDispatch, useSelector } from "react-redux";
 import useInput from "../hooks/useInput";
-import { LOG_IN_REQUEST } from "../reducers/user";
+import { loginRequestAction } from "../reducers/user";
 
 const Login = () => {
     const { logInLoading, logInDone } = useSelector((state: any) => state.user);
@@ -16,7 +16,6 @@ const Login = () => {
     const [password, onChangePassword, setPassword] = useInput("");
 
     useEffect(() => {
-        console.log(logInDone);
         if (logInDone) {
             message.success("로그인되었습니다.");
             setEmail("");
@@ -26,10 +25,7 @@ const Login = () => {
     }, [logInDone]);
 
     const onSubmit = useCallback(async (values) => {
-        dispatch({
-            type: LOG_IN_REQUEST,
-            data: values,
-        });
+        dispatch(loginRequestAction(values));
     }, []);
     return (
         <AppLayout>
