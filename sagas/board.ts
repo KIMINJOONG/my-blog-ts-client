@@ -253,15 +253,18 @@ function* loadComments(action: any) {
 function addCommentAPI(boardId: string | number, data: any) {
     const token = jsCookie.get("token");
     const Authorization = token ? `token=${token}` : "";
-    return axios.post(`/boards/${boardId}`, data, {
-        headers: { Authorization },
-    });
+    return axios.post(
+        `/comments/${boardId}`,
+        { comment: data },
+        {
+            headers: { Authorization },
+        }
+    );
 }
 
 function* addComment(action: any) {
     try {
         const result = yield call(addCommentAPI, action.boardId, action.data);
-
         yield put({
             // put은 dispatch 동일
             type: ADD_COMMENT_SUCCESS,

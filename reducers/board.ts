@@ -1,7 +1,7 @@
 import produce from "immer";
 
 export const initialState = {
-    board: null,
+    board: null as any,
     boardDetailLoading: false,
     boardDetailDone: false,
     boardDetailError: null,
@@ -257,23 +257,6 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
     return produce(state, (draft) => {
         switch (action.type) {
-            case LOAD_COMMENTS_REQUEST: {
-                draft.commentsLoading = true;
-                draft.commentsDone = false;
-                draft.commentsError = null;
-                break;
-            }
-            case LOAD_COMMENTS_SUCCESS: {
-                draft.commentsLoading = false;
-                draft.commentsDone = true;
-                draft.boards = action.data;
-                break;
-            }
-            case LOAD_COMMENTS_FAILURE: {
-                draft.commentsLoading = false;
-                draft.commentsError = action.error;
-                break;
-            }
             case ADD_COMMENT_REQUEST: {
                 draft.addCommentLoading = true;
                 draft.addCommentDone = false;
@@ -281,13 +264,9 @@ const reducer = (state = initialState, action: BoardActionType) => {
                 break;
             }
             case ADD_COMMENT_SUCCESS: {
-                const board: any = draft.boardsForMain.find(
-                    (v: any) => v.id === action.data.boardId
-                );
-                board.Comments.unshift(action.data);
+                draft.board.data.comments.push(action.data.data);
                 draft.addCommentLoading = false;
                 draft.addCommentDone = true;
-                draft.board = action.data;
                 break;
             }
             case ADD_COMMENT_FAILURE: {
