@@ -17,7 +17,11 @@ import Router from "next/router";
 import { FaRegThumbsUp } from "react-icons/fa";
 import wrapper from "../../stores/configureStore";
 import { END } from "redux-saga";
-import { BOARD_DETAIL_REQUEST, addLikeAction } from "../../reducers/board";
+import {
+  BOARD_DETAIL_REQUEST,
+  addLikeAction,
+  removeLikeAction,
+} from "../../reducers/board";
 import { useSelector, useDispatch } from "react-redux";
 import { LOAD_USER_REQUEST } from "../../reducers/user";
 import axios from "axios";
@@ -79,18 +83,33 @@ const ContentCard = styled(Card)`
 const edit = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state: any) => state.user);
-  const { board } = useSelector((state: any) => state.board);
+  const { board, addLikeDone, removeLikeDone } = useSelector((state: any) =>
+    state.board
+  );
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(board.data.likes.length);
 
   useEffect(() => {
     for (let like of board.data.likes) {
-      if (like.userId === board.data.id) {
+      if (like.userId === me.data.id) {
         setIsLiked(true);
-        break;
+        return;
       }
     }
-  }, [me]);
+
+    setIsLiked(false);
+  }, [addLikeDone, removeLikeDone]);
+
+  useEffect(() => {
+    if (addLikeDone) {
+      message.success("감사합니다.");
+    }
+  }, [addLikeDone]);
+
+  useEffect(() => {
+    if (removeLikeDone) {
+      message.error("노력하겠습니다 ㅜ_ㅜ");
+    }
+  }, [removeLikeDone]);
 
   const onClickHelped = useCallback(async () => {
     if (!me || !me.data || !me.data.id) {
@@ -98,21 +117,12 @@ const edit = () => {
       return;
     }
 
-    dispatch(addLikeAction(board.data.id));
-    // const result = await api.create(`/likes/${board.data.id}`, {});
-    // const { data, status: httpStatus } = result;
-    // if (httpStatus === 200) {
-    // if (data.message === "liked") {
-    //     setIsLiked(true);
-    //     setLikeCount(likeCount + 1);
-    //     message.success("감사합니다.");
-    // } else if (data.message === "deleted") {
-    //     setIsLiked(false);
-    //     setLikeCount(likeCount - 1);
-    //     message.success("더 도움될 수 있도록 노력하겠습니다.");
-    // }
-    // }
-  }, [likeCount, board]);
+    if (isLiked) {
+      dispatch(removeLikeAction(board.data.id));
+    } else {
+      dispatch(addLikeAction(board.data.id));
+    }
+  }, [board, isLiked]);
 
   return (
     <AppLayout>
@@ -150,7 +160,7 @@ const edit = () => {
               >
                 <span style={{ marginLeft: "5px" }}>
                   도움이 됐어요.
-                  <Badge count={likeCount} />
+                  <Badge count={board.data.likes.length} />
                 </span>
               </Button>
             )
@@ -163,7 +173,7 @@ const edit = () => {
               >
                 <span style={{ marginLeft: "5px" }}>
                   도움이 됐어요.
-                  <Badge count={likeCount} />
+                  <Badge count={board.data.likes.length} />
                 </span>
               </Button>
             )}

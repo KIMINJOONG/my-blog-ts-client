@@ -37,9 +37,11 @@ import {
   LOAD_COMMENTS_REQUEST,
   ADD_COMMENT_REQUEST,
   ADD_LIKE_SUCCESS,
-  DELETE_LIKE_SUCCESS,
-  LIKE_REQUEST,
-  LIKE_FAILURE,
+  REMOVE_LIKE_REQUEST,
+  ADD_LIKE_REQUEST,
+  REMOVE_LIKE_SUCCESS,
+  REMOVE_LIKE_FAILURE,
+  ADD_LIKE_FAILURE,
 } from "../reducers/board";
 import jsCookie from "js-cookie";
 
@@ -283,7 +285,7 @@ function* addComment(action: any) {
   }
 }
 
-function likeAPI(boardId: any) {
+function addLikeAPI(boardId: any) {
   const token = jsCookie.get("token");
   const Authorization = token ? `token=${token}` : "";
   return axios.post(`/likes/${boardId}`, {}, {
@@ -291,26 +293,43 @@ function likeAPI(boardId: any) {
   });
 }
 
-function* like(action: any) {
+function* addLike(action: any) {
   try {
-    const result = yield call(likeAPI, action.data);
-    if (result.data.message === "liked") {
-      yield put({
-        // put은 dispatch 동일
-        type: ADD_LIKE_SUCCESS,
-        data: result.data,
-      });
-    } else if (result.data.message === "deleted") {
-      yield put({
-        // put은 dispatch 동일
-        type: DELETE_LIKE_SUCCESS,
-        data: result.data,
-      });
-    }
+    const result = yield call(addLikeAPI, action.data);
+    yield put({
+      // put은 dispatch 동일
+      type: ADD_LIKE_SUCCESS,
+      data: result.data,
+    });
   } catch (e) {
     // loginAPI 실패
     yield put({
-      type: LIKE_FAILURE,
+      type: ADD_LIKE_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
+function removeLikeAPI(boardId: any) {
+  const token = jsCookie.get("token");
+  const Authorization = token ? `token=${token}` : "";
+  return axios.delete(`/likes/${boardId}`, {
+    headers: { Authorization },
+  });
+}
+
+function* removeLike(action: any) {
+  try {
+    const result = yield call(removeLikeAPI, action.data);
+    yield put({
+      // put은 dispatch 동일
+      type: REMOVE_LIKE_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: REMOVE_LIKE_FAILURE,
       error: e.response.data,
     });
   }
@@ -344,8 +363,12 @@ function* watchLoadComments() {
   yield takeLatest(LOAD_COMMENTS_REQUEST, loadComments);
 }
 
-function* watchLike() {
-  yield takeLatest(LIKE_REQUEST, like);
+function* watchAddLike() {
+  yield takeLatest(ADD_LIKE_REQUEST, addLike);
+}
+
+function* watchRemoveLike() {
+  yield takeLatest(REMOVE_LIKE_REQUEST, removeLike);
 }
 
 export default function* userSaga() {
@@ -359,6 +382,7 @@ export default function* userSaga() {
     fork(watchRemoveBoard),
     fork(watchAddComment),
     fork(watchLoadComments),
-    fork(watchLike),
+    fork(watchAddLike),
+    fork(watchRemoveLike),
   ]);
 }

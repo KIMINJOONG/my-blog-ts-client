@@ -32,17 +32,22 @@ export const initialState = {
   commentsLoading: false,
   commentsDone: false,
   commentsError: null,
-  likeLoading: false,
-  likeDone: false,
-  likeError: null,
-  likeCount: 0,
+  addLikeLoading: false,
+  addLikeDone: false,
+  addLikeError: null,
+  removeLikeLoading: false,
+  removeLikeDone: false,
+  removeLikeError: null,
 };
 
 // 비동기 요청
-export const LIKE_REQUEST = "LIKE_REQUEST";
-export const LIKE_FAILURE = "LIKE_FAILURE";
+export const ADD_LIKE_REQUEST = "ADD_LIKE_REQUEST";
 export const ADD_LIKE_SUCCESS = "ADD_LIKE_SUCCESS";
-export const DELETE_LIKE_SUCCESS = "DELETE_LIKE_SUCCESS";
+export const ADD_LIKE_FAILURE = "ADD_LIKE_FAILURE";
+
+export const REMOVE_LIKE_REQUEST = "REMOVE_LIKE_REQUEST";
+export const REMOVE_LIKE_SUCCESS = "REMOVE_LIKE_SUCCESS";
+export const REMOVE_LIKE_FAILURE = "REMOVE_LIKE_FAILURE";
 
 export const BOARD_DETAIL_REQUEST = "BOARD_DETAIL_REQUEST";
 export const BOARD_DETAIL_SUCCESS = "BOARD_DETAIL_SUCCESS";
@@ -81,7 +86,12 @@ export const LOAD_COMMENTS_SUCCESS = "LOAD_COMMENTS_SUCCESS";
 export const LOAD_COMMENTS_FAILURE = "LOAD_COMMENTS_FAILURE";
 
 export const addLikeAction = (data: any) => ({
-  type: LIKE_REQUEST,
+  type: ADD_LIKE_REQUEST,
+  data,
+});
+
+export const removeLikeAction = (data: any) => ({
+  type: REMOVE_LIKE_REQUEST,
   data,
 });
 
@@ -107,22 +117,32 @@ export const addCommentAction = (boardId: string, data: any) => ({
   data,
 });
 
+interface IREMOVE_LIKE_REQUEST {
+  type: typeof REMOVE_LIKE_REQUEST;
+  data: any;
+}
+
+interface IREMOVE_LIKE_SUCCESS {
+  type: typeof REMOVE_LIKE_SUCCESS;
+  data: any;
+}
+
+interface IREMOVE_LIKE_FAILURE {
+  type: typeof REMOVE_LIKE_FAILURE;
+  error: any;
+}
+
+interface IADD_LIKE_REQUEST {
+  type: typeof ADD_LIKE_REQUEST;
+}
+
 interface IADD_LIKE_SUCCESS {
   type: typeof ADD_LIKE_SUCCESS;
   data: any;
 }
 
-interface IDELETE_LIKE_SUCCESS {
-  type: typeof DELETE_LIKE_SUCCESS;
-  data: any;
-}
-
-interface ILIKE_REQUEST {
-  type: typeof LIKE_REQUEST;
-}
-
-interface ILIKE_FAILURE {
-  type: typeof LIKE_FAILURE;
+interface IADD_LIKE_FAILURE {
+  type: typeof ADD_LIKE_FAILURE;
   error: any;
 }
 
@@ -282,10 +302,12 @@ export type BoardActionType =
   | IADD_COMMENT_REQUEST
   | IADD_COMMENT_SUCCESS
   | IADD_COMMENT_FAILURE
-  | ILIKE_REQUEST
+  | IADD_LIKE_REQUEST
   | IADD_LIKE_SUCCESS
-  | IDELETE_LIKE_SUCCESS
-  | ILIKE_FAILURE;
+  | IADD_LIKE_FAILURE
+  | IREMOVE_LIKE_REQUEST
+  | IREMOVE_LIKE_SUCCESS
+  | IREMOVE_LIKE_FAILURE;
 
 // 동기요청
 
@@ -294,27 +316,42 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      case LIKE_REQUEST: {
-        draft.likeLoading = true;
-        draft.likeDone = false;
-        draft.likeError = null;
+      case ADD_LIKE_REQUEST: {
+        draft.addLikeLoading = true;
+        draft.addLikeDone = false;
+        draft.addLikeError = null;
         break;
       }
       case ADD_LIKE_SUCCESS: {
-        draft.likeLoading = false;
-        draft.likeCount = draft.likeCount + 1;
-        draft.likeDone = true;
+        draft.addLikeLoading = false;
+        draft.board.data.likes.unshift(action.data.data);
+        draft.addLikeDone = true;
         break;
       }
-      case DELETE_LIKE_SUCCESS: {
-        draft.likeLoading = false;
-        draft.likeCount = draft.likeCount - 1;
-        draft.likeDone = true;
+      case ADD_LIKE_FAILURE: {
+        draft.addLikeLoading = false;
+        draft.addLikeError = action.error;
         break;
       }
-      case LIKE_FAILURE: {
-        draft.likeLoading = false;
-        draft.likeError = action.error;
+
+      case REMOVE_LIKE_REQUEST: {
+        draft.removeLikeLoading = true;
+        draft.removeLikeDone = false;
+        draft.removeLikeError = null;
+        break;
+      }
+
+      case REMOVE_LIKE_SUCCESS: {
+        draft.removeLikeLoading = false;
+        draft.board.data.likes = draft.board.data.likes.filter((like: any) =>
+          like.id !== action.data.data.id
+        );
+        draft.removeLikeDone = true;
+        break;
+      }
+      case REMOVE_LIKE_FAILURE: {
+        draft.removeLikeLoading = false;
+        draft.removeLikeError = action.error;
         break;
       }
       case ADD_COMMENT_REQUEST: {
