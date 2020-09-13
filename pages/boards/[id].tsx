@@ -21,6 +21,7 @@ import {
   BOARD_DETAIL_REQUEST,
   addLikeAction,
   removeLikeAction,
+  removeCommentAction,
 } from "../../reducers/board";
 import { useSelector, useDispatch } from "react-redux";
 import { LOAD_USER_REQUEST } from "../../reducers/user";
@@ -53,6 +54,7 @@ interface IComment {
   content: string;
   createdAt: string;
   user: IUser;
+  userId: number;
 }
 
 interface IProps {
@@ -83,10 +85,15 @@ const ContentCard = styled(Card)`
 const edit = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state: any) => state.user);
-  const { board, addLikeDone, removeLikeDone } = useSelector((state: any) =>
-    state.board
-  );
+  const {
+    board,
+    addLikeDone,
+    removeLikeDone,
+    removeCommentLoading,
+    removeCommentDone,
+  } = useSelector((state: any) => state.board);
   const [isLiked, setIsLiked] = useState(false);
+  const [isUpdateComment, setIsUpdateComment] = useState(false);
 
   useEffect(() => {
     for (let like of board.data.likes) {
@@ -111,7 +118,13 @@ const edit = () => {
     }
   }, [removeLikeDone]);
 
-  const onClickHelped = useCallback(async () => {
+  useEffect(() => {
+    if (removeCommentDone) {
+      message.error("댓글이 삭제되었습니다.");
+    }
+  }, [removeCommentDone]);
+
+  const onClickHelped = useCallback(() => {
     if (!me || !me.data || !me.data.id) {
       message.error("로그인을 먼저 해주세요.");
       return;
@@ -123,6 +136,15 @@ const edit = () => {
       dispatch(addLikeAction(board.data.id));
     }
   }, [board, isLiked]);
+
+  const onClickUpdateComment = useCallback(() => {
+    setIsUpdateComment(!isUpdateComment);
+  }, [isUpdateComment]);
+
+  const onClickRemoveComment = useCallback((commentId) =>
+    () => {
+      dispatch(removeCommentAction(board.data.id, commentId));
+    }, []);
 
   return (
     <AppLayout>
@@ -209,6 +231,18 @@ const edit = () => {
                       10,
                     )}
                   />
+                  {me && me.data && comment.userId === me.data.id && (
+                    <>
+                      <Button onClick={onClickUpdateComment}>수정하기</Button>
+                      <Button
+                        onClick={onClickRemoveComment(comment.id)}
+                        type="danger"
+                        loading={removeCommentLoading}
+                      >
+                        삭제하기
+                      </Button>
+                    </>
+                  )}
                 </li>
               </Card>
             )}

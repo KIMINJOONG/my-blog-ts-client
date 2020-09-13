@@ -29,6 +29,12 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  updateCommentLoading: false,
+  updateCommentDone: false,
+  updateCommentError: null,
+  removeCommentLoading: false,
+  removeCommentDone: false,
+  removeCommentError: null,
   commentsLoading: false,
   commentsDone: false,
   commentsError: null,
@@ -81,9 +87,28 @@ export const ADD_COMMENT_REQUEST = "ADD_COMMENT_REQUEST";
 export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
 export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
 
+export const UPDATE_COMMENT_REQUEST = "UPDATE_COMMENT_REQUEST";
+export const UPDATE_COMMENT_SUCCESS = "UPDATE_COMMENT_SUCCESS";
+export const UPDATE_COMMENT_FAILURE = "UPDATE_COMMENT_FAILURE";
+
+export const REMOVE_COMMENT_REQUEST = "REMOVE_COMMENT_REQUEST";
+export const REMOVE_COMMENT_SUCCESS = "REMOVE_COMMENT_SUCCESS";
+export const REMOVE_COMMENT_FAILURE = "REMOVE_COMMENT_FAILURE";
+
 export const LOAD_COMMENTS_REQUEST = "LOAD_COMMENTS_REQUEST";
 export const LOAD_COMMENTS_SUCCESS = "LOAD_COMMENTS_SUCCESS";
 export const LOAD_COMMENTS_FAILURE = "LOAD_COMMENTS_FAILURE";
+
+export const updateCommentAction = (
+  data: any,
+  boardId: number,
+  commentId: number,
+) => ({
+  type: UPDATE_COMMENT_REQUEST,
+  boardId,
+  commentId,
+  data,
+});
 
 export const addLikeAction = (data: any) => ({
   type: ADD_LIKE_REQUEST,
@@ -104,6 +129,12 @@ export const updateBoardAction = (boardId: string, data: any) => ({
   type: UPDATE_BOARD_REQUEST,
   data,
   boardId,
+});
+
+export const removeCommentAction = (boardId: string, commentId: any) => ({
+  type: REMOVE_COMMENT_REQUEST,
+  boardId,
+  commentId,
 });
 
 export const removeBoardAction = (boardId: string) => ({
@@ -157,6 +188,36 @@ interface ILOAD_COMMENTS_SUCCESS {
 
 interface ILOAD_COMMENTS_FAILURE {
   type: typeof LOAD_COMMENTS_FAILURE;
+  error: any;
+}
+
+interface IUPDATE_COMMENT_REQUEST {
+  type: typeof UPDATE_COMMENT_REQUEST;
+  data: any;
+}
+
+interface IUPDATE_COMMENT_SUCCESS {
+  type: typeof UPDATE_COMMENT_SUCCESS;
+  data: any;
+}
+
+interface IUPDATE_COMMENT_FAILURE {
+  type: typeof UPDATE_COMMENT_FAILURE;
+  error: any;
+}
+
+interface IREMOVE_COMMENT_REQUEST {
+  type: typeof REMOVE_COMMENT_REQUEST;
+  data: any;
+}
+
+interface IREMOVE_COMMENT_SUCCESS {
+  type: typeof REMOVE_COMMENT_SUCCESS;
+  data: any;
+}
+
+interface IREMOVE_COMMENT_FAILURE {
+  type: typeof REMOVE_COMMENT_FAILURE;
   error: any;
 }
 
@@ -302,6 +363,12 @@ export type BoardActionType =
   | IADD_COMMENT_REQUEST
   | IADD_COMMENT_SUCCESS
   | IADD_COMMENT_FAILURE
+  | IREMOVE_COMMENT_REQUEST
+  | IREMOVE_COMMENT_SUCCESS
+  | IREMOVE_COMMENT_FAILURE
+  | IUPDATE_COMMENT_REQUEST
+  | IUPDATE_COMMENT_SUCCESS
+  | IUPDATE_COMMENT_FAILURE
   | IADD_LIKE_REQUEST
   | IADD_LIKE_SUCCESS
   | IADD_LIKE_FAILURE
@@ -309,7 +376,7 @@ export type BoardActionType =
   | IREMOVE_LIKE_SUCCESS
   | IREMOVE_LIKE_FAILURE;
 
-// 동기요청
+// 동기��청
 
 // 동적인 데이터는 함수로 만들어줌 signup.js도 참고할것
 
@@ -352,6 +419,44 @@ const reducer = (state = initialState, action: BoardActionType) => {
       case REMOVE_LIKE_FAILURE: {
         draft.removeLikeLoading = false;
         draft.removeLikeError = action.error;
+        break;
+      }
+      case UPDATE_COMMENT_REQUEST: {
+        draft.updateCommentLoading = true;
+        draft.updateCommentDone = false;
+        draft.updateCommentError = null;
+        break;
+      }
+      case UPDATE_COMMENT_SUCCESS: {
+        // draft.board.data.comments.push(action.data.data);
+        draft.updateCommentLoading = false;
+        draft.updateCommentDone = true;
+        break;
+      }
+      case UPDATE_COMMENT_FAILURE: {
+        draft.updateCommentLoading = false;
+        draft.updateCommentError = action.error;
+        break;
+      }
+      case REMOVE_COMMENT_REQUEST: {
+        draft.removeCommentLoading = true;
+        draft.removeCommentDone = false;
+        draft.removeCommentError = null;
+        break;
+      }
+      case REMOVE_COMMENT_SUCCESS: {
+        draft.board.data.comments = draft.board.data.comments.filter((
+          comment: any,
+        ) => (
+          comment.id !== action.data.data.id
+        ));
+        draft.removeCommentLoading = false;
+        draft.removeCommentDone = true;
+        break;
+      }
+      case REMOVE_COMMENT_FAILURE: {
+        draft.removeCommentLoading = false;
+        draft.removeCommentError = action.error;
         break;
       }
       case ADD_COMMENT_REQUEST: {

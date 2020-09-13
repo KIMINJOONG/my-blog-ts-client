@@ -42,6 +42,12 @@ import {
   REMOVE_LIKE_SUCCESS,
   REMOVE_LIKE_FAILURE,
   ADD_LIKE_FAILURE,
+  UPDATE_COMMENT_SUCCESS,
+  UPDATE_COMMENT_FAILURE,
+  UPDATE_COMMENT_REQUEST,
+  REMOVE_COMMENT_REQUEST,
+  REMOVE_COMMENT_SUCCESS,
+  REMOVE_COMMENT_FAILURE,
 } from "../reducers/board";
 import jsCookie from "js-cookie";
 
@@ -285,6 +291,44 @@ function* addComment(action: any) {
   }
 }
 
+function updateCommentAPI(
+  boardId: string | number,
+  commentId: string | number,
+  data: any,
+) {
+  const token = jsCookie.get("token");
+  const Authorization = token ? `token=${token}` : "";
+  return axios.post(
+    `/comments/${boardId}/${commentId}`,
+    { comment: data },
+    {
+      headers: { Authorization },
+    },
+  );
+}
+
+function* updateComment(action: any) {
+  try {
+    const result = yield call(
+      updateCommentAPI,
+      action.boardId,
+      action.commentId,
+      action.data,
+    );
+    yield put({
+      // put은 dispatch 동일
+      type: UPDATE_COMMENT_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: UPDATE_COMMENT_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function addLikeAPI(boardId: any) {
   const token = jsCookie.get("token");
   const Authorization = token ? `token=${token}` : "";
@@ -335,6 +379,35 @@ function* removeLike(action: any) {
   }
 }
 
+function removeCommentAPI(boardId: any, commentId: any) {
+  const token = jsCookie.get("token");
+  const Authorization = token ? `token=${token}` : "";
+  return axios.delete(`/comments/${boardId}/${commentId}`, {
+    headers: { Authorization },
+  });
+}
+
+function* removeComment(action: any) {
+  try {
+    const result = yield call(
+      removeCommentAPI,
+      action.boardId,
+      action.commentId,
+    );
+    yield put({
+      // put은 dispatch 동일
+      type: REMOVE_COMMENT_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: REMOVE_COMMENT_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function* watchLoadCountByToday() {
   yield takeLatest(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
 }
@@ -359,6 +432,10 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function* watchUpdateComment() {
+  yield takeLatest(UPDATE_COMMENT_REQUEST, updateComment);
+}
+
 function* watchLoadComments() {
   yield takeLatest(LOAD_COMMENTS_REQUEST, loadComments);
 }
@@ -369,6 +446,10 @@ function* watchAddLike() {
 
 function* watchRemoveLike() {
   yield takeLatest(REMOVE_LIKE_REQUEST, removeLike);
+}
+
+function* watchRemoveComment() {
+  yield takeLatest(REMOVE_COMMENT_REQUEST, removeComment);
 }
 
 export default function* userSaga() {
@@ -384,5 +465,7 @@ export default function* userSaga() {
     fork(watchLoadComments),
     fork(watchAddLike),
     fork(watchRemoveLike),
+    fork(watchUpdateComment),
+    fork(watchRemoveComment),
   ]);
 }
