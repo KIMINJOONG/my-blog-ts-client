@@ -298,7 +298,7 @@ function updateCommentAPI(
 ) {
   const token = jsCookie.get("token");
   const Authorization = token ? `token=${token}` : "";
-  return axios.post(
+  return axios.put(
     `/comments/${boardId}/${commentId}`,
     { comment: data },
     {

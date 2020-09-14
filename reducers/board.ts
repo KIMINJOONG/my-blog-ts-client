@@ -428,7 +428,11 @@ const reducer = (state = initialState, action: BoardActionType) => {
         break;
       }
       case UPDATE_COMMENT_SUCCESS: {
-        // draft.board.data.comments.push(action.data.data);
+        const commentIndex = draft.board.data.comments.findIndex((
+          comment: any,
+        ) => comment.id === action.data.data.id);
+        console.log(commentIndex);
+        draft.board.data.comments[commentIndex] = action.data.data;
         draft.updateCommentLoading = false;
         draft.updateCommentDone = true;
         break;

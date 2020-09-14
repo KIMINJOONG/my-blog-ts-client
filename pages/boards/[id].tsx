@@ -1,13 +1,9 @@
-import { useState, useEffect, useCallback, useContext } from "react";
-import api from "../../api";
+import { useState, useEffect, useCallback } from "react";
 import ReactHtmlParser from "react-html-parser";
 import {
   Button,
   Card,
-  Input,
-  Form,
   List,
-  Comment,
   Row,
   Col,
   message,
@@ -21,7 +17,6 @@ import {
   BOARD_DETAIL_REQUEST,
   addLikeAction,
   removeLikeAction,
-  removeCommentAction,
 } from "../../reducers/board";
 import { useSelector, useDispatch } from "react-redux";
 import { LOAD_USER_REQUEST } from "../../reducers/user";
@@ -30,6 +25,7 @@ import AppLayout from "../../components/AppLayout";
 import styled from "styled-components";
 import Head from "next/head";
 import CommentForm from "../../components/CommentForm";
+import CommentCard from "../../components/CommentCard";
 
 interface IBoard {
   content: string;
@@ -55,11 +51,6 @@ interface IComment {
   createdAt: string;
   user: IUser;
   userId: number;
-}
-
-interface IProps {
-  boardData: IBoard;
-  id: string;
 }
 
 const ContentCard = styled(Card)`
@@ -89,11 +80,9 @@ const edit = () => {
     board,
     addLikeDone,
     removeLikeDone,
-    removeCommentLoading,
     removeCommentDone,
   } = useSelector((state: any) => state.board);
   const [isLiked, setIsLiked] = useState(false);
-  const [isUpdateComment, setIsUpdateComment] = useState(false);
 
   useEffect(() => {
     for (let like of board.data.likes) {
@@ -136,15 +125,6 @@ const edit = () => {
       dispatch(addLikeAction(board.data.id));
     }
   }, [board, isLiked]);
-
-  const onClickUpdateComment = useCallback(() => {
-    setIsUpdateComment(!isUpdateComment);
-  }, [isUpdateComment]);
-
-  const onClickRemoveComment = useCallback((commentId) =>
-    () => {
-      dispatch(removeCommentAction(board.data.id, commentId));
-    }, []);
 
   return (
     <AppLayout>
@@ -221,30 +201,7 @@ const edit = () => {
             itemLayout="horizontal"
             dataSource={board.data.comments}
             renderItem={(comment: IComment) => (
-              <Card key={comment.id}>
-                <li>
-                  <Comment
-                    author={`${comment.user.email}(${comment.user.name})`}
-                    content={<p>{comment.content}</p>}
-                    datetime={comment.createdAt.substring(
-                      0,
-                      10,
-                    )}
-                  />
-                  {me && me.data && comment.userId === me.data.id && (
-                    <>
-                      <Button onClick={onClickUpdateComment}>수정하기</Button>
-                      <Button
-                        onClick={onClickRemoveComment(comment.id)}
-                        type="danger"
-                        loading={removeCommentLoading}
-                      >
-                        삭제하기
-                      </Button>
-                    </>
-                  )}
-                </li>
-              </Card>
+              <CommentCard comment={comment} />
             )}
           />
         </Col>
