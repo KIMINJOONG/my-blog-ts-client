@@ -89,9 +89,7 @@ const Edit = ({
       category: categorySelect.value,
     };
 
-    let result;
     if (param) {
-      result = await api.update(`/boards/${param}`, dataForm);
       dispatch(updateBoardAction(param as string, dataForm));
     } else {
       dispatch(addBoardAction(dataForm));

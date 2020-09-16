@@ -48,6 +48,9 @@ import {
   REMOVE_COMMENT_REQUEST,
   REMOVE_COMMENT_SUCCESS,
   REMOVE_COMMENT_FAILURE,
+  LOAD_HASHTAG_BOARDS_SUCCESS,
+  LOAD_HASHTAG_BOARDS_FAILURE,
+  LOAD_HASHTAG_BOARDS_REQUEST,
 } from "../reducers/board";
 import jsCookie from "js-cookie";
 
@@ -408,6 +411,30 @@ function* removeComment(action: any) {
   }
 }
 
+function hashtagBoardsAPI(hashtag: string) {
+  return axios.get(`hashtags/${hashtag}`);
+}
+
+function* hashtagBoards(action: any) {
+  try {
+    const result = yield call(
+      hashtagBoardsAPI,
+      action.hashtag,
+    );
+    yield put({
+      // put은 dispatch 동일
+      type: LOAD_HASHTAG_BOARDS_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: LOAD_HASHTAG_BOARDS_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function* watchLoadCountByToday() {
   yield takeLatest(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
 }
@@ -452,6 +479,10 @@ function* watchRemoveComment() {
   yield takeLatest(REMOVE_COMMENT_REQUEST, removeComment);
 }
 
+function* watchHashtagBoards() {
+  yield takeLatest(LOAD_HASHTAG_BOARDS_REQUEST, hashtagBoards);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchBoardDetail),
@@ -467,5 +498,6 @@ export default function* userSaga() {
     fork(watchRemoveLike),
     fork(watchUpdateComment),
     fork(watchRemoveComment),
+    fork(watchHashtagBoards),
   ]);
 }

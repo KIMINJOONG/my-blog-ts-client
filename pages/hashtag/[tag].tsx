@@ -1,8 +1,14 @@
-import { useEffect, useCallback, useState } from "react";
-import api from "../../api";
-import { useRouter } from "next/router";
 import { Row, Col, Card, Divider } from "antd";
 import ReactHtmlParser from "react-html-parser";
+import AppLayout from "../../components/AppLayout";
+import axios from "axios";
+import wrapper from "../../stores/configureStore";
+import { LOAD_USER_REQUEST } from "../../reducers/user";
+import { END } from "redux-saga";
+import {
+  LOAD_HASHTAG_BOARDS_REQUEST,
+} from "../../reducers/board";
+import { useSelector } from "react-redux";
 
 interface IBoard {
   id: number;
@@ -13,58 +19,60 @@ interface IBoard {
 }
 
 const hashtag = () => {
-  const router = useRouter();
-  const { tag } = router.query;
+  const { hashtagBoards } = useSelector((state: any) => state.board);
 
-  const [boards, setBoards] = useState([]);
-
-  const init = useCallback(async () => {
-    const encodedUriTag = encodeURIComponent(tag as string);
-    const result = await api.show(`hashtags/${encodedUriTag}`);
-    const { data, status: httpStatus } = result;
-
-    const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
-    for (let board of data.data) {
-      const imgRegex = imgRegexPattern.exec(board.content);
-      if (imgRegex) {
-        const mainImg = imgRegex[0];
-        board.mainImg = mainImg;
-        board.shortContent = board.content.replace(/(<([^>]+)>)/ig, "");
-      }
-    }
-    if (httpStatus === 200) {
-      setBoards(data.data);
-    }
-  }, []);
-  useEffect(() => {
-    init();
-  }, []);
-  return <div>
-    <Row>
-      <Col span={24}>
-        <Divider
-          style={{
-            borderBottom: "1px solid black",
-          }}
-        >
-          Latest
-        </Divider>
-      </Col>
-      {boards && boards.map((board: IBoard) => (
-        <Col span={24} key={board.id}>
-          <Card
-            title={board.title}
-            bordered={true}
-            headStyle={{ textAlign: "center" }}
-            extra={<a href={`/boards/${board.id}`}>More</a>}
+  return (
+    <AppLayout>
+      <Row>
+        <Col span={24}>
+          <Divider
+            style={{
+              borderBottom: "1px solid black",
+            }}
           >
-            {ReactHtmlParser(board.mainImg)}
-            <p>{board.shortContent}</p>
-          </Card>
+            Latest
+          </Divider>
         </Col>
-      ))}
-    </Row>
-  </div>;
+        {hashtagBoards && hashtagBoards.map((board: IBoard) => (
+          <Col span={24} key={board.id}>
+            <Card
+              title={board.title}
+              bordered={true}
+              headStyle={{ textAlign: "center" }}
+              extra={<a href={`/boards/${board.id}`}>More</a>}
+            >
+              {ReactHtmlParser(board.mainImg)}
+              <p>{board.shortContent}</p>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </AppLayout>
+  );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context: any) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Authorization = "";
+    axios.defaults.withCredentials = true;
+    if (context.req && cookie) {
+      axios.defaults.headers.Authorization = cookie;
+    }
+
+    const { tag } = context.query;
+    const encodedUriTag = encodeURIComponent(tag as string);
+
+    context.store.dispatch({
+      type: LOAD_HASHTAG_BOARDS_REQUEST,
+      hashtag: encodedUriTag,
+    });
+    context.store.dispatch({
+      type: LOAD_USER_REQUEST,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  },
+);
 
 export default hashtag;

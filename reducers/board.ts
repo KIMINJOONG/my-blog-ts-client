@@ -44,6 +44,10 @@ export const initialState = {
   removeLikeLoading: false,
   removeLikeDone: false,
   removeLikeError: null,
+  hashtagBoardsLoading: false,
+  hashtagBoardsDone: false,
+  hashtagBoardsError: null,
+  hashtagBoards: [],
 };
 
 // 비동기 요청
@@ -99,6 +103,10 @@ export const LOAD_COMMENTS_REQUEST = "LOAD_COMMENTS_REQUEST";
 export const LOAD_COMMENTS_SUCCESS = "LOAD_COMMENTS_SUCCESS";
 export const LOAD_COMMENTS_FAILURE = "LOAD_COMMENTS_FAILURE";
 
+export const LOAD_HASHTAG_BOARDS_REQUEST = "LOAD_HASHTAG_BOARDS_REQUEST";
+export const LOAD_HASHTAG_BOARDS_SUCCESS = "LOAD_HASHTAG_BOARDS_SUCCESS";
+export const LOAD_HASHTAG_BOARDS_FAILURE = "LOAD_HASHTAG_BOARDS_FAILURE";
+
 export const updateCommentAction = (
   data: any,
   boardId: number,
@@ -108,6 +116,11 @@ export const updateCommentAction = (
   boardId,
   commentId,
   data,
+});
+
+export const loadHashtagBoardsAction = (hashtag: string) => ({
+  type: LOAD_HASHTAG_BOARDS_REQUEST,
+  hashtag,
 });
 
 export const addLikeAction = (data: any) => ({
@@ -147,6 +160,20 @@ export const addCommentAction = (boardId: string, data: any) => ({
   boardId,
   data,
 });
+
+interface ILOAD_HASHTAG_BOARDS_REQUEST {
+  type: typeof LOAD_HASHTAG_BOARDS_REQUEST;
+}
+
+interface ILOAD_HASHTAG_BOARDS_SUCCESS {
+  type: typeof LOAD_HASHTAG_BOARDS_SUCCESS;
+  data: any;
+}
+
+interface ILOAD_HASHTAG_BOARDS_FAILURE {
+  type: typeof LOAD_HASHTAG_BOARDS_FAILURE;
+  error: any;
+}
 
 interface IREMOVE_LIKE_REQUEST {
   type: typeof REMOVE_LIKE_REQUEST;
@@ -374,7 +401,10 @@ export type BoardActionType =
   | IADD_LIKE_FAILURE
   | IREMOVE_LIKE_REQUEST
   | IREMOVE_LIKE_SUCCESS
-  | IREMOVE_LIKE_FAILURE;
+  | IREMOVE_LIKE_FAILURE
+  | ILOAD_HASHTAG_BOARDS_REQUEST
+  | ILOAD_HASHTAG_BOARDS_SUCCESS
+  | ILOAD_HASHTAG_BOARDS_FAILURE;
 
 // 동기��청
 
@@ -383,6 +413,47 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_HASHTAG_BOARDS_REQUEST: {
+        draft.hashtagBoardsLoading = true;
+        draft.hashtagBoardsDone = false;
+        draft.hashtagBoardsError = null;
+        break;
+      }
+      case LOAD_HASHTAG_BOARDS_SUCCESS: {
+        const imgRegexPattern = /<img.*?src="(.*?)"+>/g;
+        const styleRegexPattern = /style\s*=\s*"([^"]*)/g;
+        for (let board of action.data.data) {
+          const imgRegex = imgRegexPattern.exec(board.content);
+
+          if (imgRegex) {
+            const mainImg = imgRegex[0];
+            const imgStyleRegex = styleRegexPattern.exec(mainImg);
+            if (imgStyleRegex) {
+              const styleValue = imgStyleRegex[1];
+              board.mainImgStyleValue = styleValue;
+            }
+
+            board.mainImg = mainImg;
+            board.shortContent = board.content.replace(
+              /(<([^>]+)>)/gi,
+              "",
+            );
+            board.shortContent = board.shortContent.length > 60
+              ? `${board.shortContent.substring(0, 60)}...`
+              : board.shortContent;
+          }
+        }
+
+        draft.hashtagBoardsLoading = false;
+        draft.hashtagBoardsDone = true;
+        draft.hashtagBoards = action.data.data;
+        break;
+      }
+      case LOAD_HASHTAG_BOARDS_FAILURE: {
+        draft.hashtagBoardsLoading = false;
+        draft.hashtagBoardsError = action.error;
+        break;
+      }
       case ADD_LIKE_REQUEST: {
         draft.addLikeLoading = true;
         draft.addLikeDone = false;
