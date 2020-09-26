@@ -65,7 +65,7 @@ const boards = () => {
 
       Router.push({
         pathname: `/boards/category/${id}`,
-        query: { title: value, page: 1, limit: 10 },
+        query: { title: encodeURIComponent(value), page: 1, limit: 10 },
       });
       //   dispatch({
       //     type: LOAD_BOARDS_REQUEST,
