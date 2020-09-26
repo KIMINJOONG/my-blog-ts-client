@@ -15,10 +15,11 @@ import {
   LOGOUT_USER_FAILURE,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
-  ILOG_IN_REQUEST_ACTION,
-  UserActionType,
   ILOG_IN_REQUEST,
   LOG_IN_SUCCESS,
+  JOIN_USER_REQUEST,
+  JOIN_USER_SUCCESS,
+  JOIN_USER_FAILURE,
 } from "../reducers/user";
 
 import axios from "axios";
@@ -95,6 +96,27 @@ function* logIn(action: ILOG_IN_REQUEST) {
   }
 }
 
+function joinUserAPI(data: any) {
+  return axios.post("/users", data, {
+    withCredentials: true,
+  });
+}
+
+function* joinUser(action: ILOG_IN_REQUEST) {
+  try {
+    const result = yield call(joinUserAPI, action.data);
+    yield put({
+      type: JOIN_USER_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    yield put({
+      type: JOIN_USER_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function* watchLogoutUser() {
   yield takeLatest(LOGOUT_USER_REQUEST, logoutUser);
 }
@@ -102,6 +124,18 @@ function* watchLogoutUser() {
 function* watchLogIn() {
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
+
+function* watchJoin() {
+  yield takeLatest(JOIN_USER_REQUEST, joinUser);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLoadUser), fork(watchLogoutUser), fork(watchLogIn)]);
+  yield all(
+    [
+      fork(watchLoadUser),
+      fork(watchLogoutUser),
+      fork(watchLogIn),
+      fork(watchJoin),
+    ],
+  );
 }

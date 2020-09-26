@@ -1,6 +1,6 @@
 import { Table, Col, Input } from "antd";
 import Link from "next/link";
-import { useState, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useRouter } from "next/router";
 import Router from "next/router";
 import { useSelector, useDispatch } from "react-redux";
@@ -67,13 +67,6 @@ const boards = () => {
         pathname: `/boards/category/${id}`,
         query: { title: encodeURIComponent(value), page: 1, limit: 10 },
       });
-      //   dispatch({
-      //     type: LOAD_BOARDS_REQUEST,
-      //     data: {
-      //       categoryId: id,
-      //       query: searchArray.join("&"),
-      //     },
-      //   });
     },
     [router],
   );
@@ -85,26 +78,6 @@ const boards = () => {
       pathname: `/boards/category/${id}`,
       query: { page, title, limit: pageSize },
     });
-
-    // let searchArray = [];
-
-    // if (title) {
-    //   searchArray.push(`title=${title}`);
-    // }
-    // if (page) {
-    //   searchArray.push(`page=${page}`);
-    // }
-    // if (pageSize) {
-    //   searchArray.push(`limit=${pageSize}`);
-    // }
-
-    // dispatch({
-    //   type: LOAD_BOARDS_REQUEST,
-    //   data: {
-    //     categoryId: id,
-    //     query: searchArray.join("&"),
-    //   },
-    // });
   }, []);
 
   const onShowSizeChange = useCallback((current, size) => {
@@ -114,25 +87,6 @@ const boards = () => {
       pathname: `/boards/category/${id}`,
       query: { page: current, title, limit: size },
     });
-    // let searchArray = [];
-
-    // if (title) {
-    //   searchArray.push(`title=${title}`);
-    // }
-    // if (current) {
-    //   searchArray.push(`page=${current}`);
-    // }
-    // if (size) {
-    //   searchArray.push(`limit=${size}`);
-    // }
-
-    // dispatch({
-    //   type: LOAD_BOARDS_REQUEST,
-    //   data: {
-    //     categoryId: id,
-    //     query: searchArray.join("&"),
-    //   },
-    // });
   }, []);
   return (
     <AppLayout>
