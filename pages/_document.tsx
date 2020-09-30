@@ -61,7 +61,13 @@ export default class MyDocument extends Document<IProps> {
 
           {/* Open Graph */}
           <meta property="og:url" content={"https://kohubi.xyz"} key="ogurl" />
-          <meta property="og:image" content={"/logo.png"} key="ogimage" />
+          <meta
+            property="og:image"
+            content={"https://kohubi.xyz/logo.png"}
+            key="ogimage"
+          />
+          <meta property="og:image:width" content="800" />
+          <meta property="og:image:height" content="400" />
           <meta
             property="og:site_name"
             content={"Kohubi's Blog"}
