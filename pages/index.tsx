@@ -21,6 +21,7 @@ import {
 } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
+import Head from "next/head";
 
 interface ICategory {
   id: string;
@@ -120,6 +121,17 @@ const Home: NextPage = () => {
   };
   return (
     <AppLayout>
+      <Head>
+        {/* Open Graph */}
+        <meta property="og:url" content="https://kohubi.xyz" />
+        <meta property="og:title" content="코후비 블로그" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="http://www.bbsetheme.com/wp-content/uploads/2017/11/bbsetheme_logo.png"
+        />
+        <meta property="og:description" content="코후비 블로그" />
+      </Head>
       <Row>
         <Col xs={0} md={24}>
           <h2>LATEST</h2>
