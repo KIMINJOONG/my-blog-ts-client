@@ -1,6 +1,6 @@
 import { Row, Col, Card, Divider } from "antd";
 import { NextPage } from "next";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, Fragment } from "react";
 import api from "../api";
 import Chart from "../components/Chart";
 import wrapper from "../stores/configureStore";
@@ -21,7 +21,7 @@ import {
 } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 interface ICategory {
   id: string;
@@ -120,7 +120,7 @@ const Home: NextPage = () => {
     return createdat;
   };
   return (
-    <AppLayout>
+    <Fragment>
       <Helmet>
         {/* Open Graph */}
         <meta property="og:url" content="https://kohubi.xyz" />
@@ -132,111 +132,113 @@ const Home: NextPage = () => {
         />
         <meta property="og:description" content="코후비 블로그" />
       </Helmet>
-      <Row>
-        <Col xs={0} md={24}>
-          <h2>LATEST</h2>
-        </Col>
-        <Col xs={24} md={0} style={{ textAlign: "center" }}>
-          <h2>LATEST</h2>
-        </Col>
-        <Col xs={24} style={{ marginTop: "15px" }}>
-          <Row justify="space-around">
-            {boardsForMain.length > 0 &&
-              boardsForMain.map((board: IBoard) => (
-                <Col
-                  key={board.id}
-                  xs={24}
-                  md={7}
-                  style={{
-                    boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
-                    backgroundColor: "#ffffff",
-                    padding: "10px 20px",
-                    marginTop: "24px",
-                  }}
-                >
-                  <Row>
-                    <Col span={24}>
-                      <div
-                        style={{
-                          width: "47px",
-                          height: "24px",
-                          display: "inline-block",
-                          borderRadius: "16px",
-                          backgroundColor: "#03e0c5",
-                          textAlign: "center",
-                        }}
-                      >
-                        <CategoryNameLabel>
-                          {board.category.name}
-                        </CategoryNameLabel>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row style={{ marginTop: "19px" }}>
-                    <Col xs={24}>
-                      <h3>{board.title}</h3>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col
-                      xs={24}
-                      style={{ textAlign: "left" }}
-                    >
-                      <BoardDate>
-                        {getCreatedAt(board.createdAt)}
-                      </BoardDate>
-                    </Col>
-                  </Row>
-                  <Row
+      <AppLayout>
+        <Row>
+          <Col xs={0} md={24}>
+            <h2>LATEST</h2>
+          </Col>
+          <Col xs={24} md={0} style={{ textAlign: "center" }}>
+            <h2>LATEST</h2>
+          </Col>
+          <Col xs={24} style={{ marginTop: "15px" }}>
+            <Row justify="space-around">
+              {boardsForMain.length > 0 &&
+                boardsForMain.map((board: IBoard) => (
+                  <Col
+                    key={board.id}
+                    xs={24}
+                    md={7}
                     style={{
-                      marginTop: "32px",
-                      height: "54px",
+                      boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
+                      backgroundColor: "#ffffff",
+                      padding: "10px 20px",
+                      marginTop: "24px",
                     }}
                   >
-                    <Col xs={24}>
-                      <BoardContentSumary>
-                        {ReactHtmlParser(
-                          board.shortContent,
-                        )}
-                      </BoardContentSumary>
-                    </Col>
-                  </Row>
-                  <Row style={{ marginTop: "53px" }}>
-                    <Col
-                      xs={24}
-                      style={{ textAlign: "right" }}
+                    <Row>
+                      <Col span={24}>
+                        <div
+                          style={{
+                            width: "47px",
+                            height: "24px",
+                            display: "inline-block",
+                            borderRadius: "16px",
+                            backgroundColor: "#03e0c5",
+                            textAlign: "center",
+                          }}
+                        >
+                          <CategoryNameLabel>
+                            {board.category.name}
+                          </CategoryNameLabel>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row style={{ marginTop: "19px" }}>
+                      <Col xs={24}>
+                        <h3>{board.title}</h3>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col
+                        xs={24}
+                        style={{ textAlign: "left" }}
+                      >
+                        <BoardDate>
+                          {getCreatedAt(board.createdAt)}
+                        </BoardDate>
+                      </Col>
+                    </Row>
+                    <Row
+                      style={{
+                        marginTop: "32px",
+                        height: "54px",
+                      }}
                     >
-                      <Link href={`boards/${board.id}`}>
-                        <MoreA>+more</MoreA>
-                      </Link>
-                    </Col>
-                  </Row>
-                </Col>
-              ))}
-          </Row>
-          <Row style={{ marginTop: "100px" }}>
-            <Col xs={24} md={12}>
-              {dates.length > 0 && counts.length > 0 && (
+                      <Col xs={24}>
+                        <BoardContentSumary>
+                          {ReactHtmlParser(
+                            board.shortContent,
+                          )}
+                        </BoardContentSumary>
+                      </Col>
+                    </Row>
+                    <Row style={{ marginTop: "53px" }}>
+                      <Col
+                        xs={24}
+                        style={{ textAlign: "right" }}
+                      >
+                        <Link href={`boards/${board.id}`}>
+                          <MoreA>+more</MoreA>
+                        </Link>
+                      </Col>
+                    </Row>
+                  </Col>
+                ))}
+            </Row>
+            <Row style={{ marginTop: "100px" }}>
+              <Col xs={24} md={12}>
+                {dates.length > 0 && counts.length > 0 && (
+                  <Chart
+                    labels={dates}
+                    datas={counts}
+                    thisMonth={thisMonth}
+                    isBar={false}
+                  />
+                )}
+              </Col>
+              <Col xs={24} md={12}>
                 <Chart
-                  labels={dates}
-                  datas={counts}
+                  labels={["개발", "취미", "TIL"]}
+                  datas={[1, 2, 3]}
                   thisMonth={thisMonth}
-                  isBar={false}
+                  isBar={true}
                 />
-              )}
-            </Col>
-            <Col xs={24} md={12}>
-              <Chart
-                labels={["개발", "취미", "TIL"]}
-                datas={[1, 2, 3]}
-                thisMonth={thisMonth}
-                isBar={true}
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </AppLayout>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </AppLayout>
+    </Fragment>
   );
 };
 
