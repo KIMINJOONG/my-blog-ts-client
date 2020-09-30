@@ -36,29 +36,44 @@ export default class MyDocument extends Document<IProps> {
     return (
       <Html>
         <Head>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+          />
           <meta charSet="utf-8" />
           <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
           <meta name="subject" content="Kohubi's Blog" />
           <meta name="title" content="Kohubi's Blog" />
           <meta name="author" content="김인중 / kohubi" />
-          <meta name="keywords" content="$keyword" />
+          <meta name="keywords" content="비보이,개발,개발자" />
           <meta
             name="description"
             content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
           />
-          <meta name="copyright" content="Kohubi's Blog" />
-          <meta name="og:title" content="Kohubi's Blog" />
-          <meta property="og:url" content="https://kohubi.xyz" />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary" key="twcard" />
           <meta
-            name="og:description"
-            content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
+            name="twitter:creator"
+            content={"ohubi's Blog"}
+            key="twhandle"
           />
-          <meta property="og:image" content="/logo.png" />
-          <meta property="og:type" content="website" />
+
+          {/* Open Graph */}
+          <meta property="og:url" content={"https://kohubi.xyz"} key="ogurl" />
+          <meta property="og:image" content={"/logo.png"} key="ogimage" />
           <meta
-            name="viewport"
-            content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+            property="og:site_name"
+            content={"Kohubi's Blog"}
+            key="ogsitename"
           />
+          <meta property="og:title" content={"Kohubi's Blog"} key="ogtitle" />
+          <meta
+            property="og:description"
+            content={"개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."}
+            key="ogdesc"
+          />
+
           <link rel="canonical" href="https://kohubi.xyz" />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="apple-touch-icon" href="/logo.png" />
@@ -96,6 +111,7 @@ export default class MyDocument extends Document<IProps> {
             name="google-site-verification"
             content="O4gmbMWol2odBM0qvx_2cY02Ilbp_3l-Px69viCH2Ng"
           />
+
           {this.props.styleTags}
         </Head>
 
