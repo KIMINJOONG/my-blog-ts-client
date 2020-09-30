@@ -81,34 +81,11 @@ export default class MyDocument extends Document<IProps> {
           />
 
           <link rel="canonical" href="https://kohubi.xyz" />
-          <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-          <link rel="apple-touch-icon" href="/logo.png" />
           <link
-            rel="apple-touch-icon-precomposed"
-            sizes="152x152"
-            href="/logo.png"
+            rel="shortcut icon"
+            href="https://kohubi.xyz/favicon.ico"
+            type="image/x-icon"
           />
-          <link
-            rel="apple-touch-icon-precomposed"
-            sizes="144x144"
-            href="/logo.png"
-          />
-          <link
-            rel="apple-touch-icon-precomposed"
-            sizes="120x120"
-            href="/logo.png"
-          />
-          <link
-            rel="apple-touch-icon-precomposed"
-            sizes="114x114"
-            href="/logo.png"
-          />
-          <link
-            rel="apple-touch-icon-precomposed"
-            sizes="72x72"
-            href="/logo.png"
-          />
-          <link rel="apple-touch-icon-precomposed" href="/logo.png" />
           <meta
             name="naver-site-verification"
             content="b859482b7c9f0278e01a56189ba14a7b55f7489d"
