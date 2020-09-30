@@ -36,7 +36,7 @@ export default class MyDocument extends Document<IProps> {
     return (
       <Html>
         <Head>
-          <meta
+          {/* <meta
             name="viewport"
             content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
           />
@@ -49,7 +49,7 @@ export default class MyDocument extends Document<IProps> {
           <meta
             name="description"
             content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
-          />
+          /> */}
 
           {/* Open Graph */}
           <meta property="og:url" content="https://kohubi.xyz" />
@@ -61,7 +61,7 @@ export default class MyDocument extends Document<IProps> {
           />
           <meta property="og:description" content="코후비 블로그" />
 
-          <link rel="canonical" href="https://kohubi.xyz" />
+          {/* <link rel="canonical" href="https://kohubi.xyz" /> */}
           <link
             rel="shortcut icon"
             href="https://kohubi.xyz/favicon.ico"
