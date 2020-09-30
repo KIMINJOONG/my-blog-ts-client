@@ -51,34 +51,15 @@ export default class MyDocument extends Document<IProps> {
             content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
           />
 
-          {/* Twitter */}
-          <meta name="twitter:card" content="summary" key="twcard" />
-          <meta
-            name="twitter:creator"
-            content={"ohubi's Blog"}
-            key="twhandle"
-          />
-
           {/* Open Graph */}
-          <meta property="og:url" content={"https://kohubi.xyz"} key="ogurl" />
+          <meta property="og:url" content="https://kohubi.xyz" />
+          <meta property="og:title" content="코후비 블로그" />
+          <meta property="og:type" content="website" />
           <meta
             property="og:image"
-            content={"https://kohubi.xyz/logo.png"}
-            key="ogimage"
+            content="http://www.bbsetheme.com/wp-content/uploads/2017/11/bbsetheme_logo.png"
           />
-          <meta property="og:image:width" content="800" />
-          <meta property="og:image:height" content="400" />
-          <meta
-            property="og:site_name"
-            content={"Kohubi's Blog"}
-            key="ogsitename"
-          />
-          <meta property="og:title" content={"Kohubi's Blog"} key="ogtitle" />
-          <meta
-            property="og:description"
-            content={"개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."}
-            key="ogdesc"
-          />
+          <meta property="og:description" content="코후비 블로그" />
 
           <link rel="canonical" href="https://kohubi.xyz" />
           <link
