@@ -21,7 +21,7 @@ import {
 } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
-import Head from "next/head";
+import Helmet from "react-helmet";
 
 interface ICategory {
   id: string;
@@ -121,7 +121,7 @@ const Home: NextPage = () => {
   };
   return (
     <AppLayout>
-      <Head>
+      <Helmet>
         {/* Open Graph */}
         <meta property="og:url" content="https://kohubi.xyz" />
         <meta property="og:title" content="코후비 블로그" />
@@ -131,7 +131,7 @@ const Home: NextPage = () => {
           content="http://www.bbsetheme.com/wp-content/uploads/2017/11/bbsetheme_logo.png"
         />
         <meta property="og:description" content="코후비 블로그" />
-      </Head>
+      </Helmet>
       <Row>
         <Col xs={0} md={24}>
           <h2>LATEST</h2>
