@@ -1,6 +1,6 @@
 import { Row, Col, Card, Divider } from "antd";
 import { NextPage } from "next";
-import { useEffect, useCallback, useState, Fragment } from "react";
+import { useEffect, useCallback, useState } from "react";
 import api from "../api";
 import Chart from "../components/Chart";
 import wrapper from "../stores/configureStore";
@@ -21,7 +21,7 @@ import {
 } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
+import Head from "next/head";
 
 interface ICategory {
   id: string;
@@ -120,8 +120,23 @@ const Home: NextPage = () => {
     return createdat;
   };
   return (
-    <Fragment>
-      <Helmet>
+    <AppLayout>
+      <Head>
+        {/* <meta
+            name="viewport"
+            content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+          />
+          <meta charSet="utf-8" />
+          <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
+          <meta name="subject" content="Kohubi's Blog" />
+          <meta name="title" content="Kohubi's Blog" />
+          <meta name="author" content="김인중 / kohubi" />
+          <meta name="keywords" content="비보이,개발,개발자" />
+          <meta
+            name="description"
+            content="개발자 김인중이자 비보이 kohubi의 개발과 일상을 담은 블로그입니다."
+          /> */}
+
         {/* Open Graph */}
         <meta property="og:url" content="https://kohubi.xyz" />
         <meta property="og:title" content="코후비 블로그" />
@@ -131,114 +146,127 @@ const Home: NextPage = () => {
           content="http://www.bbsetheme.com/wp-content/uploads/2017/11/bbsetheme_logo.png"
         />
         <meta property="og:description" content="코후비 블로그" />
-      </Helmet>
-      <AppLayout>
-        <Row>
-          <Col xs={0} md={24}>
-            <h2>LATEST</h2>
-          </Col>
-          <Col xs={24} md={0} style={{ textAlign: "center" }}>
-            <h2>LATEST</h2>
-          </Col>
-          <Col xs={24} style={{ marginTop: "15px" }}>
-            <Row justify="space-around">
-              {boardsForMain.length > 0 &&
-                boardsForMain.map((board: IBoard) => (
-                  <Col
-                    key={board.id}
-                    xs={24}
-                    md={7}
+
+        {/* <link rel="canonical" href="https://kohubi.xyz" /> */}
+        <link
+          rel="shortcut icon"
+          href="https://kohubi.xyz/favicon.ico"
+          type="image/x-icon"
+        />
+        <meta
+          name="naver-site-verification"
+          content="b859482b7c9f0278e01a56189ba14a7b55f7489d"
+        />
+        <meta
+          name="google-site-verification"
+          content="O4gmbMWol2odBM0qvx_2cY02Ilbp_3l-Px69viCH2Ng"
+        />
+      </Head>
+      <Row>
+        <Col xs={0} md={24}>
+          <h2>LATEST</h2>
+        </Col>
+        <Col xs={24} md={0} style={{ textAlign: "center" }}>
+          <h2>LATEST</h2>
+        </Col>
+        <Col xs={24} style={{ marginTop: "15px" }}>
+          <Row justify="space-around">
+            {boardsForMain.length > 0 &&
+              boardsForMain.map((board: IBoard) => (
+                <Col
+                  key={board.id}
+                  xs={24}
+                  md={7}
+                  style={{
+                    boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
+                    backgroundColor: "#ffffff",
+                    padding: "10px 20px",
+                    marginTop: "24px",
+                  }}
+                >
+                  <Row>
+                    <Col span={24}>
+                      <div
+                        style={{
+                          width: "47px",
+                          height: "24px",
+                          display: "inline-block",
+                          borderRadius: "16px",
+                          backgroundColor: "#03e0c5",
+                          textAlign: "center",
+                        }}
+                      >
+                        <CategoryNameLabel>
+                          {board.category.name}
+                        </CategoryNameLabel>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row style={{ marginTop: "19px" }}>
+                    <Col xs={24}>
+                      <h3>{board.title}</h3>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col
+                      xs={24}
+                      style={{ textAlign: "left" }}
+                    >
+                      <BoardDate>
+                        {getCreatedAt(board.createdAt)}
+                      </BoardDate>
+                    </Col>
+                  </Row>
+                  <Row
                     style={{
-                      boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
-                      backgroundColor: "#ffffff",
-                      padding: "10px 20px",
-                      marginTop: "24px",
+                      marginTop: "32px",
+                      height: "54px",
                     }}
                   >
-                    <Row>
-                      <Col span={24}>
-                        <div
-                          style={{
-                            width: "47px",
-                            height: "24px",
-                            display: "inline-block",
-                            borderRadius: "16px",
-                            backgroundColor: "#03e0c5",
-                            textAlign: "center",
-                          }}
-                        >
-                          <CategoryNameLabel>
-                            {board.category.name}
-                          </CategoryNameLabel>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row style={{ marginTop: "19px" }}>
-                      <Col xs={24}>
-                        <h3>{board.title}</h3>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col
-                        xs={24}
-                        style={{ textAlign: "left" }}
-                      >
-                        <BoardDate>
-                          {getCreatedAt(board.createdAt)}
-                        </BoardDate>
-                      </Col>
-                    </Row>
-                    <Row
-                      style={{
-                        marginTop: "32px",
-                        height: "54px",
-                      }}
+                    <Col xs={24}>
+                      <BoardContentSumary>
+                        {ReactHtmlParser(
+                          board.shortContent,
+                        )}
+                      </BoardContentSumary>
+                    </Col>
+                  </Row>
+                  <Row style={{ marginTop: "53px" }}>
+                    <Col
+                      xs={24}
+                      style={{ textAlign: "right" }}
                     >
-                      <Col xs={24}>
-                        <BoardContentSumary>
-                          {ReactHtmlParser(
-                            board.shortContent,
-                          )}
-                        </BoardContentSumary>
-                      </Col>
-                    </Row>
-                    <Row style={{ marginTop: "53px" }}>
-                      <Col
-                        xs={24}
-                        style={{ textAlign: "right" }}
-                      >
-                        <Link href={`boards/${board.id}`}>
-                          <MoreA>+more</MoreA>
-                        </Link>
-                      </Col>
-                    </Row>
-                  </Col>
-                ))}
-            </Row>
-            <Row style={{ marginTop: "100px" }}>
-              <Col xs={24} md={12}>
-                {dates.length > 0 && counts.length > 0 && (
-                  <Chart
-                    labels={dates}
-                    datas={counts}
-                    thisMonth={thisMonth}
-                    isBar={false}
-                  />
-                )}
-              </Col>
-              <Col xs={24} md={12}>
+                      <Link href={`boards/${board.id}`}>
+                        <MoreA>+more</MoreA>
+                      </Link>
+                    </Col>
+                  </Row>
+                </Col>
+              ))}
+          </Row>
+          <Row style={{ marginTop: "100px" }}>
+            <Col xs={24} md={12}>
+              {dates.length > 0 && counts.length > 0 && (
                 <Chart
-                  labels={["개발", "취미", "TIL"]}
-                  datas={[1, 2, 3]}
+                  labels={dates}
+                  datas={counts}
                   thisMonth={thisMonth}
-                  isBar={true}
+                  isBar={false}
                 />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </AppLayout>
-    </Fragment>
+              )}
+            </Col>
+            <Col xs={24} md={12}>
+              <Chart
+                labels={["개발", "취미", "TIL"]}
+                datas={[1, 2, 3]}
+                thisMonth={thisMonth}
+                isBar={true}
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </AppLayout>
   );
 };
 

@@ -1,5 +1,6 @@
 import Document, { Html, Main, NextScript, Head } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+import NextHead from "next/head";
 
 interface IProps {
   styleTags: Array<React.ReactElement<{}>>;
@@ -36,6 +37,9 @@ export default class MyDocument extends Document<IProps> {
     return (
       <Html>
         <Head>
+          {this.props.styleTags}
+        </Head>
+        <NextHead>
           {/* <meta
             name="viewport"
             content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
@@ -75,10 +79,7 @@ export default class MyDocument extends Document<IProps> {
             name="google-site-verification"
             content="O4gmbMWol2odBM0qvx_2cY02Ilbp_3l-Px69viCH2Ng"
           />
-
-          {this.props.styleTags}
-        </Head>
-
+        </NextHead>
         <body>
           <Main />
           <NextScript />
