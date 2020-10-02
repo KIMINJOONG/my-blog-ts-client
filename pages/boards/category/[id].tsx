@@ -1,4 +1,4 @@
-import { Table, Col, Input } from "antd";
+import { Table, Col, Input, Typography } from "antd";
 import Link from "next/link";
 import { useCallback } from "react";
 import { useRouter } from "next/router";
@@ -32,6 +32,20 @@ const columns = [
     align: "center" as Align,
     render: (text: string, record: any) => (
       <Link href={`/boards/${record.id}`}>
+        <a>
+          {text}&nbsp;
+          <Typography.Text disabled>[{record.comments.length}]</Typography.Text>
+        </a>
+      </Link>
+    ),
+  },
+  {
+    title: "조회",
+    dataIndex: "view",
+    key: "view",
+    align: "center" as Align,
+    render: (text: string, record: any) => (
+      <Link href={`/boards/${record.id}`}>
         <a>{text}</a>
       </Link>
     ),
@@ -51,7 +65,6 @@ const columns = [
 ];
 
 const boards = () => {
-  const dispatch = useDispatch();
   const { me } = useSelector((state: any) => state.user);
   const { boards } = useSelector((state: any) => state.board);
 
