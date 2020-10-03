@@ -72,7 +72,7 @@ const Jodit = ({
     allowTabNavigation: true,
     addNewLineTagsTriggers: ["table", "iframe", "img", "hr", "jodit"],
     uploader: {
-      url: `http://api.kohubi.xyz/images/upload`,
+      url: `https://api.kohubi.xyz/images/upload`,
       insertImageAsBase64URI: false,
       imagesExtensions: ["jpg", "png", "jpeg", "gif"],
       headers: {
