@@ -14,11 +14,12 @@ import {
 import AppLayout from "../../../components/AppLayout";
 import Router from "next/router";
 import { message } from "antd";
+import { RootState } from "../../../reducers";
 
-const edit = (props: any) => {
+const edit = () => {
   const router = useRouter();
   const { board, updateBoardDone, removeBoardDone } = useSelector((
-    state: any,
+    state: RootState,
   ) => state.board);
   const { id } = router.query;
   const [data, setData] = useState();

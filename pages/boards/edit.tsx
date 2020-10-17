@@ -4,10 +4,13 @@ import { useState, useCallback, useEffect } from "react";
 import AppLayout from "../../components/AppLayout";
 import { useSelector } from "react-redux";
 import Router from "next/router";
+import { RootState } from "../../reducers";
 
 const edit = () => {
   const [categories, setCategories] = useState([]);
-  const { addBoardDone, board } = useSelector((state: any) => state.board);
+  const { addBoardDone, board } = useSelector((state: RootState) =>
+    state.board
+  );
 
   const init = useCallback(async () => {
     const categoriesResult = await api.index("/categories");

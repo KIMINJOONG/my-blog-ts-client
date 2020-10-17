@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Col, Card, Form, Input, Button, message } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { addCommentAction, updateCommentAction } from "../reducers/board";
+import { RootState } from "../reducers";
 
 interface IUser {
   email: string;
@@ -22,7 +23,7 @@ interface IProps {
 const CommentForm = ({ commentObject = null }: IProps) => {
   const dispatch = useDispatch();
   const [comment, setComment] = useState("");
-  const { me } = useSelector((state: any) => state.user);
+  const { me } = useSelector((state: RootState) => state.user);
   const {
     board,
     addCommentLoading,

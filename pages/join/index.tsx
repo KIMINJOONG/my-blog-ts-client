@@ -5,6 +5,7 @@ import api from "../../api";
 import { joinRequestAction } from "../../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "../../components/AppLayout";
+import { RootState } from "../../reducers";
 
 interface IJoinForm {
   email: string;
@@ -26,9 +27,9 @@ const useForm = (initValue: IJoinForm) => {
 };
 const join = () => {
   const dispatch = useDispatch();
-  const { joinUserDone, joinUserError, joinUser } = useSelector((state: any) =>
-    state.user
-  );
+  const { joinUserDone, joinUserError, joinUser } = useSelector((
+    state: RootState,
+  ) => state.user);
   const joinForm = useForm({
     email: "",
     password: "",

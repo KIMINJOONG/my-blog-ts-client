@@ -26,6 +26,7 @@ import styled from "styled-components";
 import Head from "next/head";
 import CommentForm from "../../components/CommentForm";
 import CommentCard from "../../components/CommentCard";
+import { RootState } from "../../reducers";
 
 interface IBoard {
   content: string;
@@ -75,13 +76,13 @@ const ContentCard = styled(Card)`
 `;
 const edit = () => {
   const dispatch = useDispatch();
-  const { me } = useSelector((state: any) => state.user);
+  const { me } = useSelector((state: RootState) => state.user);
   const {
     board,
     addLikeDone,
     removeLikeDone,
     removeCommentDone,
-  } = useSelector((state: any) => state.board);
+  } = useSelector((state: RootState) => state.board);
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {

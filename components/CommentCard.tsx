@@ -3,6 +3,7 @@ import { Card, Comment, Button, message } from "antd";
 import { removeCommentAction } from "../reducers/board";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
+import { RootState } from "../reducers";
 
 interface IUser {
   email: string;
@@ -21,13 +22,13 @@ interface IProps {
   comment: IComment;
 }
 const CommentCard = ({ comment }: IProps) => {
-  const { me } = useSelector((state: any) => state.user);
+  const { me } = useSelector((state: RootState) => state.user);
   const {
     board,
     removeCommentLoading,
     removeCommentDone,
     updateCommentDone,
-  } = useSelector((state: any) => state.board);
+  } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
 

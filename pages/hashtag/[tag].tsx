@@ -9,6 +9,7 @@ import {
   LOAD_HASHTAG_BOARDS_REQUEST,
 } from "../../reducers/board";
 import { useSelector } from "react-redux";
+import { RootState } from "../../reducers";
 
 interface IBoard {
   id: number;
@@ -19,7 +20,7 @@ interface IBoard {
 }
 
 const hashtag = () => {
-  const { hashtagBoards } = useSelector((state: any) => state.board);
+  const { hashtagBoards } = useSelector((state: RootState) => state.board);
 
   return (
     <AppLayout>

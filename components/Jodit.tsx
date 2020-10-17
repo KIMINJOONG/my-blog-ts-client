@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import api from "../api";
 
@@ -160,14 +160,13 @@ const Jodit = ({
     toolbarButtonSize: "large",
   });
 
-  return (
+  return useMemo(() => (
     <JoditEditor
       value={content}
       config={config as any}
-      onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-      onChange={(newContent) => {}}
+      onChange={(newContent) => setContent(newContent)}
     />
-  );
+  ), []);
 };
 
 export default Jodit;

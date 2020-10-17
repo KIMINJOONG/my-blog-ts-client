@@ -10,6 +10,8 @@ import { END } from "redux-saga";
 import axios from "axios";
 import { LOAD_USER_REQUEST } from "../../../reducers/user";
 import { LOAD_BOARDS_REQUEST } from "../../../reducers/board";
+import { RootState } from "../../../reducers";
+import { IBoard } from "../../../types/board";
 
 type Align = "left" | "right" | "center";
 const columns = [
@@ -30,7 +32,7 @@ const columns = [
     dataIndex: "title",
     key: "title",
     align: "center" as Align,
-    render: (text: string, record: any) => (
+    render: (text: string, record: IBoard) => (
       <Link href={`/boards/${record.id}`}>
         <a>
           {text}&nbsp;
@@ -44,7 +46,7 @@ const columns = [
     dataIndex: "view",
     key: "view",
     align: "center" as Align,
-    render: (text: string, record: any) => (
+    render: (text: string, record: IBoard) => (
       <Link href={`/boards/${record.id}`}>
         <a>{text}</a>
       </Link>
@@ -56,7 +58,7 @@ const columns = [
     key: "createdAt",
     width: "20%",
     align: "center" as Align,
-    render: (text: string, record: any) => (
+    render: (text: string, record: IBoard) => (
       <Link href={`/boards/${record.id}`}>
         <a>{text.substring(0, 10)}</a>
       </Link>
@@ -65,8 +67,8 @@ const columns = [
 ];
 
 const boards = () => {
-  const { me } = useSelector((state: any) => state.user);
-  const { boards } = useSelector((state: any) => state.board);
+  const { me } = useSelector((state: RootState) => state.user);
+  const { boards } = useSelector((state: RootState) => state.board);
 
   const router = useRouter();
   const { id } = router.query;

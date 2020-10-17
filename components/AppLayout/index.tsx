@@ -19,6 +19,7 @@ import api from "../../api";
 import { useSelector, useDispatch } from "react-redux";
 import { LOGOUT_USER_REQUEST } from "../../reducers/user";
 import { LOAD_COUNT_BY_TODAY_REQUEST } from "../../reducers/board";
+import { RootState } from "../../reducers";
 
 interface ICategory {
   id: number;
@@ -27,8 +28,8 @@ interface ICategory {
 }
 
 const AppLayout: FunctionComponent = ({ children }) => {
-  const { countByToday } = useSelector((state: any) => state.board);
-  const { me } = useSelector((state: any) => state.user);
+  const { countByToday } = useSelector((state: RootState) => state.board);
+  const { me } = useSelector((state: RootState) => state.user);
   const [visible, setVisible] = useState(false);
   const [hashtags, setHashtags] = useState([]);
   const [categories, setCategories] = useState([]);

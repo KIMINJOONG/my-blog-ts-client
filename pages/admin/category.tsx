@@ -2,14 +2,7 @@ import { Col, Table, Input, Divider, Button, Row, Form } from "antd";
 import { useEffect, useCallback, useState } from "react";
 import api from "../../api";
 import Router, { useRouter } from "next/router";
-
-interface IRecord {
-  id: number;
-  code: number;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { ICategory, ICategoryRequest } from "../../types/category";
 
 type Align = "left" | "right" | "center";
 
@@ -43,9 +36,9 @@ const category = () => {
   }, []);
 
   const onSubmit = useCallback(async () => {
-    const submitData: any = {
-      code: codeInput.value,
-      name: nameInput.value,
+    const submitData: ICategoryRequest = {
+      code: codeInput.value as number,
+      name: nameInput.value as string,
     };
     const result = await api.create(`/categories`, submitData);
     const { data, status } = result;
@@ -58,7 +51,9 @@ const category = () => {
     const result = await api.destroy(`/categories/${id}`);
     const { status } = result;
     if (status === 200) {
-      setCategories(categories.filter((category: any) => category.id !== id));
+      setCategories(
+        categories.filter((category: ICategory) => category.id !== id),
+      );
     }
   }, [categories]);
 
@@ -102,7 +97,7 @@ const category = () => {
     {
       title: "action",
       align: "center" as Align,
-      render: (text: string, record: IRecord) => {
+      render: (text: string, record: ICategory) => {
         return (
           <Button
             type="danger"
@@ -147,7 +142,7 @@ const category = () => {
       <Col span={24}>
         {categories && (
           <Table
-            rowKey={(record: any) => record.id}
+            rowKey={(record: ICategory) => record.id}
             columns={columns}
             dataSource={categories}
             pagination={{

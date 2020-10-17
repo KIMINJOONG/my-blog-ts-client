@@ -1,0 +1,13 @@
+import { IComment } from "./comment";
+
+export interface IBoard {
+  id: number;
+  title: string;
+  content: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  view: number;
+  categoryId: number;
+  comments: Array<IComment>;
+}
