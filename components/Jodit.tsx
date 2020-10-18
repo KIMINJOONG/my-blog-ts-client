@@ -103,6 +103,7 @@ const Jodit = ({
         this: any,
         data: { fileName: string; baseurl: string },
       ) {
+        console.log("hi");
         setContent(
           `${this.value} <img src=${data.baseurl + data.fileName} />`,
         );
@@ -166,7 +167,7 @@ const Jodit = ({
       config={config as any}
       onChange={(newContent) => setContent(newContent)}
     />
-  ), []);
+  ), [content]);
 };
 
 export default Jodit;
