@@ -1,2 +1,4 @@
 User-agent: Yeti
 Allow:/
+
+DaumWebMasterTool:4cc92c1058bc0484f1d6fde06c6dd644cd21509ba0a8284e4a3e88ab381f915b:TesVcx2h+/TAdJmgWJNq7g==
