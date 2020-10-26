@@ -78,7 +78,7 @@ const MyBlog: any = ({ Component }: any) => {
           <meta property="og:type" content="website" /> 
           <meta property="og:title" content="코후비 블로그" />
           <meta property="og:description" content="춤추는 개발자 코후비 블로그" />
-          <meta property="og:image" content="https://kohubi.xyz/test.png" />
+          <meta property="og:image" content="https://kohubi.xyz/meta_guide.png" />
           <meta property="og:image:width" content="200" />
           <meta property="og:image:height" content="200" />
           <meta property="og:url" content="https://kohubi.xyz" />
