@@ -9,12 +9,8 @@ import {
   removeBoardAction,
 } from "../reducers/board";
 import Jodit from "./Jodit";
+import { ICategory } from "../types/category";
 
-interface ICategory {
-  id: number;
-  code: number;
-  name: string;
-}
 
 interface IProps {
   param?: string | string[] | number;

@@ -27,32 +27,11 @@ import Head from "next/head";
 import CommentForm from "../../components/CommentForm";
 import CommentCard from "../../components/CommentCard";
 import { RootState } from "../../reducers";
+import { IComment } from "../../types/comment";
 
-interface IBoard {
-  content: string;
-  createdAt: string;
-  id: number;
-  title: string;
-  updatedAt: string;
-  userId: number;
-  likes: Array<ILikes>;
-}
 
-interface ILikes {
-  boardId: number;
-  userId: number;
-}
-interface IUser {
-  email: string;
-  name: string;
-}
-interface IComment {
-  id: number;
-  content: string;
-  createdAt: string;
-  user: IUser;
-  userId: number;
-}
+
+
 
 const ContentCard = styled(Card)`
     word-break: break-word;

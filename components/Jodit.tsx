@@ -167,7 +167,7 @@ const Jodit = ({
       config={config as any}
       onChange={(newContent) => setContent(newContent)}
     />
-  ), [content]);
+  ), []);
 };
 
 export default Jodit;

@@ -4,19 +4,8 @@ import { removeCommentAction } from "../reducers/board";
 import { useDispatch, useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import { RootState } from "../reducers";
+import { IComment } from "../types/comment";
 
-interface IUser {
-  email: string;
-  name: string;
-}
-
-interface IComment {
-  id: number;
-  content: string;
-  createdAt: string;
-  user: IUser;
-  userId: number;
-}
 
 interface IProps {
   comment: IComment;

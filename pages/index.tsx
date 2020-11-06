@@ -21,23 +21,8 @@ import {
 } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
+import { IBoard } from "../types/board";
 
-interface ICategory {
-  id: string;
-  code: number;
-  name: string;
-  createdAt: string;
-}
-interface IBoard {
-  id: number;
-  title: string;
-  content: string;
-  mainImg: string;
-  shortContent: string;
-  mainImgStyleValue: any;
-  createdAt: string;
-  category: ICategory;
-}
 const Home: NextPage = () => {
   const { countByToday, boardsForMain } = useSelector(
     (state: any) => state.board,

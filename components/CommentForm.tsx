@@ -3,19 +3,7 @@ import { Col, Card, Form, Input, Button, message } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { addCommentAction, updateCommentAction } from "../reducers/board";
 import { RootState } from "../reducers";
-
-interface IUser {
-  email: string;
-  name: string;
-}
-
-interface IComment {
-  id: number;
-  content: string;
-  createdAt: string;
-  user: IUser;
-  userId: number;
-}
+import { IComment } from "../types/comment";
 
 interface IProps {
   commentObject?: IComment | null;
@@ -31,7 +19,7 @@ const CommentForm = ({ commentObject = null }: IProps) => {
     updateCommentLoading,
     updateCommentDone,
   } = useSelector(
-    (state: any) => state.board,
+    (state: RootState) => state.board,
   );
   const onSubmit = useCallback(
     () => {

@@ -20,12 +20,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { LOGOUT_USER_REQUEST } from "../../reducers/user";
 import { LOAD_COUNT_BY_TODAY_REQUEST } from "../../reducers/board";
 import { RootState } from "../../reducers";
+import { IHashtag } from "../../types/hashtag";
+import { ICategory } from "../../types/category";
 
-interface ICategory {
-  id: number;
-  code: number;
-  name: string;
-}
 
 const AppLayout: FunctionComponent = ({ children }) => {
   const { countByToday } = useSelector((state: RootState) => state.board);
@@ -73,11 +70,6 @@ const AppLayout: FunctionComponent = ({ children }) => {
   useEffect(() => {
     init();
   }, []);
-
-  interface IHashtag {
-    id: number;
-    name: string;
-  }
 
   return (
     <div>

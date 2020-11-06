@@ -6,13 +6,9 @@ import { joinRequestAction } from "../../reducers/user";
 import { useDispatch, useSelector } from "react-redux";
 import AppLayout from "../../components/AppLayout";
 import { RootState } from "../../reducers";
+import { IJoinForm } from "../../types/user";
 
-interface IJoinForm {
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  name: string;
-}
+
 const useForm = (initValue: IJoinForm) => {
   const [value, setValue] = useState(initValue);
 
