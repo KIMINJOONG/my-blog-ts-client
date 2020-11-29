@@ -51,6 +51,9 @@ import {
   LOAD_HASHTAG_BOARDS_SUCCESS,
   LOAD_HASHTAG_BOARDS_FAILURE,
   LOAD_HASHTAG_BOARDS_REQUEST,
+  LOAD_CATEGORIES_REQUEST,
+  LOAD_CATEGORIES_SUCCESS,
+  LOAD_CATEGORIES_FAILURE,
 } from "../reducers/board";
 import jsCookie from "js-cookie";
 
@@ -435,6 +438,27 @@ function* hashtagBoards(action: any) {
   }
 }
 
+function loadCategoriesAPI() {
+  return axios.get(`categories`);
+}
+
+function* loadCategories(action: any) {
+  try {
+    const result = yield call(loadCategoriesAPI);
+    yield put({
+      // put은 dispatch 동일
+      type: LOAD_CATEGORIES_SUCCESS,
+      data: result.data,
+    });
+  } catch (e) {
+    // loginAPI 실패
+    yield put({
+      type: LOAD_CATEGORIES_FAILURE,
+      error: e.response.data,
+    });
+  }
+}
+
 function* watchLoadCountByToday() {
   yield takeLatest(LOAD_COUNT_BY_TODAY_REQUEST, loadCountByToday);
 }
@@ -483,6 +507,10 @@ function* watchHashtagBoards() {
   yield takeLatest(LOAD_HASHTAG_BOARDS_REQUEST, hashtagBoards);
 }
 
+function* watchLoadCategories() {
+  yield takeLatest(LOAD_CATEGORIES_REQUEST, loadCategories);
+}
+
 export default function* userSaga() {
   yield all([
     fork(watchBoardDetail),
@@ -499,5 +527,6 @@ export default function* userSaga() {
     fork(watchUpdateComment),
     fork(watchRemoveComment),
     fork(watchHashtagBoards),
+    fork(watchLoadCategories),
   ]);
 }

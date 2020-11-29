@@ -48,9 +48,17 @@ export const initialState = {
   hashtagBoardsDone: false,
   hashtagBoardsError: null,
   hashtagBoards: [],
+  loadCategoriesDone: false,
+  loadCategoriesLoading: false,
+  loadCategoriesError: null,
+  categories: null,
 };
 
 // 비동기 요청
+export const LOAD_CATEGORIES_REQUEST = "LOAD_CATEGORIES_REQUEST";
+export const LOAD_CATEGORIES_SUCCESS = "LOAD_CATEGORIES_SUCCESS";
+export const LOAD_CATEGORIES_FAILURE = "LOAD_CATEGORIES_FAILURE";
+
 export const ADD_LIKE_REQUEST = "ADD_LIKE_REQUEST";
 export const ADD_LIKE_SUCCESS = "ADD_LIKE_SUCCESS";
 export const ADD_LIKE_FAILURE = "ADD_LIKE_FAILURE";
@@ -107,6 +115,10 @@ export const LOAD_HASHTAG_BOARDS_REQUEST = "LOAD_HASHTAG_BOARDS_REQUEST";
 export const LOAD_HASHTAG_BOARDS_SUCCESS = "LOAD_HASHTAG_BOARDS_SUCCESS";
 export const LOAD_HASHTAG_BOARDS_FAILURE = "LOAD_HASHTAG_BOARDS_FAILURE";
 
+export const loadCategoriesAction = () => ({
+  type: LOAD_CATEGORIES_REQUEST,
+});
+
 export const updateCommentAction = (
   data: any,
   boardId: number,
@@ -160,6 +172,20 @@ export const addCommentAction = (boardId: string, data: any) => ({
   boardId,
   data,
 });
+
+interface ILOAD_CATEGORIES_REQUEST {
+  type: typeof LOAD_CATEGORIES_REQUEST;
+}
+
+interface ILOAD_CATEGORIES_SUCCESS {
+  type: typeof LOAD_CATEGORIES_SUCCESS;
+  data: any;
+}
+
+interface ILOAD_CATEGORIES_FAILURE {
+  type: typeof LOAD_CATEGORIES_FAILURE;
+  error: any;
+}
 
 interface ILOAD_HASHTAG_BOARDS_REQUEST {
   type: typeof LOAD_HASHTAG_BOARDS_REQUEST;
@@ -404,7 +430,10 @@ export type BoardActionType =
   | IREMOVE_LIKE_FAILURE
   | ILOAD_HASHTAG_BOARDS_REQUEST
   | ILOAD_HASHTAG_BOARDS_SUCCESS
-  | ILOAD_HASHTAG_BOARDS_FAILURE;
+  | ILOAD_HASHTAG_BOARDS_FAILURE
+  | ILOAD_CATEGORIES_REQUEST
+  | ILOAD_CATEGORIES_SUCCESS
+  | ILOAD_CATEGORIES_FAILURE;
 
 // 동기��청
 
@@ -413,6 +442,23 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_CATEGORIES_REQUEST: {
+        draft.loadCategoriesLoading = true;
+        draft.loadCategoriesDone = false;
+        draft.loadCategoriesError = null;
+        break;
+      }
+      case LOAD_CATEGORIES_SUCCESS: {
+        draft.loadCategoriesLoading = false;
+        draft.categories = action.data;
+        draft.loadCategoriesDone = true;
+        break;
+      }
+      case LOAD_CATEGORIES_FAILURE: {
+        draft.loadCategoriesLoading = false;
+        draft.loadCategoriesError = action.error;
+        break;
+      }
       case LOAD_HASHTAG_BOARDS_REQUEST: {
         draft.hashtagBoardsLoading = true;
         draft.hashtagBoardsDone = false;

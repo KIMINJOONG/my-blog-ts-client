@@ -1,15 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import ReactHtmlParser from "react-html-parser";
-import {
-  Button,
-  Card,
-  List,
-  Row,
-  Col,
-  message,
-  Badge,
-} from "antd";
-import Router from "next/router";
+import { Button, Card, List, Row, Col, message, Badge } from "antd";
 import { FaRegThumbsUp } from "react-icons/fa";
 import wrapper from "../../stores/configureStore";
 import { END } from "redux-saga";
@@ -17,6 +8,7 @@ import {
   BOARD_DETAIL_REQUEST,
   addLikeAction,
   removeLikeAction,
+  loadCategoriesAction
 } from "../../reducers/board";
 import { useSelector, useDispatch } from "react-redux";
 import { LOAD_USER_REQUEST } from "../../reducers/user";
@@ -28,41 +20,40 @@ import CommentForm from "../../components/CommentForm";
 import CommentCard from "../../components/CommentCard";
 import { RootState } from "../../reducers";
 import { IComment } from "../../types/comment";
-
-
-
-
+import Edit from "../../components/Edit";
 
 const ContentCard = styled(Card)`
-    word-break: break-word;
-    & img {
-        max-width: 100%;
-    }
+  word-break: break-word;
+  & img {
+    max-width: 100%;
+  }
 
-    & p {
-        max-width: 100%;
-    }
+  & p {
+    max-width: 100%;
+  }
 
-    & div {
-        max-width: 100%;
-        white-space: pre-wrap;
-    }
+  & div {
+    max-width: 100%;
+    white-space: pre-wrap;
+  }
 
-    & pre {
-        max-width: 100%;
-        white-space: pre-wrap;
-    }
+  & pre {
+    max-width: 100%;
+    white-space: pre-wrap;
+  }
 `;
 const edit = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state: RootState) => state.user);
-  const {
-    board,
-    addLikeDone,
-    removeLikeDone,
-    removeCommentDone,
-  } = useSelector((state: RootState) => state.board);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const { board, addLikeDone, removeLikeDone, removeCommentDone } = useSelector(
+    (state: RootState) => state.board
+  );
   const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    dispatch(loadCategoriesAction());
+  }, []);
 
   useEffect(() => {
     for (let like of board.data.likes) {
@@ -108,88 +99,96 @@ const edit = () => {
 
   return (
     <AppLayout>
-      <Head>
-        <title>{board.data.title}</title>
-        <meta
-          property="og:title"
-          content={board.data.title}
-          key="title"
-        />
-        <meta name="subject" content={board.data.title} />
-        <meta name="title" content={board.data.title} />
-      </Head>
-      <Row>
-        <Col md={24} xs={24} sm={24} lg={24}>
-          <ContentCard title={board.data.title}>
-            {board && ReactHtmlParser(board.data.content)}
-          </ContentCard>
-        </Col>
-      </Row>
-      <Row>
-        <Col
-          md={24}
-          xs={24}
-          sm={24}
-          lg={24}
-          style={{ textAlign: "center", marginTop: "10px" }}
-        >
-          {isLiked
-            ? (
-              <Button
-                icon={<FaRegThumbsUp />}
-                type="primary"
-                onClick={onClickHelped}
-              >
-                <span style={{ marginLeft: "5px" }}>
-                  도움이 됐어요.
-                  <Badge count={board.data.likes.length} />
-                </span>
-              </Button>
-            )
-            : (
-              <Button
-                icon={<FaRegThumbsUp />}
-                type="primary"
-                ghost
-                onClick={onClickHelped}
-              >
-                <span style={{ marginLeft: "5px" }}>
-                  도움이 됐어요.
-                  <Badge count={board.data.likes.length} />
-                </span>
-              </Button>
-            )}
-        </Col>
-      </Row>
-      <Row>
-        {me && me.data && me.data.role === 99 && (
-          <Col md={24} xs={24} sm={24} lg={24}>
-            <Button
-              type="primary"
-              onClick={() => Router.push(`/boards/edit/${board.data.id}`)}
+      {isUpdate ? (
+        <Edit />
+      ) : (
+        <>
+          <Head>
+            <title>{board.data.title}</title>
+            <meta property="og:title" content={board.data.title} key="title" />
+            <meta name="subject" content={board.data.title} />
+            <meta name="title" content={board.data.title} />
+          </Head>
+          <Row>
+            <Col md={24} xs={24} sm={24} lg={24}>
+              <ContentCard title={board.data.title}>
+                {board && ReactHtmlParser(board.data.content)}
+              </ContentCard>
+            </Col>
+          </Row>
+          <Row>
+            <Col
+              md={24}
+              xs={24}
+              sm={24}
+              lg={24}
+              style={{ textAlign: "center", marginTop: "10px" }}
             >
-              수정
-            </Button>
-          </Col>
-        )}
-      </Row>
-      <Row>
-        <Col md={24} xs={24} sm={24} lg={24}>
-          <List
-            className="comment-list"
-            header={`${board.data.comments.length} replies`}
-            itemLayout="horizontal"
-            dataSource={board.data.comments}
-            renderItem={(comment: IComment) => (
-              <CommentCard comment={comment} />
-            )}
-          />
-        </Col>
-      </Row>
+              {isLiked ? (
+                <Button
+                  icon={<FaRegThumbsUp />}
+                  type="primary"
+                  onClick={onClickHelped}
+                >
+                  <span style={{ marginLeft: "5px" }}>
+                    도움이 됐어요.
+                    <Badge count={board.data.likes.length} />
+                  </span>
+                </Button>
+              ) : (
+                <Button
+                  icon={<FaRegThumbsUp />}
+                  type="primary"
+                  ghost
+                  onClick={onClickHelped}
+                >
+                  <span style={{ marginLeft: "5px" }}>
+                    도움이 됐어요.
+                    <Badge count={board.data.likes.length} />
+                  </span>
+                </Button>
+              )}
+            </Col>
+          </Row>
+          {me && me.data && me.data.role === 99 && (
+            <Row>
+              {isUpdate ? (
+                <Col md={24} xs={24} sm={24} lg={24}>
+                  <Button type="primary" onClick={() => setIsUpdate(true)}>
+                    수정완료
+                  </Button>
+                  <Button type="danger" onClick={() => setIsUpdate(false)}>
+                    수정취소
+                  </Button>
+                </Col>
+              ) : (
+                <Col md={24} xs={24} sm={24} lg={24}>
+                  <Button type="primary" onClick={() => setIsUpdate(true)}>
+                    수정
+                  </Button>
+                </Col>
+              )}
+            </Row>
+          )}
+          <Row>
+            <Col md={24} xs={24} sm={24} lg={24}>
+              <List
+                className="comment-list"
+                header={`${board.data.comments.length} replies`}
+                itemLayout="horizontal"
+                dataSource={board.data.comments}
+                renderItem={(comment: IComment) => (
+                  <CommentCard comment={comment} />
+                )}
+              />
+            </Col>
+          </Row>
 
-      <Row>
-        <CommentForm />
-      </Row>
+          <Row>
+            <CommentForm />
+          </Row>
+        </>
+      )}
     </AppLayout>
   );
 };
@@ -203,15 +202,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Authorization = cookie;
     }
     context.store.dispatch({
-      type: LOAD_USER_REQUEST,
+      type: LOAD_USER_REQUEST
     });
     context.store.dispatch({
       type: BOARD_DETAIL_REQUEST,
-      data: context.params.id,
+      data: context.params.id
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();
-  },
+  }
 );
 
 export default edit;

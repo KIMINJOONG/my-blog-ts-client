@@ -11,8 +11,8 @@ import { loginRequestAction } from "../reducers/user";
 import { RootState } from "../reducers";
 
 const Login = () => {
-  const { logInLoading, logInDone } = useSelector((state: RootState) =>
-    state.user
+  const { logInLoading, logInDone } = useSelector(
+    (state: RootState) => state.user
   );
   const dispatch = useDispatch();
   const [email, onChangeEmail, setEmail] = useInput("");
@@ -27,7 +27,7 @@ const Login = () => {
     }
   }, [logInDone]);
 
-  const onSubmit = useCallback(async (values) => {
+  const onSubmit = useCallback(async values => {
     dispatch(loginRequestAction(values));
   }, []);
   return (
@@ -37,7 +37,7 @@ const Login = () => {
           height: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         <Row>
@@ -49,19 +49,15 @@ const Login = () => {
                 rules={[
                   {
                     type: "email",
-                    message: "The input is not valid E-mail!",
+                    message: "The input is not valid E-mail!"
                   },
                   {
                     required: true,
-                    message: "Please input your E-mail!",
-                  },
+                    message: "Please input your E-mail!"
+                  }
                 ]}
               >
-                <Input
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
-                />
+                <Input name="email" value={email} onChange={onChangeEmail} />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -69,8 +65,8 @@ const Login = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!",
-                  },
+                    message: "Please input your password!"
+                  }
                 ]}
                 hasFeedback
               >
@@ -91,7 +87,7 @@ const Login = () => {
                   Login
                 </Button>
                 <Button type="primary" block>
-                  <Link href="/join">
+                  <Link href="/join" prefetch={false}>
                     <a>회원가입</a>
                   </Link>
                 </Button>

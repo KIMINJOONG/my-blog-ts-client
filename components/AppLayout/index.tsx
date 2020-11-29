@@ -1,16 +1,6 @@
-import {
-  FunctionComponent,
-  useCallback,
-  useState,
-  useEffect,
-} from "react";
+import { FunctionComponent, useCallback, useState, useEffect } from "react";
 import { Row, Col, Button, message, Drawer } from "antd";
-import {
-  MenuSpan,
-  ProfileResultSpan,
-  ProfileSpan,
-  HashtagA,
-} from "./style";
+import { MenuSpan, ProfileResultSpan, ProfileSpan, HashtagA } from "./style";
 import Link from "next/link";
 import jsCookie from "js-cookie";
 import { MdFormatIndentIncrease, MdFormatIndentDecrease } from "react-icons/md";
@@ -23,7 +13,6 @@ import { RootState } from "../../reducers";
 import { IHashtag } from "../../types/hashtag";
 import { ICategory } from "../../types/category";
 
-
 const AppLayout: FunctionComponent = ({ children }) => {
   const { countByToday } = useSelector((state: RootState) => state.board);
   const { me } = useSelector((state: RootState) => state.user);
@@ -35,7 +24,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
   const onClickLogout = useCallback(async () => {
     await jsCookie.remove("token");
     dispatch({
-      type: LOGOUT_USER_REQUEST,
+      type: LOGOUT_USER_REQUEST
     });
     message.success("로그아웃 되었습니다");
   }, []);
@@ -44,13 +33,13 @@ const AppLayout: FunctionComponent = ({ children }) => {
     setVisible(false);
   }, [visible]);
 
-  const clickPage = useCallback((path) => {
+  const clickPage = useCallback(path => {
     Router.push(path);
     setVisible(false);
   }, []);
   const init = useCallback(async () => {
     dispatch({
-      type: LOAD_COUNT_BY_TODAY_REQUEST,
+      type: LOAD_COUNT_BY_TODAY_REQUEST
     });
     const result = await api.index("/hashtags");
     const { data, status } = result;
@@ -73,30 +62,25 @@ const AppLayout: FunctionComponent = ({ children }) => {
 
   return (
     <div>
-      <Row
-        justify="center"
-        style={{ backgroundColor: "#fafafa" }}
-      >
+      <Row justify="center" style={{ backgroundColor: "#fafafa" }}>
         <Col xs={24} md={20}>
           <Row>
             <Col xs={24} md={0}>
               <Row>
                 <Col>
-                  {visible
-                    ? (
-                      <MdFormatIndentDecrease
-                        style={{ color: "#03e0c5" }}
-                        size={30}
-                        onClick={() => setVisible(false)}
-                      />
-                    )
-                    : (
-                      <MdFormatIndentIncrease
-                        style={{ color: "#03e0c5" }}
-                        size={30}
-                        onClick={() => setVisible(true)}
-                      />
-                    )}
+                  {visible ? (
+                    <MdFormatIndentDecrease
+                      style={{ color: "#03e0c5" }}
+                      size={30}
+                      onClick={() => setVisible(false)}
+                    />
+                  ) : (
+                    <MdFormatIndentIncrease
+                      style={{ color: "#03e0c5" }}
+                      size={30}
+                      onClick={() => setVisible(true)}
+                    />
+                  )}
                 </Col>
               </Row>
               <Drawer
@@ -113,50 +97,40 @@ const AppLayout: FunctionComponent = ({ children }) => {
                     <p
                       key={category.id}
                       onClick={() =>
-                        clickPage(
-                          `/boards/category/${category.code}`,
-                        )}
+                        clickPage(`/boards/category/${category.code}`)
+                      }
                     >
                       {category.name}
                     </p>
                   ))}
                 <p onClick={() => clickPage("/about")}>About</p>
-                {me &&
-                  me.data &&
-                  me.data.role &&
-                  me.data.role === 99 && (
-                    <p
-                      onClick={() => clickPage("/admin/category")}
-                    >
-                      카테고리 추가
-                    </p>
-                  )}
+                {me && me.data && me.data.role && me.data.role === 99 && (
+                  <p onClick={() => clickPage("/admin/category")}>
+                    카테고리 추가
+                  </p>
+                )}
 
-                {me && me.data && me.data.id
-                  ? (
-                    <p onClick={onClickLogout}>
-                      <a>로그아웃</a>
-                    </p>
-                  )
-                  : (
-                    <p onClick={() => clickPage("/login")}>
-                      로그인
-                    </p>
-                  )}
+                {me && me.data && me.data.id ? (
+                  <p onClick={onClickLogout}>
+                    <a>로그아웃</a>
+                  </p>
+                ) : (
+                  <p onClick={() => clickPage("/login")}>로그인</p>
+                )}
               </Drawer>
             </Col>
           </Row>
           <Row style={{ height: "154px" }} align={"middle"}>
             <Col md={2} xs={4}></Col>
             <Col md={2} xs={5}>
-              <Link href="/">
+              <Link href="/" prefetch={false}>
                 <a>
                   <img
                     src="/logo.svg"
                     style={{
                       width: "206px",
                       height: "48px",
-                      objectFit: "contain",
+                      objectFit: "contain"
                     }}
                   />
                 </a>
@@ -170,43 +144,34 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   height: "48px",
                   borderRadius: "24px",
                   backgroundColor: "rgba(98, 103, 106, 0.6)",
-                  textAlign: "center",
+                  textAlign: "center"
                 }}
               >
                 {categories &&
                   categories.length > 0 &&
-                  categories.map(
-                    (category: ICategory) => (
-                      <Col md={4} key={category.id}>
-                        <Link href={`/boards/category/${category.code}`}>
-                          <MenuSpan>
-                            {category.name}
-                          </MenuSpan>
-                        </Link>
-                      </Col>
-                    ),
-                  )}
+                  categories.map((category: ICategory) => (
+                    <Col md={4} key={category.id}>
+                      <Link
+                        href={`/boards/category/${category.code}`}
+                        prefetch={false}
+                      >
+                        <MenuSpan>{category.name}</MenuSpan>
+                      </Link>
+                    </Col>
+                  ))}
                 <Col md={4}>
-                  <MenuSpan>
-                    ABOUT
-                  </MenuSpan>
+                  <MenuSpan>ABOUT</MenuSpan>
                 </Col>
                 <Col md={5}>
-                  {me && me.data && me.data.id
-                    ? (
-                      <MenuSpan onClick={onClickLogout}>
-                        LOGOUT
-                      </MenuSpan>
-                    )
-                    : (
-                      <MenuSpan>
-                        <Link href="/login">
-                          <a>
-                            LOGIN
-                          </a>
-                        </Link>
-                      </MenuSpan>
-                    )}
+                  {me && me.data && me.data.id ? (
+                    <MenuSpan onClick={onClickLogout}>LOGOUT</MenuSpan>
+                  ) : (
+                    <MenuSpan>
+                      <Link href="/login" prefetch={false}>
+                        <a>LOGIN</a>
+                      </Link>
+                    </MenuSpan>
+                  )}
                 </Col>
               </Row>
             </Col>
@@ -220,7 +185,7 @@ const AppLayout: FunctionComponent = ({ children }) => {
               style={{
                 boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
                 backgroundColor: "#ffffff",
-                padding: "0 20px",
+                padding: "0 20px"
               }}
             >
               <Row align="middle" style={{ marginTop: "46px" }}>
@@ -228,20 +193,34 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   <img style={{ width: "56px", height: "56px" }} />
                 </Col>
                 <Col xs={16} style={{ textAlign: "left" }}>
-                  <h4>개발자 김인중의<br /> 블로그입니다.</h4>
+                  <h4>
+                    개발자 김인중의
+                    <br /> 블로그입니다.
+                  </h4>
                 </Col>
               </Row>
               <Row style={{ marginTop: "39px" }}>
                 <Col span={24}>
                   <Row>
                     <Col span={8} style={{ textAlign: "center" }}>
-                      <ProfileSpan>오늘의<br />방문자</ProfileSpan>
+                      <ProfileSpan>
+                        오늘의
+                        <br />
+                        방문자
+                      </ProfileSpan>
                     </Col>
                     <Col span={8} style={{ textAlign: "center" }}>
-                      <ProfileSpan>오늘의<br />게시물</ProfileSpan>
+                      <ProfileSpan>
+                        오늘의
+                        <br />
+                        게시물
+                      </ProfileSpan>
                     </Col>
                     <Col span={8} style={{ textAlign: "center" }}>
-                      <ProfileSpan>총<br />방문자</ProfileSpan>
+                      <ProfileSpan>
+                        총<br />
+                        방문자
+                      </ProfileSpan>
                     </Col>
                   </Row>
                   <Row>
@@ -267,27 +246,23 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 <Col xs={24} style={{ wordBreak: "break-word" }}>
                   <Row>
                     {hashtags.length > 0 &&
-                      hashtags.map(
-                        (
-                          hashtag: IHashtag,
-                          index: number,
-                        ) => (
-                          <Col xs={8} key={index}>
-                            <Link
-                              href={`/hashtag/${hashtag.name}`}
-                              key={index}
+                      hashtags.map((hashtag: IHashtag, index: number) => (
+                        <Col xs={8} key={index}>
+                          <Link
+                            href={`/hashtag/${hashtag.name}`}
+                            key={index}
+                            prefetch={false}
+                          >
+                            <HashtagA
+                              style={{
+                                margin: "5px"
+                              }}
                             >
-                              <HashtagA
-                                style={{
-                                  margin: "5px",
-                                }}
-                              >
-                                #{hashtag.name}
-                              </HashtagA>
-                            </Link>
-                          </Col>
-                        ),
-                      )}
+                              #{hashtag.name}
+                            </HashtagA>
+                          </Link>
+                        </Col>
+                      ))}
                   </Row>
                 </Col>
               </Row>

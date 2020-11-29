@@ -12,12 +12,12 @@ import {
   BoardContentSumary,
   BoardDate,
   MoreA,
-  CategoryNameLabel,
+  CategoryNameLabel
 } from "../components/AppLayout/style";
 import Link from "next/link";
 import {
   LOAD_COUNT_BY_TODAY_REQUEST,
-  LOAD_BOARDS_FOR_MAIN_REQUEST,
+  LOAD_BOARDS_FOR_MAIN_REQUEST
 } from "../reducers/board";
 import ReactHtmlParser from "react-html-parser";
 import { useSelector } from "react-redux";
@@ -25,7 +25,7 @@ import { IBoard } from "../types/board";
 
 const Home: NextPage = () => {
   const { countByToday, boardsForMain } = useSelector(
-    (state: any) => state.board,
+    (state: any) => state.board
   );
   const [dates, setDates] = useState([]);
   const [counts, setCounts] = useState([]);
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
 
     const {
       data: countByDateResult,
-      status: countByDateResultHtppStatus,
+      status: countByDateResultHtppStatus
     } = getCountByDate;
     if (countByDateResultHtppStatus === 200) {
       let now = new Date();
@@ -48,9 +48,10 @@ const Home: NextPage = () => {
 
       for (let i = 1; i <= lastDay; i++) {
         let day = i < 10 ? `0${i}` : i.toString();
-        let month = lastDate.getMonth() + 1 < 10
-          ? `0${lastDate.getMonth() + 1}`
-          : lastDate.getMonth() + 1;
+        let month =
+          lastDate.getMonth() + 1 < 10
+            ? `0${lastDate.getMonth() + 1}`
+            : lastDate.getMonth() + 1;
         let fullDate = `${lastDate.getFullYear()}-${month}-${day}`;
         monthDates[fullDate] = 0;
         dateList.push(day);
@@ -79,13 +80,9 @@ const Home: NextPage = () => {
     if (countByToday && countByToday.data) {
       for (let countByTodayData of countByToday.data) {
         if (countByCategory[countByTodayData.categoryId]) {
-          countByCategory[countByTodayData.categoryId].push(
-            countByTodayData,
-          );
+          countByCategory[countByTodayData.categoryId].push(countByTodayData);
         } else {
-          countByCategory[countByTodayData.categoryId] = [
-            countByTodayData,
-          ];
+          countByCategory[countByTodayData.categoryId] = [countByTodayData];
         }
       }
     }
@@ -124,7 +121,7 @@ const Home: NextPage = () => {
                     boxShadow: "1px 2px 4px 0 rgba(0, 0, 0, 0.1)",
                     backgroundColor: "#ffffff",
                     padding: "10px 20px",
-                    marginTop: "24px",
+                    marginTop: "24px"
                   }}
                 >
                   <Row>
@@ -136,7 +133,7 @@ const Home: NextPage = () => {
                           display: "inline-block",
                           borderRadius: "16px",
                           backgroundColor: "#03e0c5",
-                          textAlign: "center",
+                          textAlign: "center"
                         }}
                       >
                         <CategoryNameLabel>
@@ -151,35 +148,25 @@ const Home: NextPage = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col
-                      xs={24}
-                      style={{ textAlign: "left" }}
-                    >
-                      <BoardDate>
-                        {getCreatedAt(board.createdAt)}
-                      </BoardDate>
+                    <Col xs={24} style={{ textAlign: "left" }}>
+                      <BoardDate>{getCreatedAt(board.createdAt)}</BoardDate>
                     </Col>
                   </Row>
                   <Row
                     style={{
                       marginTop: "32px",
-                      height: "54px",
+                      height: "54px"
                     }}
                   >
                     <Col xs={24}>
                       <BoardContentSumary>
-                        {ReactHtmlParser(
-                          board.shortContent,
-                        )}
+                        {ReactHtmlParser(board.shortContent)}
                       </BoardContentSumary>
                     </Col>
                   </Row>
                   <Row style={{ marginTop: "53px" }}>
-                    <Col
-                      xs={24}
-                      style={{ textAlign: "right" }}
-                    >
-                      <Link href={`boards/${board.id}`}>
+                    <Col xs={24} style={{ textAlign: "right" }}>
+                      <Link href={`boards/${board.id}`} prefetch={false}>
                         <MoreA>+more</MoreA>
                       </Link>
                     </Col>
@@ -222,16 +209,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Authorization = cookie;
     }
     context.store.dispatch({
-      type: LOAD_USER_REQUEST,
+      type: LOAD_USER_REQUEST
     });
 
     context.store.dispatch({
-      type: LOAD_BOARDS_FOR_MAIN_REQUEST,
+      type: LOAD_BOARDS_FOR_MAIN_REQUEST
     });
 
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();
-  },
+  }
 );
 
 export default Home;

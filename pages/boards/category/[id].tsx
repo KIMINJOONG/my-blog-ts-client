@@ -22,10 +22,10 @@ const columns = [
     width: "20%",
     align: "center" as Align,
     render: (text: string) => (
-      <Link href={`/boards/${text}`}>
+      <Link href={`/boards/${text}`} prefetch={false}>
         <a>{text}</a>
       </Link>
-    ),
+    )
   },
   {
     title: "제목",
@@ -33,13 +33,13 @@ const columns = [
     key: "title",
     align: "center" as Align,
     render: (text: string, record: IBoard) => (
-      <Link href={`/boards/${record.id}`}>
+      <Link href={`/boards/${record.id}`} prefetch={false}>
         <a>
           {text}&nbsp;
           <Typography.Text disabled>[{record.comments.length}]</Typography.Text>
         </a>
       </Link>
-    ),
+    )
   },
   {
     title: "조회",
@@ -47,10 +47,10 @@ const columns = [
     key: "view",
     align: "center" as Align,
     render: (text: string, record: IBoard) => (
-      <Link href={`/boards/${record.id}`}>
+      <Link href={`/boards/${record.id}`} prefetch={false}>
         <a>{text}</a>
       </Link>
-    ),
+    )
   },
   {
     title: "날짜",
@@ -59,11 +59,11 @@ const columns = [
     width: "20%",
     align: "center" as Align,
     render: (text: string, record: IBoard) => (
-      <Link href={`/boards/${record.id}`}>
+      <Link href={`/boards/${record.id}`} prefetch={false}>
         <a>{text.substring(0, 10)}</a>
       </Link>
-    ),
-  },
+    )
+  }
 ];
 
 const boards = () => {
@@ -80,10 +80,10 @@ const boards = () => {
 
       Router.push({
         pathname: `/boards/category/${id}`,
-        query: { title: encodeURIComponent(value), page: 1, limit: 10 },
+        query: { title: encodeURIComponent(value), page: 1, limit: 10 }
       });
     },
-    [router],
+    [router]
   );
 
   const onChangePage = useCallback((page, pageSize) => {
@@ -91,7 +91,7 @@ const boards = () => {
 
     Router.push({
       pathname: `/boards/category/${id}`,
-      query: { page, title, limit: pageSize },
+      query: { page, title, limit: pageSize }
     });
   }, []);
 
@@ -100,7 +100,7 @@ const boards = () => {
 
     Router.push({
       pathname: `/boards/category/${id}`,
-      query: { page: current, title, limit: size },
+      query: { page: current, title, limit: size }
     });
   }, []);
   return (
@@ -108,7 +108,7 @@ const boards = () => {
       <div>
         {me && me.data && me.data.role === 99 && (
           <Col style={{ textAlign: "right" }}>
-            <Link href="/boards/edit">
+            <Link href="/boards/edit" prefetch={false}>
               <a>글쓰기</a>
             </Link>
           </Col>
@@ -116,7 +116,7 @@ const boards = () => {
 
         {boards && (
           <Table
-            rowKey={(record) => record.id}
+            rowKey={record => record.id}
             columns={columns}
             dataSource={boards.data}
             pagination={{
@@ -126,7 +126,7 @@ const boards = () => {
                 ? parseInt(router.query.page as string, 10)
                 : 1,
               onChange: onChangePage,
-              onShowSizeChange,
+              onShowSizeChange
             }}
           />
         )}
@@ -165,18 +165,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
     }
 
     context.store.dispatch({
-      type: LOAD_USER_REQUEST,
+      type: LOAD_USER_REQUEST
     });
     context.store.dispatch({
       type: LOAD_BOARDS_REQUEST,
       data: {
         categoryId: context.params.id,
-        query: searchArray.join("&"),
-      },
+        query: searchArray.join("&")
+      }
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();
-  },
+  }
 );
 
 export default boards;

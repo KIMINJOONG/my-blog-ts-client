@@ -1,121 +1,84 @@
-import { Form, Input, Button, message, Typography, Select } from "antd";
-import { ChangeEvent, useState, useCallback, useEffect } from "react";
-import Router from "next/router";
-import api from "../api";
-import { useDispatch } from "react-redux";
+import { Form, Input, Button, Typography, Select } from "antd";
+import { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addBoardAction,
   updateBoardAction,
-  removeBoardAction,
+  removeBoardAction
 } from "../reducers/board";
 import Jodit from "./Jodit";
 import { ICategory } from "../types/category";
-
+import { RootState } from "../reducers";
+import { useRouter } from "next/router";
 
 interface IProps {
-  param?: string | string[] | number;
-  data?: any;
   preset?: string;
-  disabled?: boolean;
-  categories?: Array<ICategory>;
 }
-
-const useInput = (initValue: any) => {
-  const [value, setValue] = useState(initValue);
-
-  const initdata = useCallback((title) => {
-    setValue(title);
-  }, []);
-  const onChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
-      setValue(e.target.value);
-    },
-    [],
-  );
-
-  return { value, initdata, onChange };
-};
 
 const useSelectBox = (initValue: any) => {
   const [value, setValue] = useState(initValue);
 
-  const initData = useCallback((categoryValue) => {
+  const initData = useCallback(categoryValue => {
     setValue(categoryValue);
   }, []);
 
-  const onChange = useCallback((value) => {
+  const onChange = useCallback(value => {
     setValue(value);
   }, []);
 
   return { value, onChange, initData };
 };
 
-const Edit = ({
-  param,
-  data,
-  preset = "none",
-  categories = [],
-}: IProps) => {
+const Edit = ({ preset = "none" }: IProps) => {
+  const router = useRouter();
+  const { id } = router.query;
+  const { board, categories } = useSelector((state: RootState) => state.board);
   const dispatch = useDispatch();
-  const title = useInput("");
   const categorySelect = useSelectBox("");
-  const [content, setContent] = useState("");
-  const dataInit = useCallback(() => {
-    if (data) {
-      title.initdata(data.title);
-      categorySelect.initData(data.categoryId);
-      setContent(data.content);
-    }
-  }, [title, categorySelect]);
-
-  useEffect(() => {
-    dataInit();
-  }, [data]);
 
   const onClickRemove = useCallback(async () => {
-    if (param) {
-      dispatch(removeBoardAction(param as string));
+    if (id) {
+      dispatch(removeBoardAction(id as string));
     }
   }, []);
 
   const onSubmit = useCallback(async () => {
     const dataForm = {
-      content,
-      title: title.value,
-      category: categorySelect.value,
+      category: categorySelect.value
     };
 
-    if (param) {
-      dispatch(updateBoardAction(param as string, dataForm));
+    if (id) {
+      dispatch(updateBoardAction(id as string, dataForm));
     } else {
       dispatch(addBoardAction(dataForm));
     }
-  }, [content, title, categorySelect]);
+  }, [board, categorySelect]);
 
   return (
     <Form name="boardForm" onFinish={onSubmit}>
-      {preset === "inline"
-        ? (
-          <Typography.Title>{title.value}</Typography.Title>
-        )
-        : (
-          <Form.Item label="제목" rules={[{ required: true }]}>
-            <Input value={title.value} onChange={title.onChange} />
-          </Form.Item>
-        )}
+      {preset === "inline" ? (
+        <Typography.Title>
+          {board?.data?.title === undefined ? "" : board.data.title}
+        </Typography.Title>
+      ) : (
+        <Form.Item label="제목" rules={[{ required: true }]}>
+          <Input
+            value={board?.data?.title === undefined ? "" : board.data.title}
+          />
+        </Form.Item>
+      )}
 
       <Form.Item>
         <Select
-          value={categorySelect.value}
-          onChange={(value) => categorySelect.onChange(value)}
+          value={
+            board?.data?.categoryId === undefined ? -1 : board.data.categoryId
+          }
+          onChange={value => categorySelect.onChange(value)}
         >
           {categories &&
-            categories.length > 0 &&
-            categories.map((category: ICategory) => (
-              <Select.Option
-                key={category.id}
-                value={category.code}
-              >
+            categories.data.length > 0 &&
+            categories.data.map((category: ICategory) => (
+              <Select.Option key={category.id} value={category.code}>
                 {category.name}
               </Select.Option>
             ))}
@@ -123,27 +86,27 @@ const Edit = ({
       </Form.Item>
 
       <Form.Item>
-        <Jodit content={content} setContent={setContent} />
+        <Jodit
+          content={board?.data?.content === undefined ? "" : board.data.content}
+        />
       </Form.Item>
 
-      {param
-        ? (
-          <Form.Item>
-            <Button type="primary" onClick={onSubmit}>
-              수정
-            </Button>
-            <Button danger onClick={onClickRemove}>
-              삭제
-            </Button>
-          </Form.Item>
-        )
-        : (
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              등록
-            </Button>
-          </Form.Item>
-        )}
+      {id ? (
+        <Form.Item>
+          <Button type="primary" onClick={onSubmit}>
+            수정
+          </Button>
+          <Button danger onClick={onClickRemove}>
+            삭제
+          </Button>
+        </Form.Item>
+      ) : (
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            등록
+          </Button>
+        </Form.Item>
+      )}
     </Form>
   );
 };

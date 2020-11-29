@@ -1,30 +1,21 @@
+import { useEffect } from "react";
 import Edit from "../../components/Edit";
-import api from "../../api";
-import { useState, useCallback, useEffect } from "react";
 import AppLayout from "../../components/AppLayout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
 import { RootState } from "../../reducers";
+import {
+  loadCategoriesAction,
+  LOAD_CATEGORIES_REQUEST
+} from "../../reducers/board";
+import wrapper from "../../stores/configureStore";
+import axios from "axios";
+import { END } from "redux-saga";
 
 const edit = () => {
-  const [categories, setCategories] = useState([]);
-  const { addBoardDone, board } = useSelector((state: RootState) =>
-    state.board
+  const { addBoardDone, board } = useSelector(
+    (state: RootState) => state.board
   );
-
-  const init = useCallback(async () => {
-    const categoriesResult = await api.index("/categories");
-
-    const { data: categories, status: categoriesStatus } = categoriesResult;
-
-    if (categoriesStatus === 200) {
-      setCategories(categories.data);
-    }
-  }, []);
-
-  useEffect(() => {
-    init();
-  }, []);
 
   useEffect(() => {
     if (addBoardDone) {
@@ -34,9 +25,25 @@ const edit = () => {
 
   return (
     <AppLayout>
-      <Edit categories={categories} />
+      <Edit />x
     </AppLayout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context: any) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Authorization = "";
+    axios.defaults.withCredentials = true;
+    if (context.req && cookie) {
+      axios.defaults.headers.Authorization = cookie;
+    }
+    context.store.dispatch({
+      type: LOAD_CATEGORIES_REQUEST
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default edit;
