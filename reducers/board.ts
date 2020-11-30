@@ -1,7 +1,17 @@
 import produce from "immer";
 
 export const initialState = {
-  board: null as any,
+  board: {
+    data: {
+      title: "", 
+      content: "",
+      categoryId: -1,
+      view: -1,
+      userId: null,
+      comments: [],
+      likes: []
+    } as any
+  },
   boardDetailLoading: false,
   boardDetailDone: false,
   boardDetailError: null,
@@ -115,6 +125,19 @@ export const LOAD_HASHTAG_BOARDS_REQUEST = "LOAD_HASHTAG_BOARDS_REQUEST";
 export const LOAD_HASHTAG_BOARDS_SUCCESS = "LOAD_HASHTAG_BOARDS_SUCCESS";
 export const LOAD_HASHTAG_BOARDS_FAILURE = "LOAD_HASHTAG_BOARDS_FAILURE";
 
+export const CHANGE_INPUT = "CHANGE_INPUT";
+export const CHANGE_SELECT = "CHANGE_SELECT";
+
+export const changeSelectAction = (value: string) => ({
+  type: CHANGE_SELECT,
+  value,
+});
+
+export const changeInputAction = (event: React.ChangeEvent<HTMLInputElement>) => ({
+  type: CHANGE_INPUT,
+  event
+});
+
 export const loadCategoriesAction = () => ({
   type: LOAD_CATEGORIES_REQUEST,
 });
@@ -172,6 +195,16 @@ export const addCommentAction = (boardId: string, data: any) => ({
   boardId,
   data,
 });
+
+interface ICHANGE_SELECT {
+  type: typeof CHANGE_SELECT,
+  value: string
+};
+
+interface ICHANGE_INPUT {
+  type: typeof CHANGE_INPUT
+  event: React.ChangeEvent<HTMLInputElement>
+};
 
 interface ILOAD_CATEGORIES_REQUEST {
   type: typeof LOAD_CATEGORIES_REQUEST;
@@ -433,7 +466,9 @@ export type BoardActionType =
   | ILOAD_HASHTAG_BOARDS_FAILURE
   | ILOAD_CATEGORIES_REQUEST
   | ILOAD_CATEGORIES_SUCCESS
-  | ILOAD_CATEGORIES_FAILURE;
+  | ILOAD_CATEGORIES_FAILURE
+  | ICHANGE_INPUT
+  | ICHANGE_SELECT;
 
 // 동기��청
 
@@ -442,6 +477,19 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case CHANGE_SELECT: {
+        draft.board.data.categoryId = action.value;
+        break;
+      }
+      case CHANGE_INPUT: {
+        if(action.event.target) {
+          const { target: { value, name } } = action.event;
+          draft.board.data[name] = value;
+        } else {
+          draft.board.data.content = action.event;
+        }
+        break;
+      };
       case LOAD_CATEGORIES_REQUEST: {
         draft.loadCategoriesLoading = true;
         draft.loadCategoriesDone = false;

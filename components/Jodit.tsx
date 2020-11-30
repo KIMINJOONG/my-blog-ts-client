@@ -5,7 +5,7 @@ import api from "../api";
 const importJodit = () => import("jodit-react");
 
 const JoditEditor = dynamic(importJodit, {
-  ssr: false,
+  ssr: false
 });
 
 interface IProps {
@@ -19,7 +19,7 @@ const Jodit = ({
   content = "",
   setContent = null,
   preset = "none",
-  disabled = false,
+  disabled = false
 }: IProps) => {
   const [config, setConfig] = useState({
     preset,
@@ -66,7 +66,7 @@ const Jodit = ({
       "symbol",
       "fullsize",
       "print",
-      "about",
+      "about"
     ],
     disabled: preset === "none" ? false : true,
     allowTabNavigation: true,
@@ -76,7 +76,7 @@ const Jodit = ({
       insertImageAsBase64URI: false,
       imagesExtensions: ["jpg", "png", "jpeg", "gif"],
       headers: {
-        Authorization: "zjdkjfkld",
+        Authorization: "zjdkjfkld"
       },
       filesVariableName(i: number): string {
         return `files`;
@@ -95,19 +95,16 @@ const Jodit = ({
         return {
           fileName: resp[0],
           baseurl:
-            "http://kohubi-renual-blog.s3-ap-northeast-1.amazonaws.com/images/",
+            "http://kohubi-renual-blog.s3-ap-northeast-1.amazonaws.com/images/"
         };
       },
 
       defaultHandlerSuccess: function (
         this: any,
-        data: { fileName: string; baseurl: string },
+        data: { fileName: string; baseurl: string }
       ) {
-        console.log("hi");
-        setContent(
-          `${this.value} <img src=${data.baseurl + data.fileName} />`,
-        );
-      },
+        setContent(`${this.value} <img src=${data.baseurl + data.fileName} />`);
+      }
     },
     readonly: false,
     showXPathInStatusbar: false,
@@ -141,8 +138,8 @@ const Jodit = ({
         Ok: "확인",
         Background: "배경색",
         Text: "글자색",
-        "Fill color or set the text color": "색상변경",
-      },
+        "Fill color or set the text color": "색상변경"
+      }
     },
     events: {
       async afterRemoveNode(node: any) {
@@ -153,21 +150,24 @@ const Jodit = ({
           imageKey = imageKey[imageKey.length - 1];
           await api.destroy(`/images/${imageKey}`);
         }
-      },
+      }
     },
     minWidth: "300px",
     minHeight: "300px",
     placeholder: "",
-    toolbarButtonSize: "large",
+    toolbarButtonSize: "large"
   });
 
-  return useMemo(() => (
-    <JoditEditor
-      value={content}
-      config={config as any}
-      onChange={(newContent) => setContent(newContent)}
-    />
-  ), []);
+  return useMemo(
+    () => (
+      <JoditEditor
+        value={content}
+        config={config as any}
+        onChange={newContent => setContent(newContent)}
+      />
+    ),
+    []
+  );
 };
 
 export default Jodit;

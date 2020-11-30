@@ -4,37 +4,26 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addBoardAction,
   updateBoardAction,
-  removeBoardAction
+  removeBoardAction,
+  changeInputAction,
+  changeSelectAction
 } from "../reducers/board";
 import Jodit from "./Jodit";
 import { ICategory } from "../types/category";
 import { RootState } from "../reducers";
 import { useRouter } from "next/router";
+import { UseInput } from "../hooks/common";
 
 interface IProps {
   preset?: string;
 }
 
-const useSelectBox = (initValue: any) => {
-  const [value, setValue] = useState(initValue);
-
-  const initData = useCallback(categoryValue => {
-    setValue(categoryValue);
-  }, []);
-
-  const onChange = useCallback(value => {
-    setValue(value);
-  }, []);
-
-  return { value, onChange, initData };
-};
-
 const Edit = ({ preset = "none" }: IProps) => {
   const router = useRouter();
   const { id } = router.query;
   const { board, categories } = useSelector((state: RootState) => state.board);
+  const useInput = UseInput();
   const dispatch = useDispatch();
-  const categorySelect = useSelectBox("");
 
   const onClickRemove = useCallback(async () => {
     if (id) {
@@ -44,7 +33,9 @@ const Edit = ({ preset = "none" }: IProps) => {
 
   const onSubmit = useCallback(async () => {
     const dataForm = {
-      category: categorySelect.value
+      title: board.data.title,
+      content: board.data.content,
+      categoryId: board.data.categoryId
     };
 
     if (id) {
@@ -52,7 +43,22 @@ const Edit = ({ preset = "none" }: IProps) => {
     } else {
       dispatch(addBoardAction(dataForm));
     }
-  }, [board, categorySelect]);
+  }, [board]);
+
+  const changeInput = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      event.persist();
+      useInput.change(changeInputAction, event);
+    },
+    [useInput]
+  );
+
+  const changeSelect = useCallback(
+    value => {
+      useInput.selectChange(changeSelectAction, value);
+    },
+    [useInput]
+  );
 
   return (
     <Form name="boardForm" onFinish={onSubmit}>
@@ -63,7 +69,9 @@ const Edit = ({ preset = "none" }: IProps) => {
       ) : (
         <Form.Item label="제목" rules={[{ required: true }]}>
           <Input
+            name={"title"}
             value={board?.data?.title === undefined ? "" : board.data.title}
+            onChange={changeInput}
           />
         </Form.Item>
       )}
@@ -73,8 +81,11 @@ const Edit = ({ preset = "none" }: IProps) => {
           value={
             board?.data?.categoryId === undefined ? -1 : board.data.categoryId
           }
-          onChange={value => categorySelect.onChange(value)}
+          onChange={changeSelect}
         >
+          <Select.Option key={-1} value={-1}>
+            선택
+          </Select.Option>
           {categories &&
             categories.data.length > 0 &&
             categories.data.map((category: ICategory) => (
@@ -88,6 +99,7 @@ const Edit = ({ preset = "none" }: IProps) => {
       <Form.Item>
         <Jodit
           content={board?.data?.content === undefined ? "" : board.data.content}
+          setContent={useInput.change}
         />
       </Form.Item>
 
