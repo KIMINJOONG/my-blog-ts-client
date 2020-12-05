@@ -8,9 +8,7 @@ import wrapper from "../../../stores/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
 import { LOAD_USER_REQUEST } from "../../../reducers/user";
-import {
-  BOARD_DETAIL_REQUEST,
-} from "../../../reducers/board";
+import { BOARD_DETAIL_REQUEST } from "../../../reducers/board";
 import AppLayout from "../../../components/AppLayout";
 import Router from "next/router";
 import { message } from "antd";
@@ -18,9 +16,9 @@ import { RootState } from "../../../reducers";
 
 const edit = () => {
   const router = useRouter();
-  const { board, updateBoardDone, removeBoardDone } = useSelector((
-    state: RootState,
-  ) => state.board);
+  const { board, updateBoardDone, removeBoardDone } = useSelector(
+    (state: RootState) => state.board
+  );
   const { id } = router.query;
   const [data, setData] = useState();
   const [categories, setCategories] = useState([]);
@@ -54,20 +52,13 @@ const edit = () => {
 
   return (
     <AppLayout>
-      {loading
-        ? (
-          <div>로딩</div>
-        )
-        : (
-          <div>
-            <Edit
-              param={id}
-              data={data}
-              categories={categories}
-              preset={"none"}
-            />
-          </div>
-        )}
+      {loading ? (
+        <div>로딩</div>
+      ) : (
+        <div>
+          <Edit preset={"none"} />
+        </div>
+      )}
     </AppLayout>
   );
 };
@@ -81,16 +72,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
       axios.defaults.headers.Authorization = cookie;
     }
     context.store.dispatch({
-      type: LOAD_USER_REQUEST,
+      type: LOAD_USER_REQUEST
     });
 
     context.store.dispatch({
       type: BOARD_DETAIL_REQUEST,
-      data: context.params.id,
+      data: context.params.id
     });
     context.store.dispatch(END);
     await context.store.sagaTask.toPromise();
-  },
+  }
 );
 
 export default React.memo(edit);
