@@ -8,7 +8,9 @@ import {
   BOARD_DETAIL_REQUEST,
   addLikeAction,
   removeLikeAction,
-  loadCategoriesAction
+  loadCategoriesAction,
+  updateBoardResetAction,
+  addBoardResetAction
 } from "../../reducers/board";
 import { useSelector, useDispatch } from "react-redux";
 import { LOAD_USER_REQUEST } from "../../reducers/user";
@@ -46,9 +48,16 @@ const edit = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state: RootState) => state.user);
   const [isUpdate, setIsUpdate] = useState(false);
-  const { board, addLikeDone, removeLikeDone, removeCommentDone } = useSelector(
-    (state: RootState) => state.board
-  );
+  const {
+    board,
+    addLikeDone,
+    removeLikeDone,
+    removeCommentDone,
+    updateBoardDone,
+    updateBoardError,
+    addBoardDone,
+    addBoardError
+  } = useSelector((state: RootState) => state.board);
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
@@ -66,6 +75,26 @@ const edit = () => {
     setIsLiked(false);
   }, [addLikeDone, removeLikeDone]);
 
+  useEffect(() => {
+    if (addBoardDone) {
+      message.success("게시글이 게시되었습니다.");
+    }
+
+    if (addBoardError) {
+      message.error(addBoardError);
+    }
+  }, [addBoardDone, addBoardError]);
+
+  useEffect(() => {
+    if (updateBoardDone) {
+      message.success("수정되었습니다.");
+      setIsUpdate(false);
+    }
+
+    if (updateBoardError) {
+      message.error(updateBoardError.msg);
+    }
+  }, [updateBoardDone, updateBoardError]);
   useEffect(() => {
     if (addLikeDone) {
       message.success("감사합니다.");

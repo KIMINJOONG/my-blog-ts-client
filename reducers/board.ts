@@ -27,9 +27,11 @@ export const initialState = {
   addBoardLoading: false,
   addBoardDone: false,
   addBoardError: null,
+  addBoard: null,
   updateBoardLoading: false,
   updateBoardDone: false,
   updateBoardError: null,
+  updateBoard: null,
   removeBoardLoading: false,
   removeBoardDone: false,
   removeBoardError: null,
@@ -96,10 +98,12 @@ export const LOAD_BOARDS_FOR_MAIN_FAILURE = "LOAD_BOARDS_FOR_MAIN_FAILURE";
 export const ADD_BOARD_REQUEST = "ADD_BOARD_REQUEST";
 export const ADD_BOARD_SUCCESS = "ADD_BOARD_SUCCESS";
 export const ADD_BOARD_FAILURE = "ADD_BOARD_FAILURE";
+export const ADD_BOARD_RESET = "ADD_BOARD_RESET";
 
 export const UPDATE_BOARD_REQUEST = "UPDATE_BOARD_REQUEST";
 export const UPDATE_BOARD_SUCCESS = "UPDATE_BOARD_SUCCESS";
 export const UPDATE_BOARD_FAILURE = "UPDATE_BOARD_FAILURE";
+export const UPDATE_BOARD_RESET = "UPDATE_BOARD_RESET";
 
 export const REMOVE_BOARD_REQUEST = "REMOVE_BOARD_REQUEST";
 export const REMOVE_BOARD_SUCCESS = "REMOVE_BOARD_SUCCESS";
@@ -127,6 +131,14 @@ export const LOAD_HASHTAG_BOARDS_FAILURE = "LOAD_HASHTAG_BOARDS_FAILURE";
 
 export const CHANGE_INPUT = "CHANGE_INPUT";
 export const CHANGE_SELECT = "CHANGE_SELECT";
+
+export const updateBoardResetAction = () => ({
+  type: UPDATE_BOARD_RESET,
+});
+
+export const addBoardResetAction = () => ({
+  type: ADD_BOARD_RESET,
+});
 
 export const changeSelectAction = (value: string) => ({
   type: CHANGE_SELECT,
@@ -292,6 +304,10 @@ interface IUPDATE_COMMENT_FAILURE {
   error: any;
 }
 
+interface IUPDATE_BOARD_RESET {
+  type: typeof UPDATE_BOARD_RESET,
+};
+
 interface IREMOVE_COMMENT_REQUEST {
   type: typeof REMOVE_COMMENT_REQUEST;
   data: any;
@@ -348,6 +364,10 @@ interface IUPDATE_BOARD_FAILURE {
   type: typeof UPDATE_BOARD_FAILURE;
   error: any;
 }
+
+interface IADD_BOARD_RESET {
+  type: typeof ADD_BOARD_RESET,
+};
 
 interface IADD_BOARD_REQUEST {
   type: typeof ADD_BOARD_REQUEST;
@@ -468,7 +488,10 @@ export type BoardActionType =
   | ILOAD_CATEGORIES_SUCCESS
   | ILOAD_CATEGORIES_FAILURE
   | ICHANGE_INPUT
-  | ICHANGE_SELECT;
+  | ICHANGE_SELECT
+  | IUPDATE_BOARD_RESET
+  | IADD_BOARD_RESET;
+
 
 // 동기��청
 
@@ -477,6 +500,20 @@ export type BoardActionType =
 const reducer = (state = initialState, action: BoardActionType) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case UPDATE_BOARD_RESET: {
+        draft.updateBoardDone = false;
+        draft.updateBoardLoading = false;
+        draft.updateBoardError = null;
+        draft.updateBoard = null;
+        break;
+      }
+      case ADD_BOARD_RESET: {
+        draft.addBoardLoading =  false;
+        draft.addBoardDone = false;
+        draft.addBoardError = null;
+        draft.addBoard = null;
+        break;
+      }
       case CHANGE_SELECT: {
         draft.board.data.categoryId = action.value;
         break;

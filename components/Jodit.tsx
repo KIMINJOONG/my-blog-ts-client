@@ -21,6 +21,7 @@ const Jodit = ({
   preset = "none",
   disabled = false
 }: IProps) => {
+  const [contentJodit, setContentJodit] = useState(content);
   const [config, setConfig] = useState({
     preset,
     buttons: [
@@ -104,6 +105,9 @@ const Jodit = ({
         data: { fileName: string; baseurl: string }
       ) {
         setContent(`${this.value} <img src=${data.baseurl + data.fileName} />`);
+        setContentJodit(
+          `${this.value} <img src=${data.baseurl + data.fileName} />`
+        );
       }
     },
     readonly: false,
@@ -158,15 +162,15 @@ const Jodit = ({
     toolbarButtonSize: "large"
   });
 
-  return useMemo(
-    () => (
-      <JoditEditor
-        value={content}
-        config={config as any}
-        onChange={newContent => setContent(newContent)}
-      />
-    ),
-    []
+  return (
+    <JoditEditor
+      value={contentJodit}
+      config={config as any}
+      onChange={newContent => {
+        setContentJodit(newContent);
+        setContent(newContent);
+      }}
+    />
   );
 };
 

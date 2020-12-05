@@ -47,7 +47,10 @@ const Edit = ({ preset = "none" }: IProps) => {
 
   const changeInput = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      event.persist();
+      if (event.persist) {
+        event.persist();
+      }
+
       useInput.change(changeInputAction, event);
     },
     [useInput]
@@ -99,7 +102,7 @@ const Edit = ({ preset = "none" }: IProps) => {
       <Form.Item>
         <Jodit
           content={board?.data?.content === undefined ? "" : board.data.content}
-          setContent={useInput.change}
+          setContent={changeInput}
         />
       </Form.Item>
 
