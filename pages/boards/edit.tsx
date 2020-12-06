@@ -25,7 +25,7 @@ const edit = () => {
 
   return (
     <AppLayout>
-      <Edit />x
+      <Edit />
     </AppLayout>
   );
 };

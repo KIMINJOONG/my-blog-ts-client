@@ -35,7 +35,8 @@ const Edit = ({ preset = "none" }: IProps) => {
     const dataForm = {
       title: board.data.title,
       content: board.data.content,
-      categoryId: board.data.categoryId
+      categoryId: board.data.categoryId,
+      hashtags: board.data.hashtags
     };
 
     if (id) {
@@ -103,6 +104,13 @@ const Edit = ({ preset = "none" }: IProps) => {
         <Jodit
           content={board?.data?.content === undefined ? "" : board.data.content}
           setContent={changeInput}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Input
+          name={"hashtags"}
+          value={board?.data?.hashtags === undefined ? "" : board.data.hashtags}
+          onChange={changeInput}
         />
       </Form.Item>
 

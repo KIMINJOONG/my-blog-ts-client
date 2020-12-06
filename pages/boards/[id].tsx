@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import ReactHtmlParser from "react-html-parser";
-import { Button, Card, List, Row, Col, message, Badge } from "antd";
+import { Button, Card, List, Row, Col, message, Badge, Tag } from "antd";
 import { FaRegThumbsUp } from "react-icons/fa";
 import wrapper from "../../stores/configureStore";
 import { END } from "redux-saga";
@@ -8,9 +8,7 @@ import {
   BOARD_DETAIL_REQUEST,
   addLikeAction,
   removeLikeAction,
-  loadCategoriesAction,
-  updateBoardResetAction,
-  addBoardResetAction
+  loadCategoriesAction
 } from "../../reducers/board";
 import { useSelector, useDispatch } from "react-redux";
 import { LOAD_USER_REQUEST } from "../../reducers/user";
@@ -23,6 +21,7 @@ import CommentCard from "../../components/CommentCard";
 import { RootState } from "../../reducers";
 import { IComment } from "../../types/comment";
 import Edit from "../../components/Edit";
+import Link from "next/link";
 
 const ContentCard = styled(Card)`
   word-break: break-word;
@@ -142,6 +141,13 @@ const edit = () => {
             <Col md={24} xs={24} sm={24} lg={24}>
               <ContentCard title={board.data.title}>
                 {board && ReactHtmlParser(board.data.content)}
+                {board.data.boardHashtag?.map((hashtag: any) => (
+                  <Tag>
+                    <Link href={`/hashtag/${hashtag.name}`} prefetch={false}>
+                      <a>#{hashtag.name}</a>
+                    </Link>
+                  </Tag>
+                ))}
               </ContentCard>
             </Col>
           </Row>

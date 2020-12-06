@@ -5,6 +5,7 @@ export const initialState = {
     data: {
       title: "", 
       content: "",
+      hashtags: "",
       categoryId: -1,
       view: -1,
       userId: null,
