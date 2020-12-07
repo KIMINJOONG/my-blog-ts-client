@@ -57,7 +57,6 @@ const Login = () => {
                   }
                 ]}
               >
-                x
                 <Input name="email" value={email} onChange={onChangeEmail} />
               </Form.Item>
               <Form.Item
