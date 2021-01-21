@@ -27,7 +27,7 @@
         "babel-plugin-styled-components": "^1.10.7",
         "chart.js": "^2.9.3",
         "compression-webpack-plugin": "^3.1.0",
-        "immer": "^7.0.7",
+        "immer": "^8.0.1",
         "install": "^0.13.0",
         "jodit": "^3.4.29",
         "jodit-react": "^1.0.66",
