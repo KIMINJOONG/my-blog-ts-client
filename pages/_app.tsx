@@ -6,7 +6,6 @@ import api from "../api";
 import wrapper from "../stores/configureStore";
 import Head from "next/head";
 import "antd/dist/antd.css";
-import AppLayout from "../components/AppLayout";
 
 const GlobalStyle = createGlobalStyle`
      a{
@@ -59,7 +58,7 @@ const MyBlog: any = ({ Component }: any) => {
   });
 
   return (
-    <AppLayout>
+    <div>
       <Head>
         {/* Open Graph */}
         <meta property="og:title" content="My new title" key="title" />
@@ -88,7 +87,7 @@ const MyBlog: any = ({ Component }: any) => {
 
       <Component />
       <GlobalStyle />
-    </AppLayout>
+    </div>
   );
 };
 
