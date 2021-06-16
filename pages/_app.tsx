@@ -61,20 +61,6 @@ const MyBlog: any = ({ Component }: any) => {
   return (
     <AppLayout>
       <Head>
-        <title>코후비 블로그</title>
-        <meta
-          name="viewport"
-          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
-        />
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="subject" content="코후비 블로그" />
-        <meta name="title" content="코후비 블로그" />
-        <meta name="author" content="김인중 | kohubi" />
-        <meta name="keywords" content="비보이,개발,개발자" />
-        <meta name="description" content="춤추는 개발자 코후비 블로그" />
-
         {/* Open Graph */}
         <meta property="og:title" content="My new title" key="title" />
         <meta
