@@ -61,7 +61,15 @@ const MyBlog: any = ({ Component }: any) => {
     <div>
       <Head>
         <title>My page title</title>
-        <meta property="og:title" content="My page title" key="title" />
+      </Head>
+      <Head>
+        <meta property="og:title" content="My new title" key="title" />
+        <meta
+          property="og:image"
+          content="https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-260nw-1389188327.jpg"
+        />
+        <meta property="og:description" content="Og tag test!!!" />
+        <meta property="og:title" content="Og tag test!!! title" />
       </Head>
       <Head>
         {/* <link rel="canonical" href="https://kohubi.xyz" /> */}
