@@ -104,41 +104,39 @@ const boards = () => {
     });
   }, []);
   return (
-    <AppLayout>
-      <div>
-        {me && me.data && me.data.role === 99 && (
-          <Col style={{ textAlign: "right" }}>
-            <Link href="/boards/edit" prefetch={false}>
-              <a>글쓰기</a>
-            </Link>
-          </Col>
-        )}
-
-        {boards && (
-          <Table
-            rowKey={record => record.id}
-            columns={columns}
-            dataSource={boards.data}
-            pagination={{
-              position: ["bottomCenter"],
-              total: boards.totalCount,
-              current: router.query.page
-                ? parseInt(router.query.page as string, 10)
-                : 1,
-              onChange: onChangePage,
-              onShowSizeChange
-            }}
-          />
-        )}
-        <Col>
-          <Input.Search
-            placeholder="input search text"
-            onSearch={onSearch}
-            enterButton
-          />
+    <div>
+      {me && me.data && me.data.role === 99 && (
+        <Col style={{ textAlign: "right" }}>
+          <Link href="/boards/edit" prefetch={false}>
+            <a>글쓰기</a>
+          </Link>
         </Col>
-      </div>
-    </AppLayout>
+      )}
+
+      {boards && (
+        <Table
+          rowKey={record => record.id}
+          columns={columns}
+          dataSource={boards.data}
+          pagination={{
+            position: ["bottomCenter"],
+            total: boards.totalCount,
+            current: router.query.page
+              ? parseInt(router.query.page as string, 10)
+              : 1,
+            onChange: onChangePage,
+            onShowSizeChange
+          }}
+        />
+      )}
+      <Col>
+        <Input.Search
+          placeholder="input search text"
+          onSearch={onSearch}
+          enterButton
+        />
+      </Col>
+    </div>
   );
 };
 
