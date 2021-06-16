@@ -108,9 +108,8 @@ const boards = () => {
     <div>
       <Head>
         <meta property="og:title" content="게시글 리스트" key="title" />
+        <meta property="og:description" content="Og tag test입니다" />
         <meta property="og:image" content="https://kohubi.xyz/logo.png" />
-        <meta property="og:description" content="게시글" />
-        <meta property="og:title" content="게시글 리스트" />
       </Head>
       <div>테스트</div>
     </div>

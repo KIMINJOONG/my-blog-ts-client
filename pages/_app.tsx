@@ -61,10 +61,9 @@ const MyBlog: any = ({ Component }: any) => {
     <div>
       <Head>
         {/* Open Graph */}
-        <meta property="og:title" content="My new title" key="title" />
-        <meta property="og:image" content="https://kohubi.xyz/logo@2x.png" />
+        <meta property="og:title" content="app.tsx" key="title" />
         <meta property="og:description" content="Og tag test!!!" />
-        <meta property="og:title" content="Og tag test!!! title" />
+        <meta property="og:image" content="https://kohubi.xyz/logo@2x.png" />
 
         {/* <link rel="canonical" href="https://kohubi.xyz" /> */}
         <link
