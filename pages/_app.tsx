@@ -61,7 +61,7 @@ const MyBlog: any = ({ Component }: any) => {
   return (
     <AppLayout>
       <Head>
-        <title>Kohubi's Blog</title>
+        <title>코후비 블로그</title>
         <meta
           name="viewport"
           content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
@@ -76,10 +76,13 @@ const MyBlog: any = ({ Component }: any) => {
         <meta name="description" content="춤추는 개발자 코후비 블로그" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="코후비 블로그" />
+        <meta property="og:title" content="코후비 블로그1" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://kohubi.xyz" />
-        <meta property="og:description" content="춤추는 개발자 코후비 블로그" />
+        <meta
+          property="og:description"
+          content="춤추는 개발자 코후비 블로그1"
+        />
         <meta property="og:image" content="https://kohubi.xyz/logo.png" />
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="800" />
