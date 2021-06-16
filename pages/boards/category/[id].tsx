@@ -147,41 +147,4 @@ const boards = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(
-  async (context: any) => {
-    const cookie = context.req ? context.req.headers.cookie : "";
-    axios.defaults.headers.Authorization = "";
-    axios.defaults.withCredentials = true;
-    if (context.req && cookie) {
-      axios.defaults.headers.Authorization = cookie;
-    }
-
-    const { title, page, limit = 10 } = context.query;
-
-    let searchArray = [];
-    if (title) {
-      searchArray.push(`title=${title}`);
-    }
-    if (page) {
-      searchArray.push(`page=${page}`);
-    }
-    if (limit) {
-      searchArray.push(`limit=${limit}`);
-    }
-
-    context.store.dispatch({
-      type: LOAD_USER_REQUEST
-    });
-    context.store.dispatch({
-      type: LOAD_BOARDS_REQUEST,
-      data: {
-        categoryId: context.params.id,
-        query: searchArray.join("&")
-      }
-    });
-    context.store.dispatch(END);
-    await context.store.sagaTask.toPromise();
-  }
-);
-
 export default boards;
