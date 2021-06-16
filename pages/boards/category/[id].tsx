@@ -103,7 +103,78 @@ const boards = () => {
       query: { page: current, title, limit: size }
     });
   }, []);
-  return <div>gg</div>;
+  return (
+    <div>
+      {me && me.data && me.data.role === 99 && (
+        <Col style={{ textAlign: "right" }}>
+          <Link href="/boards/edit" prefetch={false}>
+            <a>글쓰기</a>
+          </Link>
+        </Col>
+      )}
+
+      {boards && (
+        <Table
+          rowKey={record => record.id}
+          columns={columns}
+          dataSource={boards.data}
+          pagination={{
+            position: ["bottomCenter"],
+            total: boards.totalCount,
+            current: router.query.page
+              ? parseInt(router.query.page as string, 10)
+              : 1,
+            onChange: onChangePage,
+            onShowSizeChange
+          }}
+        />
+      )}
+      <Col>
+        <Input.Search
+          placeholder="input search text"
+          onSearch={onSearch}
+          enterButton
+        />
+      </Col>
+    </div>
+  );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context: any) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    axios.defaults.headers.Authorization = "";
+    axios.defaults.withCredentials = true;
+    if (context.req && cookie) {
+      axios.defaults.headers.Authorization = cookie;
+    }
+
+    const { title, page, limit = 10 } = context.query;
+
+    let searchArray = [];
+    if (title) {
+      searchArray.push(`title=${title}`);
+    }
+    if (page) {
+      searchArray.push(`page=${page}`);
+    }
+    if (limit) {
+      searchArray.push(`limit=${limit}`);
+    }
+
+    context.store.dispatch({
+      type: LOAD_USER_REQUEST
+    });
+    context.store.dispatch({
+      type: LOAD_BOARDS_REQUEST,
+      data: {
+        categoryId: context.params.id,
+        query: searchArray.join("&")
+      }
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default boards;
