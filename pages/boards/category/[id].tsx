@@ -12,6 +12,7 @@ import { LOAD_USER_REQUEST } from "../../../reducers/user";
 import { LOAD_BOARDS_REQUEST } from "../../../reducers/board";
 import { RootState } from "../../../reducers";
 import { IBoard } from "../../../types/board";
+import Head from "next/head";
 
 type Align = "left" | "right" | "center";
 const columns = [
@@ -105,6 +106,12 @@ const boards = () => {
   }, []);
   return (
     <div>
+      <Head>
+        <meta property="og:title" content="게시글 리스트" key="title" />
+        <meta property="og:image" content="https://kohubi.xyz/logo.png" />
+        <meta property="og:description" content="Og tag test!!!" />
+        <meta property="og:title" content="Og tag test!!! title" />
+      </Head>
       {me && me.data && me.data.role === 99 && (
         <Col style={{ textAlign: "right" }}>
           <Link href="/boards/edit" prefetch={false}>
