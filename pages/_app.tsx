@@ -6,6 +6,7 @@ import api from "../api";
 import wrapper from "../stores/configureStore";
 import Head from "next/head";
 import "antd/dist/antd.css";
+import AppLayout from "../components/AppLayout";
 
 const GlobalStyle = createGlobalStyle`
      a{
@@ -58,7 +59,7 @@ const MyBlog: any = ({ Component }: any) => {
   });
 
   return (
-    <div>
+    <AppLayout>
       <Head>
         <title>Kohubi's Blog</title>
         <meta
@@ -102,7 +103,7 @@ const MyBlog: any = ({ Component }: any) => {
 
       <Component />
       <GlobalStyle />
-    </div>
+    </AppLayout>
   );
 };
 
