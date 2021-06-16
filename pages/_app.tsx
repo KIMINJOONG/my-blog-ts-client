@@ -62,10 +62,7 @@ const MyBlog: any = ({ Component }: any) => {
       <Head>
         {/* Open Graph */}
         <meta property="og:title" content="My new title" key="title" />
-        <meta
-          property="og:image"
-          content="https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-260nw-1389188327.jpg"
-        />
+        <meta property="og:image" content="https://kohubi.xyz/logo@2x.png" />
         <meta property="og:description" content="Og tag test!!!" />
         <meta property="og:title" content="Og tag test!!! title" />
 
