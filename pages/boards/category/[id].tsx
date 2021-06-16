@@ -109,8 +109,8 @@ const boards = () => {
       <Head>
         <meta property="og:title" content="게시글 리스트" key="title" />
         <meta property="og:image" content="https://kohubi.xyz/logo.png" />
-        <meta property="og:description" content="Og tag test!!!" />
-        <meta property="og:title" content="Og tag test!!! title" />
+        <meta property="og:description" content="게시글" />
+        <meta property="og:title" content="게시글 리스트" />
       </Head>
       {me && me.data && me.data.role === 99 && (
         <Col style={{ textAlign: "right" }}>
