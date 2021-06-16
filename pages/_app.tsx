@@ -76,17 +76,13 @@ const MyBlog: any = ({ Component }: any) => {
         <meta name="description" content="춤추는 개발자 코후비 블로그" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="코후비 블로그1" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kohubi.xyz" />
+        <meta property="og:title" content="My new title" key="title" />
         <meta
-          property="og:description"
-          content="춤추는 개발자 코후비 블로그1"
+          property="og:image"
+          content="https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-260nw-1389188327.jpg"
         />
-        <meta property="og:image" content="https://kohubi.xyz/logo.png" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="800" />
+        <meta property="og:description" content="Og tag test!!!" />
+        <meta property="og:title" content="Og tag test!!! title" />
 
         {/* <link rel="canonical" href="https://kohubi.xyz" /> */}
         <link
