@@ -188,8 +188,11 @@ const AppLayout: FunctionComponent = ({ children }) => {
                 padding: "0 20px"
               }}
             >
-              <Row align="middle" style={{ marginTop: "46px" }}>
-                <Col xs={8}>
+              <Row style={{ marginTop: "46px" }}>
+                <Col
+                  xs={8}
+                  style={{ justifyContent: "center", alignItems: "center" }}
+                >
                   <img style={{ width: "56px", height: "56px" }} />
                 </Col>
                 <Col xs={16} style={{ textAlign: "left" }}>
@@ -244,10 +247,25 @@ const AppLayout: FunctionComponent = ({ children }) => {
                   <h3>해쉬태그</h3>
                 </Col>
                 <Col xs={24} style={{ wordBreak: "break-word" }}>
-                  <Row>
+                  <Row
+                    style={{
+                      display: "flex",
+                      flex: 1,
+                      justifyContent: "space-around"
+                    }}
+                  >
                     {hashtags.length > 0 &&
                       hashtags.map((hashtag: IHashtag, index: number) => (
-                        <Col xs={8} key={index}>
+                        <Col
+                          xs={8}
+                          key={index}
+                          style={{
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            color: "#03e0c5"
+                          }}
+                        >
                           <Link
                             href={`/hashtag/${hashtag.name}`}
                             key={index}

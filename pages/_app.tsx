@@ -60,30 +60,19 @@ const MyBlog: any = ({ Component }: any) => {
   return (
     <div>
       <Head>
-        <title>Kohubi's Blog</title>
+        <title>My page title</title>
+        <meta property="og:title" content="My page title" key="title" />
+      </Head>
+      <Head>
+        <meta property="og:title" content="My new title" key="title" />
         <meta
-          name="viewport"
-          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+          property="og:image"
+          content="https://image.shutterstock.com/image-vector/sample-stamp-grunge-texture-vector-260nw-1389188327.jpg"
         />
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta httpEquiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="subject" content="코후비 블로그" />
-        <meta name="title" content="코후비 블로그" />
-        <meta name="author" content="김인중 | kohubi" />
-        <meta name="keywords" content="비보이,개발,개발자" />
-        <meta name="description" content="춤추는 개발자 코후비 블로그" />
-
-        {/* Open Graph */}
-        <meta property="og:title" content="코후비 블로그" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kohubi.xyz" />
-        <meta property="og:description" content="춤추는 개발자 코후비 블로그" />
-        <meta property="og:image" content="https://kohubi.xyz/meta_guide.png" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="800" />
-
+        <meta property="og:description" content="Og tag test!!!" />
+        <meta property="og:title" content="Og tag test!!! title" />
+      </Head>
+      <Head>
         {/* <link rel="canonical" href="https://kohubi.xyz" /> */}
         <link
           rel="shortcut icon"
