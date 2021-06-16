@@ -131,12 +131,6 @@ const edit = () => {
         <Edit />
       ) : (
         <>
-          <Head>
-            <title>{board.data.title}</title>
-            <meta property="og:title" content={board.data.title} key="title" />
-            <meta name="subject" content={board.data.title} />
-            <meta name="title" content={board.data.title} />
-          </Head>
           <Row>
             <Col md={24} xs={24} sm={24} lg={24}>
               <ContentCard title={board.data.title}>
