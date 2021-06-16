@@ -126,7 +126,7 @@ const edit = () => {
   }, [board, isLiked]);
 
   return (
-    <AppLayout>
+    <div>
       {isUpdate ? (
         <Edit />
       ) : (
@@ -218,7 +218,7 @@ const edit = () => {
           </Row>
         </>
       )}
-    </AppLayout>
+    </div>
   );
 };
 
