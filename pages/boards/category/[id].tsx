@@ -112,37 +112,7 @@ const boards = () => {
         <meta property="og:description" content="게시글" />
         <meta property="og:title" content="게시글 리스트" />
       </Head>
-      {me && me.data && me.data.role === 99 && (
-        <Col style={{ textAlign: "right" }}>
-          <Link href="/boards/edit" prefetch={false}>
-            <a>글쓰기</a>
-          </Link>
-        </Col>
-      )}
-
-      {boards && (
-        <Table
-          rowKey={record => record.id}
-          columns={columns}
-          dataSource={boards.data}
-          pagination={{
-            position: ["bottomCenter"],
-            total: boards.totalCount,
-            current: router.query.page
-              ? parseInt(router.query.page as string, 10)
-              : 1,
-            onChange: onChangePage,
-            onShowSizeChange
-          }}
-        />
-      )}
-      <Col>
-        <Input.Search
-          placeholder="input search text"
-          onSearch={onSearch}
-          enterButton
-        />
-      </Col>
+      <div>테스트</div>
     </div>
   );
 };
